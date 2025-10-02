@@ -24,4 +24,29 @@
 ## **Technische Details**
 
 - Behaviour Tree Designer + Movement Pack
-- U Motion Pro
+- UMotionPro
+
+## **Protokolle**
+
+#### **02.10.2025**
+Besprechung:
+- Für Coop Bossfight Projekt entschieden
+- Repository wurde aufgesetzt
+- UMotionPro und BehaviourDesigner Packages ins Projekt eingebunden
+
+Ziel:
+- Anfangen zu Prototypen (Movement, Simples Schlag/Hit System, etc.) 
+
+Für die Präsentation:
+- 5-10 Minuten
+- Projekt Vorstellung
+- Inspiration
+- Ideen vom Design
+- Gameplay Funktionalität
+- Herausforderungen
+- Lösungsansätze
+- Unity Techniken
+- ungefährer Zeitplan
+- Projektziel
+- MVP (Minimum Viable Product)
+- Nice-To-Haves
