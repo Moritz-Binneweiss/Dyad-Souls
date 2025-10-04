@@ -3,10 +3,11 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-     [SerializeField] GameObject mainMenu;
+    [SerializeField]
+    GameObject mainMenu;
 
-    public void LoadGameArena()
+    public void StartGame()
     {
-        SceneManager.LoadScene("GameArena");
+        SceneManager.LoadScene("PrepLobby");
     }
 }
