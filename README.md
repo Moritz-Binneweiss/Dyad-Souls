@@ -1,9 +1,13 @@
 # **Blood & Honor**
- 
+
 ## **Mitwirkende**
 
 - **Moritz Binneweiß** - Lead Developer
 - **Sebastian Schuster** - Lead Developer
+
+### **Figma Board**
+
+- https://www.figma.com/board/uUtF92ZtxAHNdhbk2m4GBN/Blood---Honor?node-id=0-1&t=b68sJGUsaQNf1V7O-1
 
 ## **Features**
 
@@ -29,15 +33,19 @@
 ## **Protokolle**
 
 #### **02.10.2025**
+
 Besprechung:
+
 - Für Coop Bossfight Projekt entschieden
 - Repository wurde aufgesetzt
 - UMotionPro und BehaviourDesigner Packages ins Projekt eingebunden
 
 Ziel:
-- Anfangen zu Prototypen (Movement, Simples Schlag/Hit System, etc.) 
+
+- Anfangen zu Prototypen (Movement, Simples Schlag/Hit System, etc.)
 
 Für die Präsentation:
+
 - 5-10 Minuten
 - Projekt Vorstellung
 - Inspiration
