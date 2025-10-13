@@ -9,8 +9,13 @@ public class CharacterManager : MonoBehaviour
         DontDestroyOnLoad(this);
         characterController = GetComponent<CharacterController>();
     }
-    
+
     protected virtual void Update()
+    {
+
+    }
+    
+    protected virtual void LateUpdate()
     {
 
     }

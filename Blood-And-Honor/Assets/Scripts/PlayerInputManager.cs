@@ -11,7 +11,6 @@ public class PlayerInputManager : MonoBehaviour
     Vector2 movement;
 
     public float verticalInput;
-
     public float horizontalInput;
     public float moveAmount;
 
@@ -33,9 +32,20 @@ public class PlayerInputManager : MonoBehaviour
         {
             playerControls = new InputSystem_Actions();
             playerControls.Player.Move.performed += i => movement = i.ReadValue<Vector2>();
+            playerControls.Player.Move.canceled += i => movement = Vector2.zero;
         }
 
         playerControls.Enable();
+    }
+
+    private void OnDisable()
+    {
+        if (playerControls != null)
+        {
+            playerControls.Player.Move.performed -= i => movement = i.ReadValue<Vector2>();
+            playerControls.Player.Move.canceled -= i => movement = Vector2.zero;
+            playerControls.Disable();
+        }
     }
 
     private void Update()
