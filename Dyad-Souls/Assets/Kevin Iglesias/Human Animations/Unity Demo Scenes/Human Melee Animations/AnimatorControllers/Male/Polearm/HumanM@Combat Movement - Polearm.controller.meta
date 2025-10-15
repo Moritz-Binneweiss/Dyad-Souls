@@ -1,16 +1,8 @@
 fileFormatVersion: 2
-guid: 8c9166bb01bff9646987627670a7675f
+guid: 2a7438fd1e340ad4e96fbb0475460bb6
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 9100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 165785
-  packageName: Human Melee Animations FREE
-  packageVersion: 2.0.2
-  assetPath: Assets/Kevin Iglesias/Human Animations/Unity Demo Scenes/Human Melee
-    Animations/AnimatorControllers/Male/Polearm/HumanM@Combat Movement - Polearm.controller
-  uploadId: 762275

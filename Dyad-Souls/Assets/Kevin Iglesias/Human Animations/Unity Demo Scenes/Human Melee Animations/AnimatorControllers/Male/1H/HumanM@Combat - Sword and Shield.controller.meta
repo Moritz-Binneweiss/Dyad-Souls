@@ -1,16 +1,8 @@
 fileFormatVersion: 2
-guid: d4176e2452e42014e8781c3984967dfe
+guid: 626d77ceb1a44b249b6cb26e24b2e5ae
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 9100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 165785
-  packageName: Human Melee Animations FREE
-  packageVersion: 2.0.2
-  assetPath: Assets/Kevin Iglesias/Human Animations/Unity Demo Scenes/Human Melee
-    Animations/AnimatorControllers/Male/1H/HumanM@Combat - Sword and Shield.controller
-  uploadId: 762275

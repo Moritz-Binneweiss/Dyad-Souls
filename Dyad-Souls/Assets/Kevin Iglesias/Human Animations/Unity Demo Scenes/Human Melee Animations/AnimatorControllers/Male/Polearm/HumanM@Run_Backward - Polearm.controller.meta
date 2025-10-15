@@ -1,16 +1,8 @@
 fileFormatVersion: 2
-guid: c34004696b217d545bf06def66d4c833
+guid: e02461a488907c04a93f5db74416fcbf
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 9100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 165785
-  packageName: Human Melee Animations FREE
-  packageVersion: 2.0.2
-  assetPath: Assets/Kevin Iglesias/Human Animations/Unity Demo Scenes/Human Melee
-    Animations/AnimatorControllers/Male/Polearm/HumanM@Run_Backward - Polearm.controller
-  uploadId: 762275

@@ -1,16 +1,8 @@
 fileFormatVersion: 2
-guid: b6c0465f8e296d746874de35399bf579
+guid: 812911509f33d014c844b9f433d18878
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 9100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 154271
-  packageName: Human Basic Motions FREE
-  packageVersion: 2.4.1
-  assetPath: Assets/Kevin Iglesias/Human Animations/Unity Demo Scenes/Human Basic
-    Motions/AnimatorControllers/HumanM@Run01_Left.controller
-  uploadId: 762152
