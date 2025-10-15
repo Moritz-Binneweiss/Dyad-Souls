@@ -56,6 +56,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9500000, guid: 320b1c2af77554f99a1658df4a6d3d5c, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: a17ca92cf8378894c8434d39f14c8a6e, type: 2}
     - target: {fileID: 13700000, guid: 320b1c2af77554f99a1658df4a6d3d5c, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -70,6 +74,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 100096, guid: 320b1c2af77554f99a1658df4a6d3d5c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7580719117703840874}
+    - targetCorrespondingSourceObject: {fileID: 100096, guid: 320b1c2af77554f99a1658df4a6d3d5c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6534472148303153034}
     - targetCorrespondingSourceObject: {fileID: 100096, guid: 320b1c2af77554f99a1658df4a6d3d5c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7776206617037912997}
@@ -110,6 +117,18 @@ MonoBehaviour:
   walkingSpeed: 2
   runningSpeed: 5
   rotationSpeed: 15
+--- !u!114 &6534472148303153034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2085984672967987236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d75d28b157934c4bbb42c36a832ef43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!143 &7776206617037912997
 CharacterController:
   m_ObjectHideFlags: 0
