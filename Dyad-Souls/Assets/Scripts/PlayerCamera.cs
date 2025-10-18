@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour
 {
-    public static PlayerCamera instance;
+    [Header("Player Assignment")]
     public PlayerManager player;
     public Camera cameraObject;
 
@@ -44,21 +44,8 @@ public class PlayerCamera : MonoBehaviour
     private float cameraZPosition;
     private float targetCameraZPosition;
 
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
     private void Start()
     {
-        DontDestroyOnLoad(gameObject);
         cameraZPosition = cameraObject.transform.localPosition.z;
     }
 
@@ -85,11 +72,14 @@ public class PlayerCamera : MonoBehaviour
 
     private void HandleRotations()
     {
+        if (player == null || player.playerInputManager == null)
+            return;
+
         leftAndRightLookAngle +=
-            (PlayerInputManager.instance.cameraHorizontalInput * leftAndRightRotationSpeed)
+            (player.playerInputManager.cameraHorizontalInput * leftAndRightRotationSpeed)
             * Time.deltaTime;
         upAndDownLookAngle -=
-            (PlayerInputManager.instance.cameraVerticalInput * upAndDownRotationSpeed)
+            (player.playerInputManager.cameraVerticalInput * upAndDownRotationSpeed)
             * Time.deltaTime;
         upAndDownLookAngle = Mathf.Clamp(upAndDownLookAngle, minumPivot, maximumPivot);
 
