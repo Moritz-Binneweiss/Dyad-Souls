@@ -1,16 +1,14 @@
-
-
-using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
+using UnityEngine;
 
 public class Jump : Action
 {
-    public SharedTransform player;          // wird im Tree zugewiesen
-    public SharedFloat jumpHeight = 4f;     // wie hoch der Sprung geht
-    public SharedFloat jumpSpeed = 6f;      // horizontale Geschwindigkeit
-    public SharedFloat windupTime = 0.5f;   // kleine Vorbereitung
-    public SharedFloat landTime = 0.4f;     // Zeit nach der Landung
+    public SharedTransform player; // wird im Tree zugewiesen
+    public SharedFloat jumpHeight = 4f; // wie hoch der Sprung geht
+    public SharedFloat jumpSpeed = 6f; // horizontale Geschwindigkeit
+    public SharedFloat windupTime = 0.5f; // kleine Vorbereitung
+    public SharedFloat landTime = 0.4f; // Zeit nach der Landung
 
     private Animator animator;
     private float elapsed;
@@ -56,7 +54,8 @@ public class Jump : Action
         }
 
         float t = (elapsed - windupTime.Value) * (jumpSpeed.Value / 10f);
-        if (t > 1f) t = 1f;
+        if (t > 1f)
+            t = 1f;
 
         // Parabolische Bewegung (einfach)
         Vector3 pos = Vector3.Lerp(startPos, targetPos, t);
