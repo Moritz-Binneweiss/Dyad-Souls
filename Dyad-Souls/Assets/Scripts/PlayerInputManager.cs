@@ -3,11 +3,24 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.XR;
 
+public enum InputDeviceType
+{
+    KeyboardMouse,
+    Gamepad,
+}
+
 public class PlayerInputManager : MonoBehaviour
 {
-    public static PlayerInputManager instance;
-
+    [Header("Player Assignment")]
     public PlayerManager player;
+
+    [Header("Input Device Settings")]
+    public InputDeviceType deviceType = InputDeviceType.KeyboardMouse;
+
+    [Header("Auto-Configure from Lobby")]
+    public bool autoConfigureFromLobby = true;
+    public string playerName = "Player1"; // "Player1" oder "Player2"
+
     InputSystem_Actions playerControls;
     private System.Action<InputAction.CallbackContext> movePerformed;
     private System.Action<InputAction.CallbackContext> moveCanceled;
@@ -29,14 +42,12 @@ public class PlayerInputManager : MonoBehaviour
 
     private void Awake()
     {
-        if (instance == null)
+        // Auto-Konfiguration aus Lobby wenn aktiviert
+        if (autoConfigureFromLobby)
         {
-            instance = this;
+            ConfigureDeviceTypeFromLobby();
         }
-        else
-        {
-            Destroy(gameObject);
-        }
+
         // try to auto-assign player if not set in Inspector
         if (player == null)
         {
@@ -45,11 +56,30 @@ public class PlayerInputManager : MonoBehaviour
             {
                 player = GetComponentInChildren<PlayerManager>();
             }
-            if (player == null)
-            {
-                // FindAnyObjectByType is faster and non-obsolete on newer Unity versions
-                player = Object.FindAnyObjectByType<PlayerManager>();
-            }
+        }
+
+        if (player == null)
+        {
+            Debug.LogWarning(
+                $"PlayerInputManager auf {gameObject.name} hat keinen zugewiesenen Player!"
+            );
+        }
+    }
+
+    private void ConfigureDeviceTypeFromLobby()
+    {
+        string gamepadControls = PlayerPrefs.GetString("GamepadControls", "");
+        string keyboardControls = PlayerPrefs.GetString("KeyboardControls", "");
+
+        // Prüfe ob Gamepad diesem Spieler zugewiesen wurde
+        if (gamepadControls == playerName)
+        {
+            deviceType = InputDeviceType.Gamepad;
+        }
+        // Prüfe ob Keyboard diesem Spieler zugewiesen wurde
+        else if (keyboardControls == playerName)
+        {
+            deviceType = InputDeviceType.KeyboardMouse;
         }
     }
 
@@ -59,10 +89,37 @@ public class PlayerInputManager : MonoBehaviour
         {
             playerControls = new InputSystem_Actions();
 
-            movePerformed = i => movement = i.ReadValue<Vector2>();
-            lookPerformed = i => cameraInput = i.ReadValue<Vector2>();
-            moveCanceled = i => movement = Vector2.zero;
-            lookCanceled = i => cameraInput = Vector2.zero;
+            movePerformed = i =>
+            {
+                if (IsCorrectDevice(i.control.device))
+                {
+                    movement = i.ReadValue<Vector2>();
+                }
+            };
+
+            lookPerformed = i =>
+            {
+                if (IsCorrectDevice(i.control.device))
+                {
+                    cameraInput = i.ReadValue<Vector2>();
+                }
+            };
+
+            moveCanceled = i =>
+            {
+                if (IsCorrectDevice(i.control.device))
+                {
+                    movement = Vector2.zero;
+                }
+            };
+
+            lookCanceled = i =>
+            {
+                if (IsCorrectDevice(i.control.device))
+                {
+                    cameraInput = Vector2.zero;
+                }
+            };
 
             playerControls.Player.Move.performed += movePerformed;
             playerControls.Player.Look.performed += lookPerformed;
@@ -73,11 +130,22 @@ public class PlayerInputManager : MonoBehaviour
         playerControls.Enable();
     }
 
+    private bool IsCorrectDevice(UnityEngine.InputSystem.InputDevice device)
+    {
+        if (deviceType == InputDeviceType.KeyboardMouse)
+        {
+            return device is Keyboard || device is Mouse;
+        }
+        else // Gamepad
+        {
+            return device is Gamepad;
+        }
+    }
+
     private void OnDisable()
     {
         if (playerControls != null)
         {
-            // remove the previously stored callbacks so we unregister the same delegates
             if (movePerformed != null)
                 playerControls.Player.Move.performed -= movePerformed;
             if (moveCanceled != null)

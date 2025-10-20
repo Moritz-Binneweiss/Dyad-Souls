@@ -2,6 +2,12 @@ using UnityEngine;
 
 public class PlayerManager : CharacterManager
 {
+    [Header("Player Camera")]
+    public PlayerCamera playerCamera;
+
+    [Header("Player Input")]
+    public PlayerInputManager playerInputManager;
+
     [HideInInspector]
     public PlayerAnimatorManager playerAnimatorManager;
 
@@ -27,6 +33,10 @@ public class PlayerManager : CharacterManager
     {
         base.LateUpdate();
 
-        PlayerCamera.instance.HandleAllCameraActions();
+        // Jede Kamera folgt ihrem zugewiesenen Spieler
+        if (playerCamera != null)
+        {
+            playerCamera.HandleAllCameraActions();
+        }
     }
 }

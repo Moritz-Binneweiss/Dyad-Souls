@@ -41,11 +41,11 @@ public class PlayerLocomotionManager : CharacterLocomotionManager
 
     private void GetVerticalAndHorizontalInputs()
     {
-        if (PlayerInputManager.instance != null)
+        if (player.playerInputManager != null)
         {
-            verticalMovement = PlayerInputManager.instance.verticalInput;
-            horizontalMovement = PlayerInputManager.instance.horizontalInput;
-            moveAmount = PlayerInputManager.instance.moveAmount;
+            verticalMovement = player.playerInputManager.verticalInput;
+            horizontalMovement = player.playerInputManager.horizontalInput;
+            moveAmount = player.playerInputManager.moveAmount;
         }
     }
 
@@ -54,8 +54,16 @@ public class PlayerLocomotionManager : CharacterLocomotionManager
         GetVerticalAndHorizontalInputs();
 
         // Bewegung basierend auf Kameraausrichtung
-        moveDirection = PlayerCamera.instance.transform.forward * verticalMovement;
-        moveDirection = moveDirection + PlayerCamera.instance.transform.right * horizontalMovement;
+        if (player.playerCamera != null)
+        {
+            moveDirection = player.playerCamera.transform.forward * verticalMovement;
+            moveDirection =
+                moveDirection + player.playerCamera.transform.right * horizontalMovement;
+        }
+        else
+        {
+            moveDirection = Vector3.zero;
+        }
         moveDirection.Normalize();
         moveDirection.y = 0;
 
@@ -69,16 +77,13 @@ public class PlayerLocomotionManager : CharacterLocomotionManager
             moveDirection.y += gravityForce * Time.deltaTime;
         }
 
-        if (PlayerInputManager.instance != null && PlayerInputManager.instance.moveAmount > 0.5f)
+        if (player.playerInputManager != null && player.playerInputManager.moveAmount > 0.5f)
         {
             Vector3 movement = moveDirection * runningSpeed * Time.deltaTime;
             movement.y = moveDirection.y * Time.deltaTime;
             player.characterController.Move(movement);
         }
-        else if (
-            PlayerInputManager.instance != null
-            && PlayerInputManager.instance.moveAmount <= 0.5f
-        )
+        else if (player.playerInputManager != null && player.playerInputManager.moveAmount <= 0.5f)
         {
             Vector3 movement = moveDirection * walkingSpeed * Time.deltaTime;
             movement.y = moveDirection.y * Time.deltaTime;
@@ -95,11 +100,16 @@ public class PlayerLocomotionManager : CharacterLocomotionManager
     private void HandleRotation()
     {
         targetRotationDirection = Vector3.zero;
-        targetRotationDirection =
-            PlayerCamera.instance.cameraObject.transform.forward * verticalMovement;
-        targetRotationDirection =
-            targetRotationDirection
-            + PlayerCamera.instance.cameraObject.transform.right * horizontalMovement;
+
+        if (player.playerCamera != null)
+        {
+            targetRotationDirection =
+                player.playerCamera.cameraObject.transform.forward * verticalMovement;
+            targetRotationDirection =
+                targetRotationDirection
+                + player.playerCamera.cameraObject.transform.right * horizontalMovement;
+        }
+
         targetRotationDirection.Normalize();
         targetRotationDirection.y = 0;
 
