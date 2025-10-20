@@ -17,6 +17,10 @@ public class PlayerInputManager : MonoBehaviour
     [Header("Input Device Settings")]
     public InputDeviceType deviceType = InputDeviceType.KeyboardMouse;
 
+    [Header("Auto-Configure from Lobby")]
+    public bool autoConfigureFromLobby = true;
+    public string playerName = "Player1"; // "Player1" oder "Player2"
+
     InputSystem_Actions playerControls;
     private System.Action<InputAction.CallbackContext> movePerformed;
     private System.Action<InputAction.CallbackContext> moveCanceled;
@@ -38,6 +42,12 @@ public class PlayerInputManager : MonoBehaviour
 
     private void Awake()
     {
+        // Auto-Konfiguration aus Lobby wenn aktiviert
+        if (autoConfigureFromLobby)
+        {
+            ConfigureDeviceTypeFromLobby();
+        }
+
         // try to auto-assign player if not set in Inspector
         if (player == null)
         {
@@ -53,6 +63,23 @@ public class PlayerInputManager : MonoBehaviour
             Debug.LogWarning(
                 $"PlayerInputManager auf {gameObject.name} hat keinen zugewiesenen Player!"
             );
+        }
+    }
+
+    private void ConfigureDeviceTypeFromLobby()
+    {
+        string gamepadControls = PlayerPrefs.GetString("GamepadControls", "");
+        string keyboardControls = PlayerPrefs.GetString("KeyboardControls", "");
+
+        // Prüfe ob Gamepad diesem Spieler zugewiesen wurde
+        if (gamepadControls == playerName)
+        {
+            deviceType = InputDeviceType.Gamepad;
+        }
+        // Prüfe ob Keyboard diesem Spieler zugewiesen wurde
+        else if (keyboardControls == playerName)
+        {
+            deviceType = InputDeviceType.KeyboardMouse;
         }
     }
 
@@ -78,8 +105,21 @@ public class PlayerInputManager : MonoBehaviour
                 }
             };
 
-            moveCanceled = i => movement = Vector2.zero;
-            lookCanceled = i => cameraInput = Vector2.zero;
+            moveCanceled = i =>
+            {
+                if (IsCorrectDevice(i.control.device))
+                {
+                    movement = Vector2.zero;
+                }
+            };
+
+            lookCanceled = i =>
+            {
+                if (IsCorrectDevice(i.control.device))
+                {
+                    cameraInput = Vector2.zero;
+                }
+            };
 
             playerControls.Player.Move.performed += movePerformed;
             playerControls.Player.Look.performed += lookPerformed;
@@ -106,7 +146,6 @@ public class PlayerInputManager : MonoBehaviour
     {
         if (playerControls != null)
         {
-            // remove the previously stored callbacks so we unregister the same delegates
             if (movePerformed != null)
                 playerControls.Player.Move.performed -= movePerformed;
             if (moveCanceled != null)
