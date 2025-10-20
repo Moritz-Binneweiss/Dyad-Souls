@@ -58,3 +58,18 @@ Für die Präsentation:
 - Projektziel
 - MVP (Minimum Viable Product)
 - Nice-To-Haves
+
+#### **16.10.2025**
+
+Besprechung:
+
+- Namens Problem wurde besprochen
+- aktueller Stand gezeigt
+- Pläne für die nächste Woche besprochen 
+
+Ziel:
+- Tools vertraut machen
+- Kampfanimationen, Boss kann angreifen
+- Behaviour Trees reinfinden
+- minimaler Bosskampf möglich
+- Prototyp über die ganzen Funktionen
