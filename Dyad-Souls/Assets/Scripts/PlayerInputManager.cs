@@ -133,7 +133,7 @@ public class PlayerInputManager : MonoBehaviour
             playerControls.Player.Move.canceled += moveCanceled;
             playerControls.Player.Look.canceled += lookCanceled;
             playerControls.Player.LockOn.performed += i => lockOnInput = true;
-            playerControls.Player.RB.performed += i => rbInput = true;
+            playerControls.Player.Attack.performed += i => rbInput = true;
         }
 
         playerControls.Enable();

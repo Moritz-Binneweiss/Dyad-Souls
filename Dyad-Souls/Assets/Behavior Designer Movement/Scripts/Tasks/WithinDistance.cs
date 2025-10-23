@@ -15,6 +15,8 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         public SharedDetectionMode m_DetectionMode = DetectionMode.Object | DetectionMode.ObjectList | DetectionMode.Tag | DetectionMode.LayerMask;
         [Tooltip("The object that we are searching for")]
         public SharedGameObject m_TargetObject;
+        [Tooltip("The second object that we are searching for")]
+        public SharedGameObject m_TargetObjectTwo;
         [Tooltip("The objects that we are searching for")]
         [UnityEngine.Serialization.FormerlySerializedAs("targetObjects")]
         public SharedGameObjectList m_TargetObjects;
@@ -59,6 +61,12 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             if ((m_DetectionMode.Value & DetectionMode.Object) != 0 && m_TargetObject.Value != null) {
                 if (IsWithinDistance(m_TargetObject.Value)) {
                     m_ReturnedObject.Value = m_TargetObject.Value;
+                }
+            }
+
+            if (m_ReturnedObject.Value == null && (m_DetectionMode.Value & DetectionMode.Object) != 0 && m_TargetObjectTwo.Value != null) {
+                if (IsWithinDistance(m_TargetObjectTwo.Value)) {
+                    m_ReturnedObject.Value = m_TargetObjectTwo.Value;
                 }
             }
 
@@ -159,6 +167,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         {
             m_UsePhysics2D = false;
             m_TargetObject = null;
+            m_TargetObjectTwo = null;
             m_TargetTag = string.Empty;
             m_TargetLayerMask = (LayerMask)0;
             m_Magnitude = 5;

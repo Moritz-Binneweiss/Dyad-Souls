@@ -156,7 +156,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         public override void OnDrawGizmos()
         {
 #if UNITY_EDITOR
-            if (Owner == null || m_Magnitude == null)
+            if (Owner == null || m_Magnitude == null || Owner.transform == null)
             {
                 return;
             }
@@ -166,13 +166,13 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             UnityEditor.Handles.DrawWireDisc(Owner.transform.position, m_UsePhysics2D ? Owner.transform.forward : Owner.transform.up, m_Magnitude.Value);
             
             // Draw lines to players if they are assigned and within range
-            if (m_PlayerOne.Value != null)
+            if (m_PlayerOne != null && m_PlayerOne.Value != null && m_PlayerOne.Value.transform != null)
             {
                 UnityEditor.Handles.color = IsWithinDistance(m_PlayerOne.Value) ? Color.green : Color.red;
                 UnityEditor.Handles.DrawLine(Owner.transform.position, m_PlayerOne.Value.transform.position);
             }
             
-            if (m_PlayerTwo.Value != null)
+            if (m_PlayerTwo != null && m_PlayerTwo.Value != null && m_PlayerTwo.Value.transform != null)
             {
                 UnityEditor.Handles.color = IsWithinDistance(m_PlayerTwo.Value) ? Color.green : Color.red;
                 UnityEditor.Handles.DrawLine(Owner.transform.position, m_PlayerTwo.Value.transform.position);
