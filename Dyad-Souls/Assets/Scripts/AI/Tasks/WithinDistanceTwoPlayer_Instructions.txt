@@ -1,0 +1,70 @@
+// Beispiel für die Verwendung der WithinDistanceTwoPlayer Task in einem Behavior Tree
+
+/*
+ANLEITUNG FÜR DIE VERWENDUNG:
+
+1. Fügen Sie die WithinDistanceTwoPlayer Task zu Ihrem Behavior Tree hinzu
+2. Konfigurieren Sie die folgenden Parameter:
+
+   PLAYER REFERENCES:
+   - Player One: Ziehen Sie das erste Spieler-GameObject hier rein
+   - Player Two: Ziehen Sie das zweite Spieler-GameObject hier rein
+
+   DISTANCE SETTINGS:
+   - Magnitude: Die maximale Distanz in Unity-Einheiten (z.B. 10f für 10 Meter)
+   - Line Of Sight: True wenn der Boss direkte Sichtlinie zum Spieler braucht
+   - Ignore Layer Mask: Layer die bei der Sichtlinien-Prüfung ignoriert werden sollen
+
+   RETURN VALUE:
+   - Returned Player: Diese Variable wird auf den nähesten Spieler gesetzt, der in Reichweite ist
+
+3. BEHAVIOR TREE STRUKTUR BEISPIEL:
+
+   Selector (Root)
+   ├── Sequence "Attack Nearest Player"
+   │   ├── WithinDistanceTwoPlayer (Conditional)
+   │   │   ├── Player One: Player1GameObject
+   │   │   ├── Player Two: Player2GameObject  
+   │   │   ├── Magnitude: 15f
+   │   │   ├── Returned Player: NearestPlayerVariable
+   │   │   └── Line Of Sight: true
+   │   ├── SetTarget (Action) - Setzt Target auf NearestPlayerVariable
+   │   └── AttackTarget (Action) - Greift das Target an
+   └── Patrol (Action) - Fallback wenn kein Spieler in Reichweite
+
+4. SHARED VARIABLES:
+   Erstellen Sie diese Shared Variables in Ihrem Behavior Tree:
+   - NearestPlayerVariable (GameObject): Speichert den gefundenen Spieler
+   - TargetTransform (Transform): Für andere Tasks die ein Transform brauchen
+
+5. ERWEITERTE VERWENDUNG:
+   
+   // Beispiel für eine Sequence die verschiedene Aktionen basierend auf dem Spieler ausführt:
+   
+   Selector
+   ├── Sequence "Player Close Combat"
+   │   ├── WithinDistanceTwoPlayer (Distance: 5f)
+   │   ├── MoveTowards NearestPlayerVariable
+   │   └── MeleeAttack
+   ├── Sequence "Player Ranged Combat"  
+   │   ├── WithinDistanceTwoPlayer (Distance: 20f)
+   │   ├── LookAt NearestPlayerVariable
+   │   └── RangedAttack
+   └── Patrol
+
+6. DEBUG HILFEN:
+   - Im Scene View sehen Sie einen cyan-farbenen Kreis um den Boss (Detection Radius)
+   - Grüne Linien zeigen Spieler in Reichweite
+   - Rote Linien zeigen Spieler außerhalb der Reichweite
+   - Aktivieren Sie "Draw Debug Ray" für zusätzliche Debug-Informationen
+
+7. PERFORMANCE TIPPS:
+   - Line Of Sight Checks sind rechenintensiv - nutzen Sie sie nur wenn nötig
+   - Setzen Sie Magnitude nicht zu hoch um unnötige Berechnungen zu vermeiden
+   - Verwenden Sie diese Task nicht bei jedem Frame - kombinieren Sie sie mit einem Timer
+
+8. HÄUFIGE PROBLEME:
+   - Stellen Sie sicher, dass Player One und Player Two korrekt zugewiesen sind
+   - Prüfen Sie die Layer Mask Einstellungen wenn Line Of Sight nicht funktioniert
+   - Achten Sie darauf, dass die Shared Variable "Returned Player" auch in anderen Tasks verwendet wird
+*/

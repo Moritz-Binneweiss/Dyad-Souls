@@ -40,6 +40,13 @@ public class PlayerInputManager : MonoBehaviour
     public float cameraVerticalInput;
     public float cameraHorizontalInput;
 
+    [Header("Lock On Input")]
+    [SerializeField] bool lockOnInput;
+
+    [Header("Player Action Inputs")]
+    [SerializeField] bool rbInput = false;
+
+
     private void Awake()
     {
         // Auto-Konfiguration aus Lobby wenn aktiviert
@@ -125,6 +132,8 @@ public class PlayerInputManager : MonoBehaviour
             playerControls.Player.Look.performed += lookPerformed;
             playerControls.Player.Move.canceled += moveCanceled;
             playerControls.Player.Look.canceled += lookCanceled;
+            playerControls.Player.LockOn.performed += i => lockOnInput = true;
+            playerControls.Player.RB.performed += i => rbInput = true;
         }
 
         playerControls.Enable();
@@ -163,6 +172,17 @@ public class PlayerInputManager : MonoBehaviour
     {
         HandlePlayerMovementInput();
         HandleCameraMovementInput();
+        HandleLockOnInput();
+        HandleRBInput();
+
+    }
+
+    private void HandleAllInputs()
+    {
+        HandlePlayerMovementInput();
+        HandleCameraMovementInput();
+        HandleLockOnInput();
+        HandleRBInput();
     }
 
     private void HandlePlayerMovementInput()
@@ -184,6 +204,12 @@ public class PlayerInputManager : MonoBehaviour
         if (player == null)
             return;
 
+        if (player.playerAnimatorManager == null)
+        {
+            Debug.LogWarning("PlayerAnimatorManager is null in HandlePlayerMovementInput()");
+            return;
+        }
+
         player.playerAnimatorManager.UpdateAnimatorMovementParameter(0, moveAmount);
     }
 
@@ -191,5 +217,52 @@ public class PlayerInputManager : MonoBehaviour
     {
         cameraHorizontalInput = cameraInput.x;
         cameraVerticalInput = cameraInput.y;
+    }
+
+    private void HandleLockOnInput()
+    {
+        if (lockOnInput)
+        {
+            lockOnInput = false;
+            return;
+        }
+    }
+
+    private void HandleRBInput()
+    {
+        if (rbInput)
+        {
+            rbInput = false;
+
+            // Add null checks to prevent NullReferenceException
+            if (player == null)
+            {
+                Debug.LogWarning("Player is null in HandleRBInput()");
+                return;
+            }
+
+            if (player.playerCombatManager == null)
+            {
+                Debug.LogWarning("PlayerCombatManager is null in HandleRBInput()");
+                return;
+            }
+
+            if (player.playerInventoryManager == null)
+            {
+                Debug.LogWarning("PlayerInventoryManager is null in HandleRBInput()");
+                return;
+            }
+
+            if (player.playerInventoryManager.currentRightHandWeapon == null)
+            {
+                Debug.LogWarning("CurrentRightHandWeapon is null in HandleRBInput()");
+                return;
+            }
+
+            player.playerCombatManager.PerformWeaponBasedAction(
+                player.playerInventoryManager.currentRightHandWeapon.ohRbAction,
+                player.playerInventoryManager.currentRightHandWeapon
+            );
+        }
     }
 }
