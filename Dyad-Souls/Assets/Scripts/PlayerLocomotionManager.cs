@@ -1,9 +1,9 @@
-using Unity.Mathematics;
 using UnityEngine;
 
-public class PlayerLocomotionManager : CharacterLocomotionManager
+public class PlayerLocomotionManager : MonoBehaviour
 {
     PlayerManager player;
+
     public float verticalMovement;
     public float horizontalMovement;
     public float moveAmount;
@@ -11,13 +11,7 @@ public class PlayerLocomotionManager : CharacterLocomotionManager
     private Vector3 moveDirection;
     private Vector3 targetRotationDirection;
 
-    [Header("Gravity Settings")]
-    [SerializeField]
-    float gravityForce = -9.81f;
-
-    [SerializeField]
-    float groundedGravity = -0.05f;
-
+    [Header("Movement Settings")]
     [SerializeField]
     float walkingSpeed = 2;
 
@@ -27,9 +21,15 @@ public class PlayerLocomotionManager : CharacterLocomotionManager
     [SerializeField]
     float rotationSpeed = 15;
 
-    protected override void Awake()
+    [Header("Gravity Settings")]
+    [SerializeField]
+    float gravityForce = -9.81f;
+
+    [SerializeField]
+    float groundedGravity = -0.05f;
+
+    protected virtual void Awake()
     {
-        base.Awake();
         player = GetComponent<PlayerManager>();
     }
 
@@ -64,6 +64,7 @@ public class PlayerLocomotionManager : CharacterLocomotionManager
         {
             moveDirection = Vector3.zero;
         }
+
         moveDirection.Normalize();
         moveDirection.y = 0;
 
@@ -77,24 +78,10 @@ public class PlayerLocomotionManager : CharacterLocomotionManager
             moveDirection.y += gravityForce * Time.deltaTime;
         }
 
-        if (player.playerInputManager != null && player.playerInputManager.moveAmount > 0.5f)
-        {
-            Vector3 movement = moveDirection * runningSpeed * Time.deltaTime;
-            movement.y = moveDirection.y * Time.deltaTime;
-            player.characterController.Move(movement);
-        }
-        else if (player.playerInputManager != null && player.playerInputManager.moveAmount <= 0.5f)
-        {
-            Vector3 movement = moveDirection * walkingSpeed * Time.deltaTime;
-            movement.y = moveDirection.y * Time.deltaTime;
-            player.characterController.Move(movement);
-        }
-        else
-        {
-            // Auch wenn keine Bewegung, Gravity anwenden
-            Vector3 gravityMovement = new Vector3(0, moveDirection.y * Time.deltaTime, 0);
-            player.characterController.Move(gravityMovement);
-        }
+        float speed = (moveAmount > 0.5f) ? runningSpeed : walkingSpeed;
+        Vector3 movement = moveDirection * speed * Time.deltaTime;
+        movement.y = moveDirection.y * Time.deltaTime;
+        player.characterController.Move(movement);
     }
 
     private void HandleRotation()

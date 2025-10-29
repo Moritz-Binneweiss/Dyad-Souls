@@ -1,34 +1,28 @@
 using UnityEngine;
 
-public class PlayerEquipmentManager : CharacterEquipmentManager
+public class PlayerEquipmentManager : MonoBehaviour
 {
     PlayerManager player;
+
+    [Header("Right Hand Weapon")]
     public WeaponModelInstantiationSlot rightHandSlot;
-    public WeaponModelInstantiationSlot leftHandSlot;
-
-    [SerializeField] WeaponManager rightWeaponManager;
-    [SerializeField] WeaponManager leftWeaponManager;
-
     public GameObject rightHandWeaponModel;
-    public GameObject leftHandWeaponModel;
 
-    protected override void Awake()
+    [SerializeField]
+    WeaponManager rightWeaponManager;
+
+    protected virtual void Awake()
     {
-        base.Awake();
-
         player = GetComponent<PlayerManager>();
-
-        InitializeWeaponSlots();
+        InitializeWeaponSlot();
     }
 
-    protected override void Start()
+    protected virtual void Start()
     {
-        base.Start();
-
-        LoadWeaponsOnBothHands();
+        LoadRightWeapon();
     }
 
-    private void InitializeWeaponSlots()
+    private void InitializeWeaponSlot()
     {
         WeaponModelInstantiationSlot[] weaponSlots =
             GetComponentsInChildren<WeaponModelInstantiationSlot>();
@@ -38,18 +32,9 @@ public class PlayerEquipmentManager : CharacterEquipmentManager
             if (weaponSlot.weaponSlot == WeaponModelSlot.RightHand)
             {
                 rightHandSlot = weaponSlot;
-            }
-            else if (weaponSlot.weaponSlot == WeaponModelSlot.LeftHand)
-            {
-                leftHandSlot = weaponSlot;
+                break;
             }
         }
-    }
-
-    public void LoadWeaponsOnBothHands()
-    {
-        LoadRightWeapon();
-        LoadLeftWeapon();
     }
 
     public void LoadRightWeapon()
@@ -63,25 +48,9 @@ public class PlayerEquipmentManager : CharacterEquipmentManager
             );
             rightHandSlot.LoadWeaponModel(rightHandWeaponModel);
             rightWeaponManager = rightHandWeaponModel.GetComponent<WeaponManager>();
-            rightWeaponManager.SetWeaponDamage(player,
+            rightWeaponManager.SetWeaponDamage(
+                player,
                 player.playerInventoryManager.currentRightHandWeapon
-            );
-        }
-    }
-
-    public void LoadLeftWeapon()
-    {
-        if (player.playerInventoryManager.currentLeftHandWeapon != null)
-        {
-            leftHandSlot.UnloadWeaponModel();
-
-            leftHandWeaponModel = Instantiate(
-                player.playerInventoryManager.currentLeftHandWeapon.weaponModel
-            );
-            leftHandSlot.LoadWeaponModel(leftHandWeaponModel);
-            leftWeaponManager = leftHandWeaponModel.GetComponent<WeaponManager>();
-            leftWeaponManager.SetWeaponDamage(player, 
-                player.playerInventoryManager.currentLeftHandWeapon
             );
         }
     }

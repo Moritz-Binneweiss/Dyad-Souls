@@ -1,31 +1,12 @@
-using BehaviorDesigner.Runtime.Tasks.Unity.UnityCharacterController;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.XR;
-
-public enum InputDeviceType
-{
-    KeyboardMouse,
-    Gamepad,
-}
 
 public class PlayerInputManager : MonoBehaviour
 {
     [Header("Player Assignment")]
     public PlayerManager player;
 
-    [Header("Input Device Settings")]
-    public InputDeviceType deviceType = InputDeviceType.KeyboardMouse;
-
-    [Header("Auto-Configure from Lobby")]
-    public bool autoConfigureFromLobby = true;
-    public string playerName = "Player1"; // "Player1" oder "Player2"
-
     InputSystem_Actions playerControls;
-    private System.Action<InputAction.CallbackContext> movePerformed;
-    private System.Action<InputAction.CallbackContext> moveCanceled;
-    private System.Action<InputAction.CallbackContext> lookPerformed;
-    private System.Action<InputAction.CallbackContext> lookCanceled;
 
     [Header("Player Movement Input")]
     [SerializeField]
@@ -40,53 +21,21 @@ public class PlayerInputManager : MonoBehaviour
     public float cameraVerticalInput;
     public float cameraHorizontalInput;
 
-    [Header("Lock On Input")]
-    [SerializeField] bool lockOnInput;
-
     [Header("Player Action Inputs")]
-    [SerializeField] bool rbInput = false;
-
+    [SerializeField]
+    bool attackInput = false;
 
     private void Awake()
     {
-        // Auto-Konfiguration aus Lobby wenn aktiviert
-        if (autoConfigureFromLobby)
-        {
-            ConfigureDeviceTypeFromLobby();
-        }
-
-        // try to auto-assign player if not set in Inspector
         if (player == null)
         {
             player = GetComponent<PlayerManager>();
             if (player == null)
             {
-                player = GetComponentInChildren<PlayerManager>();
+                Debug.LogWarning(
+                    $"PlayerInputManager auf {gameObject.name} hat keinen zugewiesenen Player!"
+                );
             }
-        }
-
-        if (player == null)
-        {
-            Debug.LogWarning(
-                $"PlayerInputManager auf {gameObject.name} hat keinen zugewiesenen Player!"
-            );
-        }
-    }
-
-    private void ConfigureDeviceTypeFromLobby()
-    {
-        string gamepadControls = PlayerPrefs.GetString("GamepadControls", "");
-        string keyboardControls = PlayerPrefs.GetString("KeyboardControls", "");
-
-        // Prüfe ob Gamepad diesem Spieler zugewiesen wurde
-        if (gamepadControls == playerName)
-        {
-            deviceType = InputDeviceType.Gamepad;
-        }
-        // Prüfe ob Keyboard diesem Spieler zugewiesen wurde
-        else if (keyboardControls == playerName)
-        {
-            deviceType = InputDeviceType.KeyboardMouse;
         }
     }
 
@@ -96,74 +45,22 @@ public class PlayerInputManager : MonoBehaviour
         {
             playerControls = new InputSystem_Actions();
 
-            movePerformed = i =>
-            {
-                if (IsCorrectDevice(i.control.device))
-                {
-                    movement = i.ReadValue<Vector2>();
-                }
-            };
+            playerControls.Player.Move.performed += i => movement = i.ReadValue<Vector2>();
+            playerControls.Player.Move.canceled += i => movement = Vector2.zero;
 
-            lookPerformed = i =>
-            {
-                if (IsCorrectDevice(i.control.device))
-                {
-                    cameraInput = i.ReadValue<Vector2>();
-                }
-            };
+            playerControls.Player.Look.performed += i => cameraInput = i.ReadValue<Vector2>();
+            playerControls.Player.Look.canceled += i => cameraInput = Vector2.zero;
 
-            moveCanceled = i =>
-            {
-                if (IsCorrectDevice(i.control.device))
-                {
-                    movement = Vector2.zero;
-                }
-            };
-
-            lookCanceled = i =>
-            {
-                if (IsCorrectDevice(i.control.device))
-                {
-                    cameraInput = Vector2.zero;
-                }
-            };
-
-            playerControls.Player.Move.performed += movePerformed;
-            playerControls.Player.Look.performed += lookPerformed;
-            playerControls.Player.Move.canceled += moveCanceled;
-            playerControls.Player.Look.canceled += lookCanceled;
-            playerControls.Player.LockOn.performed += i => lockOnInput = true;
-            playerControls.Player.Attack.performed += i => rbInput = true;
+            playerControls.Player.Attack.performed += i => attackInput = true;
         }
 
         playerControls.Enable();
-    }
-
-    private bool IsCorrectDevice(UnityEngine.InputSystem.InputDevice device)
-    {
-        if (deviceType == InputDeviceType.KeyboardMouse)
-        {
-            return device is Keyboard || device is Mouse;
-        }
-        else // Gamepad
-        {
-            return device is Gamepad;
-        }
     }
 
     private void OnDisable()
     {
         if (playerControls != null)
         {
-            if (movePerformed != null)
-                playerControls.Player.Move.performed -= movePerformed;
-            if (moveCanceled != null)
-                playerControls.Player.Move.canceled -= moveCanceled;
-            if (lookPerformed != null)
-                playerControls.Player.Look.performed -= lookPerformed;
-            if (lookCanceled != null)
-                playerControls.Player.Look.canceled -= lookCanceled;
-
             playerControls.Disable();
         }
     }
@@ -172,17 +69,7 @@ public class PlayerInputManager : MonoBehaviour
     {
         HandlePlayerMovementInput();
         HandleCameraMovementInput();
-        HandleLockOnInput();
-        HandleRBInput();
-
-    }
-
-    private void HandleAllInputs()
-    {
-        HandlePlayerMovementInput();
-        HandleCameraMovementInput();
-        HandleLockOnInput();
-        HandleRBInput();
+        HandleAttackInput();
     }
 
     private void HandlePlayerMovementInput()
@@ -201,14 +88,8 @@ public class PlayerInputManager : MonoBehaviour
             moveAmount = 1f;
         }
 
-        if (player == null)
+        if (player == null || player.playerAnimatorManager == null)
             return;
-
-        if (player.playerAnimatorManager == null)
-        {
-            Debug.LogWarning("PlayerAnimatorManager is null in HandlePlayerMovementInput()");
-            return;
-        }
 
         player.playerAnimatorManager.UpdateAnimatorMovementParameter(0, moveAmount);
     }
@@ -219,50 +100,16 @@ public class PlayerInputManager : MonoBehaviour
         cameraVerticalInput = cameraInput.y;
     }
 
-    private void HandleLockOnInput()
+    private void HandleAttackInput()
     {
-        if (lockOnInput)
+        if (attackInput)
         {
-            lockOnInput = false;
-            return;
-        }
-    }
+            attackInput = false;
 
-    private void HandleRBInput()
-    {
-        if (rbInput)
-        {
-            rbInput = false;
-
-            // Add null checks to prevent NullReferenceException
-            if (player == null)
-            {
-                Debug.LogWarning("Player is null in HandleRBInput()");
+            if (player == null || player.playerCombatManager == null)
                 return;
-            }
 
-            if (player.playerCombatManager == null)
-            {
-                Debug.LogWarning("PlayerCombatManager is null in HandleRBInput()");
-                return;
-            }
-
-            if (player.playerInventoryManager == null)
-            {
-                Debug.LogWarning("PlayerInventoryManager is null in HandleRBInput()");
-                return;
-            }
-
-            if (player.playerInventoryManager.currentRightHandWeapon == null)
-            {
-                Debug.LogWarning("CurrentRightHandWeapon is null in HandleRBInput()");
-                return;
-            }
-
-            player.playerCombatManager.PerformWeaponBasedAction(
-                player.playerInventoryManager.currentRightHandWeapon.ohRbAction,
-                player.playerInventoryManager.currentRightHandWeapon
-            );
+            player.playerCombatManager.PerformLightAttack();
         }
     }
 }

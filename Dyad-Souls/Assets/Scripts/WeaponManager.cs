@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class WeaponManager : MonoBehaviour
 {
-    [SerializeField] MeleeWeaponDamageCollider meleeDamageCollider;
+    [SerializeField]
+    MeleeWeaponDamageCollider meleeDamageCollider;
 
     private void Awake()
     {
@@ -11,11 +12,13 @@ public class WeaponManager : MonoBehaviour
 
     public void SetWeaponDamage(CharacterManager characterWieldingWeapon, WeaponItem weapon)
     {
+        if (meleeDamageCollider == null)
+        {
+            Debug.LogWarning("MeleeWeaponDamageCollider not found!");
+            return;
+        }
+
         meleeDamageCollider.characterCausingDamage = characterWieldingWeapon;
         meleeDamageCollider.physicalDamage = weapon.physicalDamage;
-        meleeDamageCollider.magicDamage = weapon.magicDamage;
-        meleeDamageCollider.fireDamage = weapon.fireDamage;
-        meleeDamageCollider.lightningDamage = weapon.lightningDamage;
-        meleeDamageCollider.holyDamage = weapon.holyDamage;
     }
 }

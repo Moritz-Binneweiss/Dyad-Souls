@@ -1,17 +1,30 @@
 using UnityEngine;
 
-public class PlayerCombatManager : CharacterCombatManager
+public class PlayerCombatManager : MonoBehaviour
 {
     PlayerManager player;
 
-    protected override void Awake()
+    protected virtual void Awake()
     {
-        base.Awake();
         player = GetComponent<PlayerManager>();
     }
 
-    public void PerformWeaponBasedAction(WeaponItemAction weaponAction, WeaponItem weaponPerformingAction)
+    public void PerformLightAttack()
     {
-        weaponAction.AttemptToPerformAction(player, weaponPerformingAction);
+        if (player.playerInventoryManager.currentRightHandWeapon == null)
+        {
+            Debug.LogWarning("No weapon equipped!");
+            return;
+        }
+
+        WeaponItem weapon = player.playerInventoryManager.currentRightHandWeapon;
+
+        if (player.playerAnimatorManager == null)
+        {
+            Debug.LogError("PlayerAnimatorManager is null!");
+            return;
+        }
+
+        player.playerAnimatorManager.PlayTargetAttackAnimation(weapon.lightAttackAnimation, true);
     }
 }
