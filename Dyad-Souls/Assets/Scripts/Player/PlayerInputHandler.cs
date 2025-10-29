@@ -1,7 +1,5 @@
-using BehaviorDesigner.Runtime.Tasks.Unity.UnityCharacterController;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.XR;
 
 public enum InputDeviceType
 {
@@ -9,7 +7,7 @@ public enum InputDeviceType
     Gamepad,
 }
 
-public class PlayerInputManager : MonoBehaviour
+public class PlayerInputHandler : MonoBehaviour
 {
     [Header("Player Assignment")]
     public PlayerManager player;
@@ -26,6 +24,7 @@ public class PlayerInputManager : MonoBehaviour
     private System.Action<InputAction.CallbackContext> moveCanceled;
     private System.Action<InputAction.CallbackContext> lookPerformed;
     private System.Action<InputAction.CallbackContext> lookCanceled;
+    private System.Action<InputAction.CallbackContext> attackPerformed;
 
     [Header("Player Movement Input")]
     [SerializeField]
@@ -39,6 +38,10 @@ public class PlayerInputManager : MonoBehaviour
     Vector2 cameraInput;
     public float cameraVerticalInput;
     public float cameraHorizontalInput;
+
+    [Header("Player Action Inputs")]
+    [SerializeField]
+    bool attackInput = false;
 
     private void Awake()
     {
@@ -75,11 +78,27 @@ public class PlayerInputManager : MonoBehaviour
         if (gamepadControls == playerName)
         {
             deviceType = InputDeviceType.Gamepad;
+            Debug.Log($"{playerName} configured for Gamepad");
         }
         // Prüfe ob Keyboard diesem Spieler zugewiesen wurde
         else if (keyboardControls == playerName)
         {
             deviceType = InputDeviceType.KeyboardMouse;
+            Debug.Log($"{playerName} configured for Keyboard/Mouse");
+        }
+        // Standard: Player1 = Keyboard, Player2 = Gamepad
+        else
+        {
+            if (playerName == "Player1")
+            {
+                deviceType = InputDeviceType.KeyboardMouse;
+                Debug.Log($"{playerName} using default Keyboard/Mouse");
+            }
+            else if (playerName == "Player2")
+            {
+                deviceType = InputDeviceType.Gamepad;
+                Debug.Log($"{playerName} using default Gamepad");
+            }
         }
     }
 
@@ -121,10 +140,19 @@ public class PlayerInputManager : MonoBehaviour
                 }
             };
 
+            attackPerformed = i =>
+            {
+                if (IsCorrectDevice(i.control.device))
+                {
+                    attackInput = true;
+                }
+            };
+
             playerControls.Player.Move.performed += movePerformed;
             playerControls.Player.Look.performed += lookPerformed;
             playerControls.Player.Move.canceled += moveCanceled;
             playerControls.Player.Look.canceled += lookCanceled;
+            playerControls.Player.Attack.performed += attackPerformed;
         }
 
         playerControls.Enable();
@@ -154,6 +182,8 @@ public class PlayerInputManager : MonoBehaviour
                 playerControls.Player.Look.performed -= lookPerformed;
             if (lookCanceled != null)
                 playerControls.Player.Look.canceled -= lookCanceled;
+            if (attackPerformed != null)
+                playerControls.Player.Attack.performed -= attackPerformed;
 
             playerControls.Disable();
         }
@@ -163,6 +193,7 @@ public class PlayerInputManager : MonoBehaviour
     {
         HandlePlayerMovementInput();
         HandleCameraMovementInput();
+        HandleAttackInput();
     }
 
     private void HandlePlayerMovementInput()
@@ -180,16 +211,24 @@ public class PlayerInputManager : MonoBehaviour
         {
             moveAmount = 1f;
         }
-
-        if (player == null)
-            return;
-
-        player.playerAnimatorManager.UpdateAnimatorMovementParameter(0, moveAmount);
     }
 
     private void HandleCameraMovementInput()
     {
         cameraHorizontalInput = cameraInput.x;
         cameraVerticalInput = cameraInput.y;
+    }
+
+    private void HandleAttackInput()
+    {
+        if (attackInput)
+        {
+            attackInput = false;
+
+            if (player != null)
+            {
+                player.PerformLightAttack();
+            }
+        }
     }
 }

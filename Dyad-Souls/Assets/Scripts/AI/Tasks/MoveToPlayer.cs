@@ -6,6 +6,8 @@ using UnityEngine.AI;
 public class MoveToPlayer : Action
 {
     public SharedTransform player;
+
+    public SharedTransform playerTwo;
     public SharedFloat stoppingDistance = 2f;
 
     private NavMeshAgent agent;
@@ -16,10 +18,11 @@ public class MoveToPlayer : Action
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
 
-        if (agent != null && player.Value != null)
+        Transform targetPlayer = GetClosestPlayer();
+        if (agent != null && targetPlayer != null)
         {
             agent.isStopped = false;
-            agent.SetDestination(player.Value.position);
+            agent.SetDestination(targetPlayer.position);
 
             // Setze isRunning auf true wenn der Agent zu laufen beginnt
             if (animator != null)
@@ -29,7 +32,8 @@ public class MoveToPlayer : Action
 
     public override TaskStatus OnUpdate()
     {
-        if (player.Value == null || agent == null)
+        Transform targetPlayer = GetClosestPlayer();
+        if (targetPlayer == null || agent == null)
         {
             // Stoppe Animation wenn Fehler auftritt
             if (animator != null)
@@ -37,11 +41,11 @@ public class MoveToPlayer : Action
             return TaskStatus.Failure;
         }
 
-        // Lauf weiter zum Ziel
-        agent.SetDestination(player.Value.position);
+        // Lauf weiter zum nächstgelegenen Spieler
+        agent.SetDestination(targetPlayer.position);
 
         // Prüfe Entfernung
-        float distance = Vector3.Distance(transform.position, player.Value.position);
+        float distance = Vector3.Distance(transform.position, targetPlayer.position);
         if (distance <= stoppingDistance.Value)
         {
             agent.isStopped = true;
@@ -56,6 +60,25 @@ public class MoveToPlayer : Action
             animator.SetBool("isRunning", true);
 
         return TaskStatus.Running;
+    }
+
+    private Transform GetClosestPlayer()
+    {
+        // Prüfe welche Spieler verfügbar sind
+        if (player.Value == null && playerTwo.Value == null)
+            return null;
+
+        if (player.Value == null)
+            return playerTwo.Value;
+
+        if (playerTwo.Value == null)
+            return player.Value;
+
+        // Beide Spieler sind verfügbar - wähle den nächstgelegenen
+        float distanceToPlayer = Vector3.Distance(transform.position, player.Value.position);
+        float distanceToPlayerTwo = Vector3.Distance(transform.position, playerTwo.Value.position);
+
+        return distanceToPlayer <= distanceToPlayerTwo ? player.Value : playerTwo.Value;
     }
 
     public override void OnEnd()
