@@ -1,0 +1,69 @@
+using UnityEngine;
+
+public class PlayerCombatSystem : MonoBehaviour
+{
+    [Header("Components")]
+    private PlayerManager player;
+    private Animator animator;
+
+    [Header("Weapon Setup")]
+    public GameObject swordPrefab;
+    public Transform rightHandBone;
+    private GameObject currentSword;
+
+    [Header("Combat Settings")]
+    [SerializeField]
+    string lightAttackAnimation = "MainLightAttack";
+
+    private void Awake()
+    {
+        player = GetComponent<PlayerManager>();
+        animator = GetComponent<Animator>();
+
+        // Find right hand bone if not assigned
+        if (rightHandBone == null)
+        {
+            rightHandBone = FindRightHandBone(transform);
+        }
+    }
+
+    private void Start()
+    {
+        EquipSword();
+    }
+
+    private Transform FindRightHandBone(Transform root)
+    {
+        // Recursively search for "RightHand" bone
+        foreach (Transform child in root.GetComponentsInChildren<Transform>())
+        {
+            if (child.name.Contains("RightHand") || child.name.Contains("Right_Hand"))
+            {
+                return child;
+            }
+        }
+        return null;
+    }
+
+    private void EquipSword()
+    {
+        if (swordPrefab == null || rightHandBone == null)
+        {
+            Debug.LogWarning("Sword prefab or right hand bone not assigned!");
+            return;
+        }
+
+        // Instantiate sword and attach to right hand
+        currentSword = Instantiate(swordPrefab, rightHandBone);
+        currentSword.transform.localPosition = Vector3.zero;
+        currentSword.transform.localRotation = Quaternion.identity;
+    }
+
+    public void PerformLightAttack()
+    {
+        if (animator != null && !string.IsNullOrEmpty(lightAttackAnimation))
+        {
+            animator.CrossFade(lightAttackAnimation, 0.2f, 0);
+        }
+    }
+}
