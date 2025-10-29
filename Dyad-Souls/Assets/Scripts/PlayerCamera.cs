@@ -137,5 +137,4 @@ public class PlayerCamera : MonoBehaviour
         );
         cameraObject.transform.localPosition = cameraObjectPosition;
     }
-
 }

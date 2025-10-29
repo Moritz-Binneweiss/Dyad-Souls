@@ -67,10 +67,10 @@ public class MoveToPlayer : Action
         // Prüfe welche Spieler verfügbar sind
         if (player.Value == null && playerTwo.Value == null)
             return null;
-        
+
         if (player.Value == null)
             return playerTwo.Value;
-        
+
         if (playerTwo.Value == null)
             return player.Value;
 

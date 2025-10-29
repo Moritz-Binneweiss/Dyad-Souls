@@ -13,7 +13,8 @@ public class Jump : Action
 
     public override TaskStatus OnUpdate()
     {
-        if (rb == null) return TaskStatus.Failure;
+        if (rb == null)
+            return TaskStatus.Failure;
 
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         return TaskStatus.Success;

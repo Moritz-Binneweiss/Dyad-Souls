@@ -3,19 +3,14 @@ using UnityEngine;
 
 public class DamageCollider : MonoBehaviour
 {
-    [Header("Collider")]
-    protected Collider damageCollider;
+    [Header("Damage Settings")]
+    public float physicalDamage = 10f;
+    public PlayerManager characterCausingDamage;
 
-    [Header("Damage")]
-    public float physicalDamage = 0;
+    private Collider damageCollider;
+    private List<PlayerManager> charactersDamaged = new List<PlayerManager>();
 
-    [Header("Contact Point")]
-    protected Vector3 contactPoint;
-
-    [Header("Characters Damaged")]
-    protected List<CharacterManager> charactersDamaged = new List<CharacterManager>();
-
-    protected virtual void Awake()
+    private void Awake()
     {
         damageCollider = GetComponent<Collider>();
         if (damageCollider != null)
@@ -24,23 +19,30 @@ public class DamageCollider : MonoBehaviour
         }
     }
 
-    protected virtual void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
-        CharacterManager target = other.GetComponent<CharacterManager>();
+        PlayerManager target = other.GetComponent<PlayerManager>();
 
-        if (target != null && !charactersDamaged.Contains(target))
+        if (
+            target != null
+            && target != characterCausingDamage
+            && !charactersDamaged.Contains(target)
+        )
         {
             charactersDamaged.Add(target);
             DamageTarget(target);
         }
     }
 
-    protected virtual void DamageTarget(CharacterManager characterToDamage)
+    private void DamageTarget(PlayerManager target)
     {
-        Debug.Log($"Damaged {characterToDamage.gameObject.name} for {physicalDamage} damage!");
+        Debug.Log(
+            $"{characterCausingDamage?.gameObject.name} damaged {target.gameObject.name} for {physicalDamage} damage!"
+        );
+        // Here you can add health reduction logic later
     }
 
-    public virtual void EnableDamageCollider()
+    public void EnableDamageCollider()
     {
         if (damageCollider != null)
         {
@@ -48,7 +50,7 @@ public class DamageCollider : MonoBehaviour
         }
     }
 
-    public virtual void DisableDamageCollider()
+    public void DisableDamageCollider()
     {
         if (damageCollider != null)
         {

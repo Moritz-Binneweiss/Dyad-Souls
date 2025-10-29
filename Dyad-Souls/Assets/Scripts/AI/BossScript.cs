@@ -14,7 +14,6 @@ public class BossScript : MonoBehaviour
     private float wanderTimer = 5f; // Zeit bis zum nächsten Ziel
 
     [Header("Animation Settings")]
-
     private float timer;
 
     void Start()

@@ -87,11 +87,6 @@ public class PlayerInputManager : MonoBehaviour
         {
             moveAmount = 1f;
         }
-
-        if (player == null || player.playerAnimatorManager == null)
-            return;
-
-        player.playerAnimatorManager.UpdateAnimatorMovementParameter(0, moveAmount);
     }
 
     private void HandleCameraMovementInput()
@@ -106,10 +101,10 @@ public class PlayerInputManager : MonoBehaviour
         {
             attackInput = false;
 
-            if (player == null || player.playerCombatManager == null)
-                return;
-
-            player.playerCombatManager.PerformLightAttack();
+            if (player != null)
+            {
+                player.PerformLightAttack();
+            }
         }
     }
 }

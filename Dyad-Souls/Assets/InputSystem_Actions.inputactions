@@ -86,15 +86,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "RB",
-                    "type": "Button",
-                    "id": "a59698d5-8353-4ea6-a05a-f1db04a2b31c",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -370,17 +361,6 @@
                     "processors": "",
                     "groups": ";Gamepad",
                     "action": "LockOn",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "5538c601-96e7-4542-bc63-f2233379d8e2",
-                    "path": "<Gamepad>/rightShoulder",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Gamepad",
-                    "action": "RB",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
