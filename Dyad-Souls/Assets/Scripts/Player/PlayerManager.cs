@@ -4,7 +4,7 @@ public class PlayerManager : MonoBehaviour
 {
     [Header("Components")]
     public PlayerCamera playerCamera;
-    public PlayerInputManager playerInputManager;
+    public PlayerInputHandler playerInputManager;
 
     [HideInInspector]
     public PlayerMovement playerMovement;
