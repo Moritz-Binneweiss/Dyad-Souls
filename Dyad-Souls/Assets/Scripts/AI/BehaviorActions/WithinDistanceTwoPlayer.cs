@@ -12,51 +12,24 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
     [TaskIcon("62dc1c328b5c4eb45a90ec7a75cfb747", "0e2ffa7c5e610214eb6d5c71613bbdec")]
     public class WithinDistanceTwoPlayer : Conditional
     {
-        [Tooltip("The first player to check distance to")]
         public SharedGameObject m_PlayerOne;
-
-        [Tooltip("The second player to check distance to")]
         public SharedGameObject m_PlayerTwo;
-
-        [Tooltip("The distance that at least one player needs to be within")]
         public SharedFloat m_Magnitude = 5f;
-
-        [Tooltip(
-            "If true, the player must be within line of sight to be considered within distance"
-        )]
         public SharedBool m_LineOfSight = true;
-
-        [Tooltip("The LayerMask of the objects to ignore when performing the line of sight check")]
         public LayerMask m_IgnoreLayerMask = 1 << LayerMask.NameToLayer("Ignore Raycast");
-
-        [Tooltip("The raycast offset relative to the pivot position")]
         public SharedVector3 m_Offset = Vector3.zero;
-
-        [Tooltip("The target raycast offset relative to the pivot position")]
         public SharedVector3 m_TargetOffset = Vector3.zero;
-
-        [Tooltip("Should a debug ray be drawn to the scene view?")]
         public SharedBool m_DrawDebugRay = false;
-
-        [Tooltip(
-            "The player object that will be set when a player is found within distance (the closest one)"
-        )]
         public SharedGameObject m_ReturnedPlayer;
-
-        [Tooltip("Should the 2D version be used?")]
         public bool m_UsePhysics2D = false;
 
-        private float m_SqrMagnitude; // distance * distance, optimization so we don't have to take the square root
+        private float m_SqrMagnitude;
 
         public override void OnStart()
         {
             m_SqrMagnitude = m_Magnitude.Value * m_Magnitude.Value;
         }
 
-        /// <summary>
-        /// Returns success if either player is within distance of the current object.
-        /// Sets m_ReturnedPlayer to the closest player within range.
-        /// </summary>
         public override TaskStatus OnUpdate()
         {
             m_ReturnedPlayer.Value = null;
@@ -101,9 +74,6 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             return TaskStatus.Failure;
         }
 
-        /// <summary>
-        /// Is the target player within distance?
-        /// </summary>
         private bool IsWithinDistance(GameObject player)
         {
             if (player == null)
@@ -144,9 +114,6 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             return false;
         }
 
-        /// <summary>
-        /// Get the square distance to the target player (for comparison purposes)
-        /// </summary>
         private float GetSquareDistance(GameObject player)
         {
             if (player == null)
