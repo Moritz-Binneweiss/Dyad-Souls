@@ -41,4 +41,12 @@ public class PlayerManager : MonoBehaviour
             playerCombatSystem.PerformLightAttack();
         }
     }
+
+    public void PerformDodge()
+    {
+        if (playerCombatSystem != null)
+        {
+            playerCombatSystem.PerformDodge();
+        }
+    }
 }

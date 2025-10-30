@@ -25,6 +25,7 @@ public class PlayerInputHandler : MonoBehaviour
     private System.Action<InputAction.CallbackContext> lookPerformed;
     private System.Action<InputAction.CallbackContext> lookCanceled;
     private System.Action<InputAction.CallbackContext> attackPerformed;
+    private System.Action<InputAction.CallbackContext> dodgePerformed;
 
     [Header("Player Movement Input")]
     [SerializeField]
@@ -42,6 +43,10 @@ public class PlayerInputHandler : MonoBehaviour
     [Header("Player Action Inputs")]
     [SerializeField]
     bool attackInput = false;
+
+    [Header("Player Dodge Inputs")]
+    [SerializeField]
+    bool dodgeInput = false;
 
     private void Awake()
     {
@@ -148,11 +153,20 @@ public class PlayerInputHandler : MonoBehaviour
                 }
             };
 
+            dodgePerformed = i =>
+            {
+                if (IsCorrectDevice(i.control.device))
+                {
+                    dodgeInput = true;
+                }
+            };
+
             playerControls.Player.Move.performed += movePerformed;
             playerControls.Player.Look.performed += lookPerformed;
             playerControls.Player.Move.canceled += moveCanceled;
             playerControls.Player.Look.canceled += lookCanceled;
             playerControls.Player.Attack.performed += attackPerformed;
+            playerControls.Player.Dodge.performed += dodgePerformed;
         }
 
         playerControls.Enable();
@@ -184,6 +198,8 @@ public class PlayerInputHandler : MonoBehaviour
                 playerControls.Player.Look.canceled -= lookCanceled;
             if (attackPerformed != null)
                 playerControls.Player.Attack.performed -= attackPerformed;
+            if (dodgePerformed != null)
+                playerControls.Player.Dodge.performed -= dodgePerformed;
 
             playerControls.Disable();
         }
@@ -194,6 +210,7 @@ public class PlayerInputHandler : MonoBehaviour
         HandlePlayerMovementInput();
         HandleCameraMovementInput();
         HandleAttackInput();
+        HandleDodgeInput();
     }
 
     private void HandlePlayerMovementInput()
@@ -228,6 +245,19 @@ public class PlayerInputHandler : MonoBehaviour
             if (player != null)
             {
                 player.PerformLightAttack();
+            }
+        }
+    }
+
+    private void HandleDodgeInput()
+    {
+        if (dodgeInput)
+        {
+            dodgeInput = false;
+
+            if (player != null)
+            {
+                player.PerformDodge();
             }
         }
     }

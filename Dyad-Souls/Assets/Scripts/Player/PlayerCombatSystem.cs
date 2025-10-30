@@ -15,6 +15,10 @@ public class PlayerCombatSystem : MonoBehaviour
     [SerializeField]
     string lightAttackAnimation = "MainLightAttack";
 
+    [Header("Dodge Settings")]
+    [SerializeField]
+    string dodgeAnimation = "Backstep";
+
     private void Awake()
     {
         player = GetComponent<PlayerManager>();
@@ -64,6 +68,14 @@ public class PlayerCombatSystem : MonoBehaviour
         if (animator != null && !string.IsNullOrEmpty(lightAttackAnimation))
         {
             animator.CrossFade(lightAttackAnimation, 0.2f, 0);
+        }
+    }
+
+    public void PerformDodge()
+    {
+        if (animator != null && !string.IsNullOrEmpty(dodgeAnimation))
+        {
+            animator.CrossFade(dodgeAnimation, 0.1f, 0);
         }
     }
 }
