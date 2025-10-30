@@ -10,10 +10,15 @@ public class PlayerCombatSystem : MonoBehaviour
     public GameObject swordPrefab;
     public Transform rightHandBone;
     private GameObject currentSword;
+    private Collider weaponCollider;
 
     [Header("Combat Settings")]
     [SerializeField]
     string lightAttackAnimation = "MainLightAttack";
+
+    [Header("Dodge Settings")]
+    [SerializeField]
+    string dodgeAnimation = "Backstep";
 
     private void Awake()
     {
@@ -53,10 +58,19 @@ public class PlayerCombatSystem : MonoBehaviour
             return;
         }
 
-        // Instantiate sword and attach to right hand
         currentSword = Instantiate(swordPrefab, rightHandBone);
         currentSword.transform.localPosition = Vector3.zero;
         currentSword.transform.localRotation = Quaternion.identity;
+
+        weaponCollider = currentSword.GetComponentInChildren<Collider>();
+        if (weaponCollider != null)
+        {
+            weaponCollider.enabled = false;
+        }
+        else
+        {
+            Debug.LogError("No collider found on sword or its children!");
+        }
     }
 
     public void PerformLightAttack()
@@ -64,6 +78,30 @@ public class PlayerCombatSystem : MonoBehaviour
         if (animator != null && !string.IsNullOrEmpty(lightAttackAnimation))
         {
             animator.CrossFade(lightAttackAnimation, 0.2f, 0);
+        }
+    }
+
+    public void EnableWeaponCollider()
+    {
+        if (weaponCollider != null)
+        {
+            weaponCollider.enabled = true;
+        }
+    }
+
+    public void DisableWeaponCollider()
+    {
+        if (weaponCollider != null)
+        {
+            weaponCollider.enabled = false;
+        }
+    }
+
+    public void PerformDodge()
+    {
+        if (animator != null && !string.IsNullOrEmpty(dodgeAnimation))
+        {
+            animator.CrossFade(dodgeAnimation, 0.1f, 0);
         }
     }
 }
