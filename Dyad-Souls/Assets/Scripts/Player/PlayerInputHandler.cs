@@ -43,6 +43,10 @@ public class PlayerInputHandler : MonoBehaviour
     [SerializeField]
     bool attackInput = false;
 
+    [Header("Interact Input")]
+    [SerializeField]
+    private bool isHoldingInteract = false;
+
     private void Awake()
     {
         // Auto-Konfiguration aus Lobby wenn aktiviert
@@ -194,6 +198,7 @@ public class PlayerInputHandler : MonoBehaviour
         HandlePlayerMovementInput();
         HandleCameraMovementInput();
         HandleAttackInput();
+        HandleInteractInput();
     }
 
     private void HandlePlayerMovementInput()
@@ -228,6 +233,43 @@ public class PlayerInputHandler : MonoBehaviour
             if (player != null)
             {
                 player.PerformLightAttack();
+            }
+        }
+    }
+
+    private void HandleInteractInput()
+    {
+        if (playerControls == null)
+            return;
+
+        // Prüfe ob die Interact-Taste vom richtigen Device gedrückt wird
+        bool isCurrentlyPressed = false;
+
+        // Prüfe alle aktiven Controls der Interact-Action
+        foreach (var control in playerControls.Player.Interact.controls)
+        {
+            if (control.IsPressed() && IsCorrectDevice(control.device))
+            {
+                isCurrentlyPressed = true;
+                break;
+            }
+        }
+
+        // Nur wenn sich der Zustand geändert hat, informiere den PositionSwapManager
+        if (isCurrentlyPressed != isHoldingInteract)
+        {
+            isHoldingInteract = isCurrentlyPressed;
+
+            if (PositionSwapManager.Instance != null)
+            {
+                if (playerName == "Player1")
+                {
+                    PositionSwapManager.Instance.SetPlayer1Holding(isCurrentlyPressed);
+                }
+                else if (playerName == "Player2")
+                {
+                    PositionSwapManager.Instance.SetPlayer2Holding(isCurrentlyPressed);
+                }
             }
         }
     }
