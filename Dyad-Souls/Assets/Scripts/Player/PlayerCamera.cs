@@ -53,9 +53,6 @@ public class PlayerCamera : MonoBehaviour
     private float lockOnRotationSpeed = 10f; // Geschwindigkeit der Lock-On Rotation
 
     [SerializeField]
-    private float lockOnSmoothTime = 0.1f; // Smoothing beim Übergang
-
-    [SerializeField]
     private float lockOnHeightOffset = 1.5f; // Höhen-Offset zum Anvisieren (z.B. Oberkörper statt Füße)
 
     private void Start()
