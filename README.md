@@ -65,11 +65,50 @@ Besprechung:
 
 - Namens Problem wurde besprochen
 - aktueller Stand gezeigt
-- Pläne für die nächste Woche besprochen 
+- Pläne für die nächste Woche besprochen
 
 Ziel:
+
 - Tools vertraut machen
 - Kampfanimationen, Boss kann angreifen
 - Behaviour Trees reinfinden
 - minimaler Bosskampf möglich
 - Prototyp über die ganzen Funktionen
+
+#### **23.10.2025**
+
+Besprechung:
+
+- Behaviour Designer start gezeigt
+- Splitscreen und 2 Player Movement gezeigt
+
+Ziel:
+
+- weitere Animationen
+- Schaden nehmen (Boss und Player)
+- Attack Buffer
+- Elden Ring Wiki (Boss AI Behaviour Inspiration)
+
+#### **30.10.2025**
+
+Besprechung:
+
+- Lieber ein komplexer Boss anstatt mehrerer simpleren
+- Überlegen was kann der Boss spezielles
+- Fokus auf Kampf
+
+Ziel:
+
+- an MVP weiterarbeiten
+- Fokus auf den einen Bossfight
+
+#### **06.11.2025**
+
+Besprechung:
+
+- LockOnTarget gezeigt
+- Wave based Gameplay gezeigt
+
+Ziel:
+
+-
