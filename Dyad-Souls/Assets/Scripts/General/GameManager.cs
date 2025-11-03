@@ -22,6 +22,9 @@ public class GameManager : MonoBehaviour
     private float waveCooldownTime = 5f;
 
     [SerializeField]
+    private float enemyDefeatedDisplayTime = 5f;
+
+    [SerializeField]
     private float healthIncreasePerWave = 500f;
 
     private int currentWave = 1;
@@ -90,13 +93,28 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator WaveCooldownCoroutine()
     {
-        // Cooldown Timer
+        // Heile alle lebenden Spieler sofort
+        HealAllLivingPlayers();
+
+        // Zeige "Enemy Defeated" Text für 5 Sekunden
+        gameUIManager.ShowEnemyDefeated();
+        yield return new WaitForSeconds(enemyDefeatedDisplayTime);
+        gameUIManager.HideEnemyDefeated();
+
+        // Cooldown Timer mit UI-Update
         currentCooldownTime = waveCooldownTime;
         while (currentCooldownTime > 0)
         {
+            // Zeige Countdown-Text an
+            int secondsRemaining = Mathf.CeilToInt(currentCooldownTime);
+            gameUIManager.ShowWaveCountdown(currentWave + 1, secondsRemaining);
+
             yield return new WaitForSeconds(0.1f);
             currentCooldownTime -= 0.1f;
         }
+
+        // Verstecke Countdown-Text
+        gameUIManager.HideWaveCountdown();
 
         // Starte nächste Wave
         currentWave++;
@@ -130,6 +148,22 @@ public class GameManager : MonoBehaviour
             }
         }
         deadPlayers.Clear();
+    }
+
+    private void HealAllLivingPlayers()
+    {
+        foreach (PlayerManager player in players)
+        {
+            if (player != null && !player.IsDead())
+            {
+                // Heile Spieler vollständig
+                float missingHealth = player.GetMaxHealth() - player.GetCurrentHealth();
+                if (missingHealth > 0)
+                {
+                    player.Heal(missingHealth);
+                }
+            }
+        }
     }
 
     public int GetCurrentWave()
