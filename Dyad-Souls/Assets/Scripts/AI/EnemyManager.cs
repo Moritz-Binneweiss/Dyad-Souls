@@ -12,6 +12,8 @@ public class EnemyManager : MonoBehaviour
     [SerializeField]
     private Slider bossHealthSlider;
 
+    private bool isAlive = true;
+
     void Start()
     {
         currentHealth = maxHealth;
@@ -20,6 +22,9 @@ public class EnemyManager : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
+        if (!isAlive)
+            return;
+
         currentHealth -= damage;
         currentHealth = Mathf.Max(0, currentHealth);
 
@@ -42,11 +47,68 @@ public class EnemyManager : MonoBehaviour
 
     void Die()
     {
-        Destroy(gameObject);
+        isAlive = false;
+
+        // Deaktiviere Komponenten statt GameObject zu zerstören
+        // So können wir ihn für die nächste Wave wiederverwenden
+        Collider[] colliders = GetComponents<Collider>();
+        foreach (Collider col in colliders)
+        {
+            col.enabled = false;
+        }
+
+        // TODO: Spiele Death Animation ab
+        // Deaktiviere Renderer
+        Renderer[] renderers = GetComponentsInChildren<Renderer>();
+        foreach (Renderer rend in renderers)
+        {
+            rend.enabled = false;
+        }
+
+        // Verstecke Boss Health Bar
+        if (bossHealthSlider != null)
+        {
+            bossHealthSlider.gameObject.SetActive(false);
+        }
+    }
+
+    public void Revive(float newMaxHealth)
+    {
+        maxHealth = newMaxHealth;
+        currentHealth = maxHealth;
+        isAlive = true;
+
+        // Setze Position zurück auf (0, 0, 0)
+        transform.position = Vector3.zero;
+
+        // Reaktiviere Komponenten
+        Collider[] colliders = GetComponents<Collider>();
+        foreach (Collider col in colliders)
+        {
+            col.enabled = true;
+        }
+
+        // Reaktiviere Renderer
+        Renderer[] renderers = GetComponentsInChildren<Renderer>();
+        foreach (Renderer rend in renderers)
+        {
+            rend.enabled = true;
+        }
+
+        // Zeige Boss Health Bar wieder
+        if (bossHealthSlider != null)
+        {
+            bossHealthSlider.gameObject.SetActive(true);
+        }
+
+        UpdateHealthUI();
     }
 
     void OnTriggerEnter(Collider other)
     {
+        if (!isAlive)
+            return;
+
         if (other.CompareTag("Player"))
         {
             return;
@@ -83,6 +145,6 @@ public class EnemyManager : MonoBehaviour
 
     public bool IsAlive()
     {
-        return currentHealth > 0;
+        return isAlive;
     }
 }

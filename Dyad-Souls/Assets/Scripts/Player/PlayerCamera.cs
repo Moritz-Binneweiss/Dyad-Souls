@@ -45,6 +45,16 @@ public class PlayerCamera : MonoBehaviour
     private float cameraZPosition;
     private float targetCameraZPosition;
 
+    [Header("Lock-On Settings")]
+    private bool isLockedOn = false;
+    private Transform lockOnTarget;
+
+    [SerializeField]
+    private float lockOnRotationSpeed = 10f; // Geschwindigkeit der Lock-On Rotation
+
+    [SerializeField]
+    private float lockOnHeightOffset = 1.5f; // Höhen-Offset zum Anvisieren (z.B. Oberkörper statt Füße)
+
     private void Start()
     {
         cameraZPosition = cameraObject.transform.localPosition.z;
@@ -55,7 +65,17 @@ public class PlayerCamera : MonoBehaviour
         if (player != null)
         {
             HandleFollowTarget();
-            HandleRotations();
+
+            // Verwende Lock-On Rotation wenn aktiv, ansonsten normale Rotation
+            if (isLockedOn && lockOnTarget != null)
+            {
+                HandleLockOnRotations();
+            }
+            else
+            {
+                HandleRotations();
+            }
+
             HandleCollisions();
         }
     }
@@ -136,5 +156,92 @@ public class PlayerCamera : MonoBehaviour
             0.2f
         );
         cameraObject.transform.localPosition = cameraObjectPosition;
+    }
+
+    private void HandleLockOnRotations()
+    {
+        if (lockOnTarget == null)
+        {
+            // Wenn Target verloren geht, wechsle zurück zu normaler Rotation
+            isLockedOn = false;
+            return;
+        }
+
+        // Berechne die Zielposition mit Höhen-Offset (z.B. Oberkörper des Enemies)
+        Vector3 targetPosition = lockOnTarget.position + Vector3.up * lockOnHeightOffset;
+
+        // Berechne die Richtung vom Kamera-Pivot zum Target (für horizontale Rotation)
+        Vector3 directionToTarget = targetPosition - transform.position;
+        directionToTarget.y = 0; // Ignoriere Y-Achse für horizontale Rotation
+        directionToTarget.Normalize();
+
+        // Berechne Ziel-Rotation (horizontal)
+        if (directionToTarget != Vector3.zero)
+        {
+            float targetYAngle =
+                Mathf.Atan2(directionToTarget.x, directionToTarget.z) * Mathf.Rad2Deg;
+
+            // Smooth Angle Interpolation für flüssige Bewegung
+            leftAndRightLookAngle = Mathf.LerpAngle(
+                leftAndRightLookAngle,
+                targetYAngle,
+                Time.deltaTime * lockOnRotationSpeed
+            );
+
+            // Wende horizontale Rotation an
+            Vector3 cameraRotation = Vector3.zero;
+            cameraRotation.y = leftAndRightLookAngle;
+            Quaternion targetRotation = Quaternion.Euler(cameraRotation);
+            transform.rotation = targetRotation;
+        }
+
+        // Berechne vertikalen Winkel zum Target (MIT Höhen-Offset)
+        Vector3 fullDirectionToTarget = targetPosition - cameraPivotTransform.position;
+        float horizontalDistance = new Vector3(
+            fullDirectionToTarget.x,
+            0,
+            fullDirectionToTarget.z
+        ).magnitude;
+
+        // Verhindere Division durch Null
+        if (horizontalDistance > 0.01f)
+        {
+            float targetVerticalAngle =
+                Mathf.Atan2(fullDirectionToTarget.y, horizontalDistance) * Mathf.Rad2Deg;
+
+            // Smooth vertical angle interpolation
+            upAndDownLookAngle = Mathf.LerpAngle(
+                upAndDownLookAngle,
+                targetVerticalAngle,
+                Time.deltaTime * lockOnRotationSpeed
+            );
+
+            // Clamp vertical angle
+            upAndDownLookAngle = Mathf.Clamp(upAndDownLookAngle, minumPivot, maximumPivot);
+        }
+
+        // Wende vertikale Rotation an
+        Vector3 pivotRotation = Vector3.zero;
+        pivotRotation.x = upAndDownLookAngle;
+        Quaternion targetPivotRotation = Quaternion.Euler(pivotRotation);
+        cameraPivotTransform.localRotation = targetPivotRotation;
+    }
+
+    // Public Methoden für Lock-On System
+    public void SetLockOnTarget(Transform target)
+    {
+        lockOnTarget = target;
+        isLockedOn = target != null;
+    }
+
+    public void ClearLockOnTarget()
+    {
+        lockOnTarget = null;
+        isLockedOn = false;
+    }
+
+    public bool IsLockedOn()
+    {
+        return isLockedOn;
     }
 }

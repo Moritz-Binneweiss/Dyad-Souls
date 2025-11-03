@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -16,7 +17,10 @@ public class GameUIManager : MonoBehaviour
     private GameObject gameOverUI;
 
     [SerializeField]
-    private GameObject victoryUI;
+    private TextMeshProUGUI waveCountdownText;
+
+    [SerializeField]
+    private GameObject enemyDefeatedText;
 
     private InputSystem_Actions inputActions;
     private bool isPaused;
@@ -106,18 +110,6 @@ public class GameUIManager : MonoBehaviour
         SelectFirstInteractableElement();
     }
 
-    public void Victory()
-    {
-        gameUI.SetActive(false);
-        victoryUI.SetActive(true);
-        Time.timeScale = 0f;
-        isPaused = true;
-        inputActions.UI.Enable();
-
-        // Automatische Selektion für Controller/Tastatur-Navigation
-        SelectFirstInteractableElement();
-    }
-
     public void RestartGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
@@ -127,5 +119,38 @@ public class GameUIManager : MonoBehaviour
     public void QuitGame()
     {
         SceneManager.LoadScene("MainMenu");
+    }
+
+    public void ShowWaveCountdown(int nextWave, int seconds)
+    {
+        if (waveCountdownText != null)
+        {
+            waveCountdownText.text = $"Wave {nextWave} starting in {seconds}...";
+            waveCountdownText.gameObject.SetActive(true);
+        }
+    }
+
+    public void HideWaveCountdown()
+    {
+        if (waveCountdownText != null)
+        {
+            waveCountdownText.gameObject.SetActive(false);
+        }
+    }
+
+    public void ShowEnemyDefeated()
+    {
+        if (enemyDefeatedText != null)
+        {
+            enemyDefeatedText.SetActive(true);
+        }
+    }
+
+    public void HideEnemyDefeated()
+    {
+        if (enemyDefeatedText != null)
+        {
+            enemyDefeatedText.SetActive(false);
+        }
     }
 }
