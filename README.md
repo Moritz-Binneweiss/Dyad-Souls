@@ -65,9 +65,10 @@ Besprechung:
 
 - Namens Problem wurde besprochen
 - aktueller Stand gezeigt
-- Pläne für die nächste Woche besprochen 
+- Pläne für die nächste Woche besprochen
 
 Ziel:
+
 - Tools vertraut machen
 - Kampfanimationen, Boss kann angreifen
 - Behaviour Trees reinfinden
@@ -82,6 +83,7 @@ Besprechung:
 - Splitscreen und 2 Player Movement gezeigt
 
 Ziel:
+
 - weitere Animationen
 - Schaden nehmen (Boss und Player)
 - Attack Buffer
@@ -96,5 +98,17 @@ Besprechung:
 - Fokus auf Kampf
 
 Ziel:
+
 - an MVP weiterarbeiten
 - Fokus auf den einen Bossfight
+
+#### **06.11.2025**
+
+Besprechung:
+
+- LockOnTarget gezeigt
+- Wave based Gameplay gezeigt
+
+Ziel:
+
+-

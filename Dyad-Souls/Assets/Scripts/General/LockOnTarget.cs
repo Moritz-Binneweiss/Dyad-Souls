@@ -22,6 +22,15 @@ public class LockOnTarget : MonoBehaviour
     [SerializeField]
     private GameObject lockOnIndicatorUI;
 
+    [SerializeField]
+    private RectTransform lockOnIndicatorRect; // RectTransform für Positionierung
+
+    [SerializeField]
+    private Vector3 uiOffset = Vector3.up * 2f; // Offset über dem Enemy (z.B. über dem Kopf)
+
+    [SerializeField]
+    private float uiSmoothSpeed = 1f; // Wie schnell das UI dem Enemy folgt (höher = direkter)
+
     [Header("Target")]
     [SerializeField]
     private EnemyManager targetEnemy;
@@ -54,6 +63,12 @@ public class LockOnTarget : MonoBehaviour
         if (lockOnIndicatorUI != null)
         {
             lockOnIndicatorUI.SetActive(false);
+
+            // Auto-assign RectTransform wenn nicht gesetzt
+            if (lockOnIndicatorRect == null)
+            {
+                lockOnIndicatorRect = lockOnIndicatorUI.GetComponent<RectTransform>();
+            }
         }
     }
 
@@ -99,8 +114,23 @@ public class LockOnTarget : MonoBehaviour
 
     private void Update()
     {
-        // Prüfe Distanz zum Enemy
+        // Prüfe Distanz zum Enemy und aktualisiere UI
         UpdateLockOnIndicator();
+
+        // Aktualisiere UI-Position auch in Update für schnellere Reaktion
+        if (isLockOnActive && lockOnIndicatorRect != null && targetEnemy != null)
+        {
+            UpdateUIPosition();
+        }
+    }
+
+    private void LateUpdate()
+    {
+        // Zusätzliches Update in LateUpdate für extra Smoothness
+        if (isLockOnActive && lockOnIndicatorRect != null && targetEnemy != null)
+        {
+            UpdateUIPosition();
+        }
     }
 
     private bool IsCorrectDevice(UnityEngine.InputSystem.InputDevice device)
@@ -221,5 +251,51 @@ public class LockOnTarget : MonoBehaviour
     public float GetLockOnRange()
     {
         return lockOnRange;
+    }
+
+    private void UpdateUIPosition()
+    {
+        if (
+            player == null
+            || player.playerCamera == null
+            || player.playerCamera.cameraObject == null
+        )
+            return;
+
+        // Berechne Welt-Position mit Offset (z.B. über dem Kopf des Enemies)
+        Vector3 worldPosition = targetEnemy.transform.position + uiOffset;
+
+        // Konvertiere Welt-Position zu Screen-Position
+        Vector3 targetScreenPosition = player.playerCamera.cameraObject.WorldToScreenPoint(
+            worldPosition
+        );
+
+        // Prüfe ob Target vor der Kamera ist
+        if (targetScreenPosition.z > 0)
+        {
+            // Smooth Interpolation zur Zielposition (verhindert Ruckeln)
+            Vector3 smoothedPosition = Vector3.Lerp(
+                lockOnIndicatorRect.position,
+                targetScreenPosition,
+                Time.deltaTime * uiSmoothSpeed
+            );
+
+            // Setze UI-Position
+            lockOnIndicatorRect.position = smoothedPosition;
+
+            // UI sichtbar, wenn vor der Kamera
+            if (!lockOnIndicatorUI.activeSelf && isLockOnActive)
+            {
+                lockOnIndicatorUI.SetActive(true);
+            }
+        }
+        else
+        {
+            // Target ist hinter der Kamera - verstecke UI
+            if (lockOnIndicatorUI.activeSelf)
+            {
+                lockOnIndicatorUI.SetActive(false);
+            }
+        }
     }
 }
