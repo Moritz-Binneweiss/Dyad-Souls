@@ -57,7 +57,15 @@ public class PlayerManager : MonoBehaviour
     {
         if (playerCombatSystem != null)
         {
-            playerCombatSystem.PerformLightAttack();
+            playerCombatSystem.PerformAttack();
+        }
+    }
+
+    public void PerformHeavyAttack()
+    {
+        if (playerCombatSystem != null)
+        {
+            playerCombatSystem.PerformHeavyAttack();
         }
     }
 

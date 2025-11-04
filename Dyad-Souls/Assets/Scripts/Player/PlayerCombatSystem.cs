@@ -11,14 +11,18 @@ public class PlayerCombatSystem : MonoBehaviour
     public Transform rightHandBone;
     private GameObject currentSword;
     private Collider weaponCollider;
+    private WeaponDamage weaponDamage;
 
     [Header("Combat Settings")]
     [SerializeField]
-    string lightAttackAnimation = "MainLightAttack";
+    string lightAttackAnimation = "Attack";
+
+    [SerializeField]
+    string heavyAttackAnimation = "HeavyAttack";
 
     [Header("Dodge Settings")]
     [SerializeField]
-    string dodgeAnimation = "Backstep";
+    string dodgeAnimation = "DodgeBackstep";
 
     private void Awake()
     {
@@ -71,13 +75,39 @@ public class PlayerCombatSystem : MonoBehaviour
         {
             Debug.LogError("No collider found on sword or its children!");
         }
+
+        weaponDamage = currentSword.GetComponentInChildren<WeaponDamage>();
+        if (weaponDamage == null)
+        {
+            Debug.LogWarning("No WeaponDamage component found on sword or its children!");
+        }
     }
 
-    public void PerformLightAttack()
+    public void PerformAttack()
     {
-        if (animator != null && !string.IsNullOrEmpty(lightAttackAnimation))
+        if (animator != null)
         {
-            animator.CrossFade(lightAttackAnimation, 0.2f, 0);
+            // Setze Damage für Light Attack
+            if (weaponDamage != null)
+            {
+                weaponDamage.SetLightAttackDamage();
+            }
+
+            animator.SetTrigger("Attack");
+        }
+    }
+
+    public void PerformHeavyAttack()
+    {
+        if (animator != null && !string.IsNullOrEmpty(heavyAttackAnimation))
+        {
+            // Setze Damage für Heavy Attack (100)
+            if (weaponDamage != null)
+            {
+                weaponDamage.SetHeavyAttackDamage();
+            }
+
+            animator.CrossFade(heavyAttackAnimation, 0.2f, 0);
         }
     }
 
@@ -99,9 +129,9 @@ public class PlayerCombatSystem : MonoBehaviour
 
     public void PerformDodge()
     {
-        if (animator != null && !string.IsNullOrEmpty(dodgeAnimation))
+        if (animator != null)
         {
-            animator.CrossFade(dodgeAnimation, 0.1f, 0);
+            animator.SetTrigger("DodgeBackstep");
         }
     }
 }

@@ -26,6 +26,7 @@ public class PlayerInputHandler : MonoBehaviour
     private System.Action<InputAction.CallbackContext> lookCanceled;
     private System.Action<InputAction.CallbackContext> attackPerformed;
     private System.Action<InputAction.CallbackContext> dodgePerformed;
+    private System.Action<InputAction.CallbackContext> heavyAttackPerformed;
 
     [Header("Player Movement Input")]
     [SerializeField]
@@ -43,6 +44,9 @@ public class PlayerInputHandler : MonoBehaviour
     [Header("Player Action Inputs")]
     [SerializeField]
     bool attackInput = false;
+
+    [SerializeField]
+    bool heavyAttackInput = false;
 
     [Header("Interact Input")]
     [SerializeField]
@@ -165,12 +169,21 @@ public class PlayerInputHandler : MonoBehaviour
                 }
             };
 
+            heavyAttackPerformed = i =>
+            {
+                if (IsCorrectDevice(i.control.device))
+                {
+                    heavyAttackInput = true;
+                }
+            };
+
             playerControls.Player.Move.performed += movePerformed;
             playerControls.Player.Look.performed += lookPerformed;
             playerControls.Player.Move.canceled += moveCanceled;
             playerControls.Player.Look.canceled += lookCanceled;
             playerControls.Player.Attack.performed += attackPerformed;
             playerControls.Player.Dodge.performed += dodgePerformed;
+            playerControls.Player.HeavyAttack.performed += heavyAttackPerformed;
         }
 
         playerControls.Enable();
@@ -204,6 +217,8 @@ public class PlayerInputHandler : MonoBehaviour
                 playerControls.Player.Attack.performed -= attackPerformed;
             if (dodgePerformed != null)
                 playerControls.Player.Dodge.performed -= dodgePerformed;
+            if (heavyAttackPerformed != null)
+                playerControls.Player.HeavyAttack.performed -= heavyAttackPerformed;
 
             playerControls.Disable();
         }
@@ -214,6 +229,7 @@ public class PlayerInputHandler : MonoBehaviour
         HandlePlayerMovementInput();
         HandleCameraMovementInput();
         HandleAttackInput();
+        HandleHeavyAttackInput();
         HandleInteractInput();
         HandleDodgeInput();
     }
@@ -250,6 +266,19 @@ public class PlayerInputHandler : MonoBehaviour
             if (player != null)
             {
                 player.PerformLightAttack();
+            }
+        }
+    }
+
+    private void HandleHeavyAttackInput()
+    {
+        if (heavyAttackInput)
+        {
+            heavyAttackInput = false;
+
+            if (player != null)
+            {
+                player.PerformHeavyAttack();
             }
         }
     }

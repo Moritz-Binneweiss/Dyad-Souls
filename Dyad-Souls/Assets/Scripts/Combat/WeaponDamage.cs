@@ -3,15 +3,35 @@ using UnityEngine;
 public class WeaponDamage : MonoBehaviour
 {
     [SerializeField]
-    private float damage = 10f;
+    private float attackDamage = 10f;
+
+    [SerializeField]
+    private float heavyAttackDamage = 100f;
+
+    private float currentDamage;
+
+    private void Awake()
+    {
+        currentDamage = attackDamage;
+    }
 
     public float GetDamage()
     {
-        return damage;
+        return currentDamage;
+    }
+
+    public void SetLightAttackDamage()
+    {
+        currentDamage = attackDamage;
+    }
+
+    public void SetHeavyAttackDamage()
+    {
+        currentDamage = heavyAttackDamage;
     }
 
     public void SetDamage(float newDamage)
     {
-        damage = newDamage;
+        currentDamage = newDamage;
     }
 }
