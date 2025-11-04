@@ -15,14 +15,7 @@ public class PlayerCombatSystem : MonoBehaviour
 
     [Header("Combat Settings")]
     [SerializeField]
-    string lightAttackAnimation = "Attack";
-
-    [SerializeField]
     string heavyAttackAnimation = "HeavyAttack";
-
-    [Header("Dodge Settings")]
-    [SerializeField]
-    string dodgeAnimation = "DodgeBackstep";
 
     private void Awake()
     {

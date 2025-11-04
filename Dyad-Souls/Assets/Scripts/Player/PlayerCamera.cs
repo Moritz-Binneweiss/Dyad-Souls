@@ -11,7 +11,8 @@ public class PlayerCamera : MonoBehaviour
     Transform cameraPivotTransform;
 
     [Header("Camera Settings")]
-    private float cameraSmoothSpeed = 1; // Je größer die Nummer, desto länger braucht die Kamera, um dem Spieler zu folgen
+    [SerializeField]
+    private float cameraSmoothSpeed = 1;
 
     [SerializeField]
     float upAndDownRotationSpeed = 220;
@@ -30,6 +31,8 @@ public class PlayerCamera : MonoBehaviour
 
     [SerializeField]
     LayerMask collideWithLayers;
+
+    private const float _inputThreshold = 0.01f; // Threshold für Input (verhindert Mikro-Bewegungen)
 
     [Header("Camera Values")]
     private Vector3 cameraVelocity;
@@ -96,25 +99,49 @@ public class PlayerCamera : MonoBehaviour
         if (player == null || player.playerInputManager == null)
             return;
 
-        leftAndRightLookAngle +=
-            (player.playerInputManager.cameraHorizontalInput * leftAndRightRotationSpeed)
-            * Time.deltaTime;
-        upAndDownLookAngle -=
-            (player.playerInputManager.cameraVerticalInput * upAndDownRotationSpeed)
-            * Time.deltaTime;
+        // Nur rotieren wenn es signifikanten Input gibt (wie im ThirdPersonController)
+        float cameraHorizontalInput = player.playerInputManager.cameraHorizontalInput;
+        float cameraVerticalInput = player.playerInputManager.cameraVerticalInput;
+
+        // Berechne Input-Magnitude für Threshold-Check
+        float inputMagnitude =
+            cameraHorizontalInput * cameraHorizontalInput
+            + cameraVerticalInput * cameraVerticalInput;
+
+        if (inputMagnitude >= _inputThreshold)
+        {
+            leftAndRightLookAngle +=
+                (cameraHorizontalInput * leftAndRightRotationSpeed) * Time.deltaTime;
+            upAndDownLookAngle -= (cameraVerticalInput * upAndDownRotationSpeed) * Time.deltaTime;
+        }
+
+        // Clamp Winkel mit besserer Normalisierung (wie ThirdPersonController)
+        leftAndRightLookAngle = ClampAngle(leftAndRightLookAngle, float.MinValue, float.MaxValue);
         upAndDownLookAngle = Mathf.Clamp(upAndDownLookAngle, minumPivot, maximumPivot);
 
         Vector3 cameraRotation = Vector3.zero;
         Quaternion targetRotation;
 
+        // Horizontale Rotation (Y-Achse)
         cameraRotation.y = leftAndRightLookAngle;
         targetRotation = Quaternion.Euler(cameraRotation);
         transform.rotation = targetRotation;
 
+        // Vertikale Rotation (X-Achse) am Pivot
         cameraRotation = Vector3.zero;
         cameraRotation.x = upAndDownLookAngle;
         targetRotation = Quaternion.Euler(cameraRotation);
         cameraPivotTransform.localRotation = targetRotation;
+    }
+
+    // Utility Methode aus ThirdPersonController - Normalisiert Winkel
+    private static float ClampAngle(float angle, float min, float max)
+    {
+        if (angle < -360f)
+            angle += 360f;
+        if (angle > 360f)
+            angle -= 360f;
+        return Mathf.Clamp(angle, min, max);
     }
 
     private void HandleCollisions()
@@ -137,12 +164,20 @@ public class PlayerCamera : MonoBehaviour
             )
         )
         {
-            // Wenn ja, nehmen wir die Distanz zwischen Kamera und Objekt
-            float distanceFromHitObject = Vector3.Distance(
-                cameraPivotTransform.position,
-                hit.point
-            );
-            targetCameraZPosition = -(distanceFromHitObject - cameraCollisionRadius);
+            // Ignoriere Kollisionen mit dem eigenen Spieler und seinen Children (z.B. Waffe)
+            if (hit.transform.IsChildOf(player.transform) || hit.transform == player.transform)
+            {
+                // Tue nichts - ignoriere diese Kollision
+            }
+            else
+            {
+                // Wenn ja, nehmen wir die Distanz zwischen Kamera und Objekt
+                float distanceFromHitObject = Vector3.Distance(
+                    cameraPivotTransform.position,
+                    hit.point
+                );
+                targetCameraZPosition = -(distanceFromHitObject - cameraCollisionRadius);
+            }
         }
 
         if (Mathf.Abs(targetCameraZPosition) < cameraCollisionRadius)
@@ -186,6 +221,13 @@ public class PlayerCamera : MonoBehaviour
                 leftAndRightLookAngle,
                 targetYAngle,
                 Time.deltaTime * lockOnRotationSpeed
+            );
+
+            // Normalisiere den Winkel
+            leftAndRightLookAngle = ClampAngle(
+                leftAndRightLookAngle,
+                float.MinValue,
+                float.MaxValue
             );
 
             // Wende horizontale Rotation an
