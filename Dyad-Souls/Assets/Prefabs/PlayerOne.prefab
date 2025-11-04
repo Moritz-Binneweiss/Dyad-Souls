@@ -59,6 +59,7 @@ MonoBehaviour:
   heavyAttackInput: 0
   isHoldingInteract: 0
   dodgeInput: 0
+  jumpInput: 0
 --- !u!1 &498509032517569694
 GameObject:
   m_ObjectHideFlags: 0
@@ -276,6 +277,7 @@ MonoBehaviour:
   player: {fileID: 9016876083239070741}
   cameraObject: {fileID: 6898166470838541505}
   cameraPivotTransform: {fileID: 1030746225050567667}
+  cameraSmoothSpeed: 1
   upAndDownRotationSpeed: 220
   leftAndRightRotationSpeed: 220
   minumPivot: -30
@@ -1967,6 +1969,13 @@ MonoBehaviour:
   rotationSpeed: 15
   gravityForce: -9.81
   groundedGravity: -0.05
+  jumpHeight: 2
+  jumpTimeout: 0.5
+  groundedOffset: -0.14
+  groundedRadius: 0.28
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!114 &5727742767127832589
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1981,9 +1990,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCombatSystem
   swordPrefab: {fileID: 367399159796376192, guid: a7bf97b28a59bc14b8b93271ed13eea7, type: 3}
   rightHandBone: {fileID: 7589549440262640359}
-  lightAttackAnimation: Attack
   heavyAttackAnimation: HeavyAttack
-  dodgeAnimation: DodgeBackstep
 --- !u!114 &2290266836912333484
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2011,6 +2018,7 @@ MonoBehaviour:
   heavyAttackInput: 0
   isHoldingInteract: 0
   dodgeInput: 0
+  jumpInput: 0
 --- !u!143 &1852255327464382356
 CharacterController:
   m_ObjectHideFlags: 0

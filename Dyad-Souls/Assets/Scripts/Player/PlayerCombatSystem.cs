@@ -122,9 +122,21 @@ public class PlayerCombatSystem : MonoBehaviour
 
     public void PerformDodge()
     {
-        if (animator != null)
+        if (animator != null && player != null && player.playerInputManager != null)
         {
-            animator.SetTrigger("DodgeBackstep");
+            // Check if player is moving
+            float moveAmount = player.playerInputManager.moveAmount;
+
+            if (moveAmount > 0.1f)
+            {
+                // Player is moving -> Dodge Roll
+                animator.SetTrigger("Dodge");
+            }
+            else
+            {
+                // Player is standing still -> Backstep
+                animator.SetTrigger("DodgeBackstep");
+            }
         }
     }
 }
