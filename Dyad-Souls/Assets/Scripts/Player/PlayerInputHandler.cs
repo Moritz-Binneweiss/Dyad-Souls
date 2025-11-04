@@ -27,6 +27,7 @@ public class PlayerInputHandler : MonoBehaviour
     private System.Action<InputAction.CallbackContext> attackPerformed;
     private System.Action<InputAction.CallbackContext> dodgePerformed;
     private System.Action<InputAction.CallbackContext> heavyAttackPerformed;
+    private System.Action<InputAction.CallbackContext> jumpPerformed;
 
     [Header("Player Movement Input")]
     [SerializeField]
@@ -55,6 +56,10 @@ public class PlayerInputHandler : MonoBehaviour
     [Header("Player Dodge Inputs")]
     [SerializeField]
     bool dodgeInput = false;
+
+    [Header("Player Jump Input")]
+    [SerializeField]
+    bool jumpInput = false;
 
     private void Awake()
     {
@@ -177,6 +182,14 @@ public class PlayerInputHandler : MonoBehaviour
                 }
             };
 
+            jumpPerformed = i =>
+            {
+                if (IsCorrectDevice(i.control.device))
+                {
+                    jumpInput = true;
+                }
+            };
+
             playerControls.Player.Move.performed += movePerformed;
             playerControls.Player.Look.performed += lookPerformed;
             playerControls.Player.Move.canceled += moveCanceled;
@@ -184,6 +197,7 @@ public class PlayerInputHandler : MonoBehaviour
             playerControls.Player.Attack.performed += attackPerformed;
             playerControls.Player.Dodge.performed += dodgePerformed;
             playerControls.Player.HeavyAttack.performed += heavyAttackPerformed;
+            playerControls.Player.Jump.performed += jumpPerformed;
         }
 
         playerControls.Enable();
@@ -219,6 +233,8 @@ public class PlayerInputHandler : MonoBehaviour
                 playerControls.Player.Dodge.performed -= dodgePerformed;
             if (heavyAttackPerformed != null)
                 playerControls.Player.HeavyAttack.performed -= heavyAttackPerformed;
+            if (jumpPerformed != null)
+                playerControls.Player.Jump.performed -= jumpPerformed;
 
             playerControls.Disable();
         }
@@ -232,6 +248,7 @@ public class PlayerInputHandler : MonoBehaviour
         HandleHeavyAttackInput();
         HandleInteractInput();
         HandleDodgeInput();
+        HandleJumpInput();
     }
 
     private void HandlePlayerMovementInput()
@@ -329,6 +346,19 @@ public class PlayerInputHandler : MonoBehaviour
             if (player != null)
             {
                 player.PerformDodge();
+            }
+        }
+    }
+
+    private void HandleJumpInput()
+    {
+        if (jumpInput)
+        {
+            jumpInput = false;
+
+            if (player != null)
+            {
+                player.PerformJump();
             }
         }
     }

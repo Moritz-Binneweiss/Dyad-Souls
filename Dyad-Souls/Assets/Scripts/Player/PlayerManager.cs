@@ -77,6 +77,14 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    public void PerformJump()
+    {
+        if (playerMovement != null)
+        {
+            playerMovement.PerformJump();
+        }
+    }
+
     public void TakeDamage(float damage)
     {
         if (isDead)
