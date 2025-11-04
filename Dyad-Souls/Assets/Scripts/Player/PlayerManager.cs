@@ -13,12 +13,18 @@ public class PlayerManager : MonoBehaviour
     [HideInInspector]
     public PlayerCombatSystem playerCombatSystem;
 
+    private Animator animator;
+
     [Header("Health Settings")]
     [SerializeField]
     private float maxHealth = 100f;
 
     [SerializeField]
     private Slider healthSlider;
+
+    [Header("Death Animation Settings")]
+    [SerializeField]
+    private float deathAnimationDuration = 2.5f;
 
     private float currentHealth;
     private bool isDead = false;
@@ -27,6 +33,7 @@ public class PlayerManager : MonoBehaviour
     {
         playerMovement = GetComponent<PlayerMovement>();
         playerCombatSystem = GetComponent<PlayerCombatSystem>();
+        animator = GetComponent<Animator>();
 
         // Initialisiere Health
         currentHealth = maxHealth;
@@ -132,7 +139,14 @@ public class PlayerManager : MonoBehaviour
     {
         isDead = true;
 
-        // Deaktiviere Player-Komponenten
+        // Deaktiviere Collider sofort (Player kann nicht mehr getroffen werden)
+        Collider[] colliders = GetComponents<Collider>();
+        foreach (Collider col in colliders)
+        {
+            col.enabled = false;
+        }
+
+        // Deaktiviere Player-Komponenten sofort
         if (playerMovement != null)
             playerMovement.enabled = false;
 
@@ -142,6 +156,12 @@ public class PlayerManager : MonoBehaviour
         if (playerInputManager != null)
             playerInputManager.enabled = false;
 
+        // Spiele Death Animation ab
+        if (animator != null)
+        {
+            animator.SetTrigger("Death");
+        }
+
         // Informiere GameManager über Tod
         GameManager gameManager = FindFirstObjectByType<GameManager>();
         if (gameManager != null)
@@ -149,7 +169,24 @@ public class PlayerManager : MonoBehaviour
             gameManager.OnPlayerDeath(this);
         }
 
-        // TODO: Spiele Death Animation ab
+        // Deaktiviere Player nach Death-Animation
+        Invoke("DisablePlayer", deathAnimationDuration);
+    }
+
+    private void DisablePlayer()
+    {
+        // Deaktiviere alle Renderer (Player wird unsichtbar)
+        Renderer[] renderers = GetComponentsInChildren<Renderer>();
+        foreach (Renderer rend in renderers)
+        {
+            rend.enabled = false;
+        }
+
+        // Verstecke Health Bar
+        if (healthSlider != null)
+        {
+            healthSlider.gameObject.SetActive(false);
+        }
     }
 
     public void Revive()
@@ -157,6 +194,33 @@ public class PlayerManager : MonoBehaviour
         isDead = false;
         currentHealth = maxHealth;
         UpdateHealthUI();
+
+        // Reaktiviere Collider
+        Collider[] colliders = GetComponents<Collider>();
+        foreach (Collider col in colliders)
+        {
+            col.enabled = true;
+        }
+
+        // Reaktiviere Renderer
+        Renderer[] renderers = GetComponentsInChildren<Renderer>();
+        foreach (Renderer rend in renderers)
+        {
+            rend.enabled = true;
+        }
+
+        // Reaktiviere Animator und setze zurück zu Idle
+        if (animator != null)
+        {
+            animator.Rebind();
+            animator.Update(0f);
+        }
+
+        // Zeige Health Bar wieder
+        if (healthSlider != null)
+        {
+            healthSlider.gameObject.SetActive(true);
+        }
 
         // Reaktiviere Player-Komponenten
         if (playerMovement != null)

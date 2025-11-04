@@ -3,9 +3,16 @@ using UnityEngine.UI;
 
 public class EnemyManager : MonoBehaviour
 {
+    [Header("Components")]
+    private Animator animator;
+
     [Header("Health Settings")]
     [SerializeField]
     private float maxHealth = 100f;
+
+    [Header("Death Animation Settings")]
+    [SerializeField]
+    private float deathAnimationDuration = 3f;
 
     private float currentHealth;
 
@@ -16,6 +23,7 @@ public class EnemyManager : MonoBehaviour
 
     void Start()
     {
+        animator = GetComponent<Animator>();
         currentHealth = maxHealth;
         UpdateHealthUI();
     }
@@ -49,26 +57,49 @@ public class EnemyManager : MonoBehaviour
     {
         isAlive = false;
 
-        // Deaktiviere Komponenten statt GameObject zu zerstören
-        // So können wir ihn für die nächste Wave wiederverwenden
+        // Deaktiviere Collider sofort (Enemy kann nicht mehr getroffen werden)
         Collider[] colliders = GetComponents<Collider>();
         foreach (Collider col in colliders)
         {
             col.enabled = false;
         }
 
-        // TODO: Spiele Death Animation ab
-        // Deaktiviere Renderer
+        // Verstecke Boss Health Bar sofort
+        if (bossHealthSlider != null)
+        {
+            bossHealthSlider.gameObject.SetActive(false);
+        }
+
+        // Spiele Death Animation ab
+        if (animator != null)
+        {
+            animator.SetTrigger("Death");
+        }
+
+        // Deaktiviere Enemy nach Death-Animation
+        Invoke("DisableEnemy", deathAnimationDuration);
+    }
+
+    private void DisableEnemy()
+    {
+        // Deaktiviere alle Renderer (Enemy wird unsichtbar)
         Renderer[] renderers = GetComponentsInChildren<Renderer>();
         foreach (Renderer rend in renderers)
         {
             rend.enabled = false;
         }
 
-        // Verstecke Boss Health Bar
-        if (bossHealthSlider != null)
+        // Optional: Deaktiviere auch Movement/AI Komponenten
+        EnemyMovement movement = GetComponent<EnemyMovement>();
+        if (movement != null)
         {
-            bossHealthSlider.gameObject.SetActive(false);
+            movement.enabled = false;
+        }
+
+        EnemyCombatSystem combat = GetComponent<EnemyCombatSystem>();
+        if (combat != null)
+        {
+            combat.enabled = false;
         }
     }
 
@@ -81,7 +112,14 @@ public class EnemyManager : MonoBehaviour
         // Setze Position zurück auf (0, 0, 0)
         transform.position = Vector3.zero;
 
-        // Reaktiviere Komponenten
+        // Reaktiviere Animator und setze zurück zu Idle
+        if (animator != null)
+        {
+            animator.Rebind();
+            animator.Update(0f);
+        }
+
+        // Reaktiviere Collider
         Collider[] colliders = GetComponents<Collider>();
         foreach (Collider col in colliders)
         {
@@ -93,6 +131,19 @@ public class EnemyManager : MonoBehaviour
         foreach (Renderer rend in renderers)
         {
             rend.enabled = true;
+        }
+
+        // Reaktiviere Movement/AI Komponenten
+        EnemyMovement movement = GetComponent<EnemyMovement>();
+        if (movement != null)
+        {
+            movement.enabled = true;
+        }
+
+        EnemyCombatSystem combat = GetComponent<EnemyCombatSystem>();
+        if (combat != null)
+        {
+            combat.enabled = true;
         }
 
         // Zeige Boss Health Bar wieder

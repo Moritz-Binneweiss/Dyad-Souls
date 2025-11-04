@@ -1,65 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1947723045954024318
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3281871632712449295}
-  - component: {fileID: 3068341329061023623}
-  m_Layer: 0
-  m_Name: PlayerInputHandler
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3281871632712449295
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1947723045954024318}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2003007407400216191}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3068341329061023623
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1947723045954024318}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2c69ed4e5fe8d64c96676a40bae2a16, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  player: {fileID: 7541084094529989456}
-  deviceType: 1
-  autoConfigureFromLobby: 1
-  playerName: Player2
-  movement: {x: 0, y: 0}
-  verticalInput: 0
-  horizontalInput: 0
-  moveAmount: 0
-  cameraInput: {x: 0, y: 0}
-  cameraVerticalInput: 0
-  cameraHorizontalInput: 0
-  attackInput: 0
-  heavyAttackInput: 0
-  isHoldingInteract: 0
-  dodgeInput: 0
-  jumpInput: 0
 --- !u!1 &2003007407400647201
 GameObject:
   m_ObjectHideFlags: 0
@@ -1776,11 +1716,11 @@ GameObject:
   m_Component:
   - component: {fileID: 2003007407400216191}
   - component: {fileID: 2003007407391115775}
+  - component: {fileID: 7236743546927467400}
   - component: {fileID: 4541171034410498712}
   - component: {fileID: 7541084094529989456}
   - component: {fileID: 7333759715161754770}
   - component: {fileID: 6840034597107588250}
-  - component: {fileID: 833326529069281836}
   - component: {fileID: 5261837910350671540}
   - component: {fileID: 1782163282172876177}
   m_Layer: 0
@@ -1803,7 +1743,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 3281871632712449295}
   - {fileID: 6772007329137862835}
   - {fileID: 2003007407400216189}
   - {fileID: 2003007407400216187}
@@ -1831,6 +1770,35 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7236743546927467400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2003007407400647583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2c69ed4e5fe8d64c96676a40bae2a16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInputHandler
+  player: {fileID: 7541084094529989456}
+  deviceType: 1
+  autoConfigureFromLobby: 1
+  playerName: Player2
+  movement: {x: 0, y: 0}
+  verticalInput: 0
+  horizontalInput: 0
+  moveAmount: 0
+  cameraInput: {x: 0, y: 0}
+  cameraVerticalInput: 0
+  cameraHorizontalInput: 0
+  attackInput: 0
+  heavyAttackInput: 0
+  isHoldingInteract: 0
+  dodgeInput: 0
+  jumpInput: 0
+  sprintInput: 0
 --- !u!114 &4541171034410498712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1844,7 +1812,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LockOnTarget
   player: {fileID: 7541084094529989456}
-  playerInputHandler: {fileID: 3068341329061023623}
+  playerInputHandler: {fileID: 7236743546927467400}
   lockOnRange: 15
   lockOnBreakDistance: 15
   lockOnIndicatorUI: {fileID: 0}
@@ -1865,11 +1833,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerManager
   playerCamera: {fileID: 6697005871327182555}
-  playerInputManager: {fileID: 3068341329061023623}
+  playerInputManager: {fileID: 7236743546927467400}
   playerMovement: {fileID: 0}
   playerCombatSystem: {fileID: 0}
   maxHealth: 100
   healthSlider: {fileID: 0}
+  deathAnimationDuration: 2.5
 --- !u!114 &7333759715161754770
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1884,6 +1853,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   walkingSpeed: 2
   runningSpeed: 5
+  sprintSpeed: 8
   rotationSpeed: 15
   gravityForce: -9.81
   groundedGravity: -0.05
@@ -1909,34 +1879,6 @@ MonoBehaviour:
   swordPrefab: {fileID: 367399159796376192, guid: a7bf97b28a59bc14b8b93271ed13eea7, type: 3}
   rightHandBone: {fileID: 2003007407400216129}
   heavyAttackAnimation: HeavyAttack
---- !u!114 &833326529069281836
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2003007407400647583}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2c69ed4e5fe8d64c96676a40bae2a16, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerInputManager
-  player: {fileID: 7541084094529989456}
-  deviceType: 1
-  autoConfigureFromLobby: 1
-  playerName: Player2
-  movement: {x: 0, y: 0}
-  verticalInput: 0
-  horizontalInput: 0
-  moveAmount: 0
-  cameraInput: {x: 0, y: 0}
-  cameraVerticalInput: 0
-  cameraHorizontalInput: 0
-  attackInput: 0
-  heavyAttackInput: 0
-  isHoldingInteract: 0
-  dodgeInput: 0
-  jumpInput: 0
 --- !u!143 &5261837910350671540
 CharacterController:
   m_ObjectHideFlags: 0

@@ -108,7 +108,8 @@ Besprechung:
 
 - LockOnTarget gezeigt
 - Wave based Gameplay gezeigt
-- erweitertes Movement und Animationen gezeigt
+- erweitertes Movement, Angriffe und Animationen gezeigt
+- Enemy Behaviour Tree, Funktionalität und Animationen gezeigt
 
 Ziel:
 
