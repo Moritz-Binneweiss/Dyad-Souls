@@ -15,6 +15,9 @@ public class PlayerMovement : MonoBehaviour
     float runningSpeed = 5f;
 
     [SerializeField]
+    float sprintSpeed = 8f;
+
+    [SerializeField]
     float rotationSpeed = 15f;
 
     [Header("Gravity Settings")]
@@ -45,6 +48,7 @@ public class PlayerMovement : MonoBehaviour
     private float verticalVelocity;
     private float jumpTimeoutDelta;
     private bool isGrounded = true;
+    private bool isSprinting = false;
 
     private void Awake()
     {
@@ -89,11 +93,28 @@ public class PlayerMovement : MonoBehaviour
         moveDirection.Normalize();
         moveDirection.y = 0;
 
+        // Beende Sprint automatisch wenn Spieler stoppt
+        if (isSprinting && moveAmount <= 0.1f)
+        {
+            isSprinting = false;
+            if (animator != null)
+            {
+                animator.SetBool("isSprinting", false);
+            }
+        }
+
         // Apply gravity and jumping
         ApplyGravityAndJump();
 
         // Move character
         float speed = (moveAmount > 0.5f) ? runningSpeed : walkingSpeed;
+
+        // Wenn Sprint aktiv ist und sich der Spieler bewegt, nutze Sprint-Speed
+        if (isSprinting && moveAmount > 0.5f)
+        {
+            speed = sprintSpeed;
+        }
+
         Vector3 horizontalMovement = moveDirection * speed;
         Vector3 verticalMovement = new Vector3(0, verticalVelocity, 0);
         Vector3 totalMovement = (horizontalMovement + verticalMovement) * Time.deltaTime;
@@ -158,6 +179,29 @@ public class PlayerMovement : MonoBehaviour
             }
 
             jumpTimeoutDelta = jumpTimeout;
+        }
+    }
+
+    public void ToggleSprint()
+    {
+        isSprinting = !isSprinting;
+
+        if (animator != null)
+        {
+            bool hasParameter = false;
+            foreach (AnimatorControllerParameter param in animator.parameters)
+            {
+                if (param.name == "isSprinting")
+                {
+                    hasParameter = true;
+                    break;
+                }
+            }
+
+            if (hasParameter)
+            {
+                animator.SetBool("isSprinting", isSprinting);
+            }
         }
     }
 

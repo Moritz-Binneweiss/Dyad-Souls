@@ -85,6 +85,14 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    public void ToggleSprint()
+    {
+        if (playerMovement != null)
+        {
+            playerMovement.ToggleSprint();
+        }
+    }
+
     public void TakeDamage(float damage)
     {
         if (isDead)

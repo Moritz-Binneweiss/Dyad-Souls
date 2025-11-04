@@ -28,6 +28,7 @@ public class PlayerInputHandler : MonoBehaviour
     private System.Action<InputAction.CallbackContext> dodgePerformed;
     private System.Action<InputAction.CallbackContext> heavyAttackPerformed;
     private System.Action<InputAction.CallbackContext> jumpPerformed;
+    private System.Action<InputAction.CallbackContext> sprintPerformed;
 
     [Header("Player Movement Input")]
     [SerializeField]
@@ -61,6 +62,13 @@ public class PlayerInputHandler : MonoBehaviour
     [SerializeField]
     bool jumpInput = false;
 
+    [Header("Player Sprint Input")]
+    [SerializeField]
+    bool sprintInput = false;
+
+    private float lastSprintTime = -1f;
+    private const float sprintDebounceTime = 0.2f; // Mindestens 0.2 Sekunden zwischen Sprint-Toggles
+
     private void Awake()
     {
         // Auto-Konfiguration aus Lobby wenn aktiviert
@@ -82,7 +90,7 @@ public class PlayerInputHandler : MonoBehaviour
         if (player == null)
         {
             Debug.LogWarning(
-                $"PlayerInputManager auf {gameObject.name} hat keinen zugewiesenen Player!"
+                $"PlayerInputHandler auf {gameObject.name} hat keinen zugewiesenen Player!"
             );
         }
     }
@@ -92,30 +100,23 @@ public class PlayerInputHandler : MonoBehaviour
         string gamepadControls = PlayerPrefs.GetString("GamepadControls", "");
         string keyboardControls = PlayerPrefs.GetString("KeyboardControls", "");
 
-        // Prüfe ob Gamepad diesem Spieler zugewiesen wurde
         if (gamepadControls == playerName)
         {
             deviceType = InputDeviceType.Gamepad;
-            Debug.Log($"{playerName} configured for Gamepad");
         }
-        // Prüfe ob Keyboard diesem Spieler zugewiesen wurde
         else if (keyboardControls == playerName)
         {
             deviceType = InputDeviceType.KeyboardMouse;
-            Debug.Log($"{playerName} configured for Keyboard/Mouse");
         }
-        // Standard: Player1 = Keyboard, Player2 = Gamepad
         else
         {
             if (playerName == "Player1")
             {
                 deviceType = InputDeviceType.KeyboardMouse;
-                Debug.Log($"{playerName} using default Keyboard/Mouse");
             }
             else if (playerName == "Player2")
             {
                 deviceType = InputDeviceType.Gamepad;
-                Debug.Log($"{playerName} using default Gamepad");
             }
         }
     }
@@ -126,67 +127,54 @@ public class PlayerInputHandler : MonoBehaviour
         {
             playerControls = new InputSystem_Actions();
 
+            // Binde die Input Actions nur an die spezifischen Devices dieses Players
+            BindToSpecificDevices();
+
             movePerformed = i =>
             {
-                if (IsCorrectDevice(i.control.device))
-                {
-                    movement = i.ReadValue<Vector2>();
-                }
+                movement = i.ReadValue<Vector2>();
             };
 
             lookPerformed = i =>
             {
-                if (IsCorrectDevice(i.control.device))
-                {
-                    cameraInput = i.ReadValue<Vector2>();
-                }
+                cameraInput = i.ReadValue<Vector2>();
             };
 
             moveCanceled = i =>
             {
-                if (IsCorrectDevice(i.control.device))
-                {
-                    movement = Vector2.zero;
-                }
+                movement = Vector2.zero;
             };
 
             lookCanceled = i =>
             {
-                if (IsCorrectDevice(i.control.device))
-                {
-                    cameraInput = Vector2.zero;
-                }
+                cameraInput = Vector2.zero;
             };
 
             attackPerformed = i =>
             {
-                if (IsCorrectDevice(i.control.device))
-                {
-                    attackInput = true;
-                }
+                attackInput = true;
             };
 
             dodgePerformed = i =>
             {
-                if (IsCorrectDevice(i.control.device))
-                {
-                    dodgeInput = true;
-                }
+                dodgeInput = true;
             };
 
             heavyAttackPerformed = i =>
             {
-                if (IsCorrectDevice(i.control.device))
-                {
-                    heavyAttackInput = true;
-                }
+                heavyAttackInput = true;
             };
 
             jumpPerformed = i =>
             {
-                if (IsCorrectDevice(i.control.device))
+                jumpInput = true;
+            };
+
+            sprintPerformed = i =>
+            {
+                if (i.performed)
                 {
-                    jumpInput = true;
+                    sprintInput = true;
                 }
             };
 
@@ -198,20 +186,38 @@ public class PlayerInputHandler : MonoBehaviour
             playerControls.Player.Dodge.performed += dodgePerformed;
             playerControls.Player.HeavyAttack.performed += heavyAttackPerformed;
             playerControls.Player.Jump.performed += jumpPerformed;
+            playerControls.Player.Sprint.performed += sprintPerformed;
         }
 
         playerControls.Enable();
     }
 
-    private bool IsCorrectDevice(UnityEngine.InputSystem.InputDevice device)
+    private void BindToSpecificDevices()
     {
+        playerControls.devices = null;
+
         if (deviceType == InputDeviceType.KeyboardMouse)
         {
-            return device is Keyboard || device is Mouse;
+            var keyboard = UnityEngine.InputSystem.Keyboard.current;
+            var mouse = UnityEngine.InputSystem.Mouse.current;
+
+            if (keyboard != null && mouse != null)
+            {
+                playerControls.devices = new UnityEngine.InputSystem.InputDevice[]
+                {
+                    keyboard,
+                    mouse,
+                };
+            }
         }
-        else // Gamepad
+        else
         {
-            return device is Gamepad;
+            var gamepad = UnityEngine.InputSystem.Gamepad.current;
+
+            if (gamepad != null)
+            {
+                playerControls.devices = new UnityEngine.InputSystem.InputDevice[] { gamepad };
+            }
         }
     }
 
@@ -235,6 +241,8 @@ public class PlayerInputHandler : MonoBehaviour
                 playerControls.Player.HeavyAttack.performed -= heavyAttackPerformed;
             if (jumpPerformed != null)
                 playerControls.Player.Jump.performed -= jumpPerformed;
+            if (sprintPerformed != null)
+                playerControls.Player.Sprint.performed -= sprintPerformed;
 
             playerControls.Disable();
         }
@@ -249,6 +257,7 @@ public class PlayerInputHandler : MonoBehaviour
         HandleInteractInput();
         HandleDodgeInput();
         HandleJumpInput();
+        HandleSprintInput();
     }
 
     private void HandlePlayerMovementInput()
@@ -305,20 +314,17 @@ public class PlayerInputHandler : MonoBehaviour
         if (playerControls == null)
             return;
 
-        // Prüfe ob die Interact-Taste vom richtigen Device gedrückt wird
         bool isCurrentlyPressed = false;
 
-        // Prüfe alle aktiven Controls der Interact-Action
         foreach (var control in playerControls.Player.Interact.controls)
         {
-            if (control.IsPressed() && IsCorrectDevice(control.device))
+            if (control.IsPressed())
             {
                 isCurrentlyPressed = true;
                 break;
             }
         }
 
-        // Nur wenn sich der Zustand geändert hat, informiere den PositionSwapManager
         if (isCurrentlyPressed != isHoldingInteract)
         {
             isHoldingInteract = isCurrentlyPressed;
@@ -359,6 +365,26 @@ public class PlayerInputHandler : MonoBehaviour
             if (player != null)
             {
                 player.PerformJump();
+            }
+        }
+    }
+
+    private void HandleSprintInput()
+    {
+        if (sprintInput)
+        {
+            sprintInput = false;
+
+            if (Time.time - lastSprintTime < sprintDebounceTime)
+            {
+                return;
+            }
+
+            lastSprintTime = Time.time;
+
+            if (player != null)
+            {
+                player.ToggleSprint();
             }
         }
     }
