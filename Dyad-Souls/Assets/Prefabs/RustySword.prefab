@@ -45,7 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50188af5e7a6a6a4da1003c14862f00a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeaponDamage
-  damage: 50
+  attackDamage: 50
+  heavyAttackDamage: 100
 --- !u!1 &1633631230418806202
 GameObject:
   m_ObjectHideFlags: 0
