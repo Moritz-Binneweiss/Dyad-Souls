@@ -115,3 +115,4 @@ Ziel:
 
 - Animation Bugs beheben und verbessern
 - Behaviour Tree Bugs beheben und verbessern
+- eigene Basic Assets anfertigen
