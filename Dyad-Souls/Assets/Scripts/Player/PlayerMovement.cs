@@ -34,6 +34,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     float jumpTimeout = 0.5f;
 
+    [Header("Crouch Settings")]
+    [SerializeField]
+    float crouchSpeed = 1f;
+
     [Header("Ground Check")]
     [SerializeField]
     float groundedOffset = -0.14f;
@@ -49,6 +53,11 @@ public class PlayerMovement : MonoBehaviour
     private float jumpTimeoutDelta;
     private bool isGrounded = true;
     private bool isSprinting = false;
+    private bool isCrouching = false;
+
+    // Public Properties für externe Abfragen
+    public bool IsCrouching => isCrouching;
+    public bool IsSprinting => isSprinting;
 
     private void Awake()
     {
@@ -77,6 +86,28 @@ public class PlayerMovement : MonoBehaviour
         {
             animator.SetFloat("Horizontal", 0, 0.1f, Time.deltaTime);
             animator.SetFloat("Vertical", moveAmount, 0.1f, Time.deltaTime);
+
+            // Set Speed parameter for blend tree (only if it exists)
+            Vector2 move = new Vector2(horizontalInput, verticalInput);
+            bool hasSpeedParameter = false;
+            foreach (AnimatorControllerParameter param in animator.parameters)
+            {
+                if (param.name == "Speed")
+                {
+                    hasSpeedParameter = true;
+                    break;
+                }
+            }
+            if (hasSpeedParameter)
+            {
+                animator.SetFloat("Speed", move.magnitude);
+            }
+
+            // Set crouching parameter - always update to ensure consistency
+            animator.SetBool("isCrouching", isCrouching);
+            
+            // Optional: Debug output to verify the parameter is being set
+            // Debug.Log($"Setting isCrouching to: {isCrouching}");
         }
 
         // Calculate movement direction based on camera
@@ -109,8 +140,13 @@ public class PlayerMovement : MonoBehaviour
         // Move character
         float speed = (moveAmount > 0.5f) ? runningSpeed : walkingSpeed;
 
+        // Wenn Crouch aktiv ist, nutze Crouch-Speed
+        if (isCrouching)
+        {
+            speed = crouchSpeed;
+        }
         // Wenn Sprint aktiv ist und sich der Spieler bewegt, nutze Sprint-Speed
-        if (isSprinting && moveAmount > 0.5f)
+        else if (isSprinting && moveAmount > 0.5f)
         {
             speed = sprintSpeed;
         }
@@ -201,6 +237,27 @@ public class PlayerMovement : MonoBehaviour
             if (hasParameter)
             {
                 animator.SetBool("isSprinting", isSprinting);
+            }
+        }
+    }
+
+    public void PerformCrouch()
+    {
+        isCrouching = !isCrouching;
+
+        // Setze sofort den Animator-Parameter
+        if (animator != null)
+        {
+            animator.SetBool("isCrouching", isCrouching);
+        }
+
+        // Deaktiviere Sprint wenn Crouch aktiviert wird
+        if (isCrouching && isSprinting)
+        {
+            isSprinting = false;
+            if (animator != null)
+            {
+                animator.SetBool("isSprinting", false);
             }
         }
     }
