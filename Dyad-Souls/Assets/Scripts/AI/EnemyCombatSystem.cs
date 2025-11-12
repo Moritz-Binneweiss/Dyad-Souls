@@ -32,7 +32,28 @@ public class EnemyCombatSystem : MonoBehaviour
 
     #region Attack Methods
     // Führt einen normalen Angriff aus (20 Damage)
-    public void PerformAttack()
+    public void PerformAttackRight()
+    {
+        if (isAttacking)
+        {
+            Debug.Log("PerformAttackRight: Already attacking, ignoring");
+            return;
+        }
+
+        isAttacking = true;
+        Debug.Log("PerformAttackRight: Starting attack, setting isAttacking = true");
+
+        if (animator != null)
+        {
+            animator.SetTrigger("AttackRight");
+        }
+        else
+        {
+            Debug.LogError("PerformAttackRight: Animator is null!");
+        }
+    }
+
+    public void PerformAttackLeft()
     {
         if (isAttacking)
             return;
@@ -41,7 +62,20 @@ public class EnemyCombatSystem : MonoBehaviour
 
         if (animator != null)
         {
-            animator.SetTrigger("Attack");
+            animator.SetTrigger("AttackLeft");
+        }
+    }
+
+    public void PerformAttackLeftRight()
+    {
+        if (isAttacking)
+            return;
+
+        isAttacking = true;
+
+        if (animator != null)
+        {
+            animator.SetTrigger("AttackLeftRight");
         }
     }
 
@@ -96,6 +130,7 @@ public class EnemyCombatSystem : MonoBehaviour
     // Wird am Ende jeder Attack-Animation aufgerufen
     public void OnAttackComplete()
     {
+        Debug.Log("OnAttackComplete: Setting isAttacking = false");
         isAttacking = false;
     }
     #endregion
