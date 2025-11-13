@@ -116,3 +116,13 @@ Ziel:
 - Animation Bugs beheben und verbessern
 - Behaviour Tree Bugs beheben und verbessern
 - eigene Basic Assets anfertigen
+
+#### **13.11.2025**
+
+Besprechung:
+
+- Crouch
+
+Ziel:
+
+-
