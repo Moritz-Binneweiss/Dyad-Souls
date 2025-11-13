@@ -92,6 +92,14 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    public void PerformCrouch()
+    {
+        if (playerMovement != null)
+        {
+            playerMovement.PerformCrouch();
+        }
+    }
+
     public void ToggleSprint()
     {
         if (playerMovement != null)
