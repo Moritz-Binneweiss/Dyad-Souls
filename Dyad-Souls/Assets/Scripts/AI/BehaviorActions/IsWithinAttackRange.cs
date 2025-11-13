@@ -9,7 +9,9 @@ public class IsWithinAttackRange : Conditional
     public SharedGameObject playerOne;
     public SharedGameObject playerTwo;
     public SharedGameObject returnedPlayer;
+    public SharedString chosenAttack;
     public AttackType attackType = AttackType.Normal;
+    public bool useDynamicAttackType = true; // Neue Option
 
     private EnemyCombatSystem combatSystem;
 
@@ -83,7 +85,17 @@ public class IsWithinAttackRange : Conditional
 
     private float GetRequiredRange()
     {
-        switch (attackType)
+        AttackType currentAttackType = attackType;
+        
+        // Wenn dynamische AttackType aktiviert ist, bestimme basierend auf chosenAttack
+        if (useDynamicAttackType 
+            && chosenAttack != null 
+            && !string.IsNullOrEmpty(chosenAttack.Value))
+        {
+            currentAttackType = GetAttackTypeFromString(chosenAttack.Value);
+        }
+
+        switch (currentAttackType)
         {
             case AttackType.Normal:
                 return combatSystem.GetAttackRange();
@@ -93,6 +105,22 @@ public class IsWithinAttackRange : Conditional
                 return combatSystem.GetRangeAttackRange();
             default:
                 return combatSystem.GetAttackRange();
+        }
+    }
+
+    private AttackType GetAttackTypeFromString(string attackName)
+    {
+        switch (attackName.ToLower())
+        {
+            case "heavy":
+                return AttackType.Heavy;
+            case "range":
+                return AttackType.Range;
+            case "right":
+            case "left":
+            case "leftright":
+            default:
+                return AttackType.Normal;
         }
     }
 }

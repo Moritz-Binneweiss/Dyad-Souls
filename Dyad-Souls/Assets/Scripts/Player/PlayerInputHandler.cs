@@ -29,6 +29,8 @@ public class PlayerInputHandler : MonoBehaviour
     private System.Action<InputAction.CallbackContext> heavyAttackPerformed;
     private System.Action<InputAction.CallbackContext> jumpPerformed;
     private System.Action<InputAction.CallbackContext> sprintPerformed;
+    private System.Action<InputAction.CallbackContext> crouchPerformed;
+    private System.Action<InputAction.CallbackContext> crouchCanceled;
 
     [Header("Player Movement Input")]
     [SerializeField]
@@ -65,6 +67,10 @@ public class PlayerInputHandler : MonoBehaviour
     [Header("Player Sprint Input")]
     [SerializeField]
     bool sprintInput = false;
+
+    [Header("Player Crouch Input")]
+    [SerializeField]
+    bool crouchInput = false;
 
     private float lastSprintTime = -1f;
     private const float sprintDebounceTime = 0.2f; // Mindestens 0.2 Sekunden zwischen Sprint-Toggles
@@ -178,15 +184,30 @@ public class PlayerInputHandler : MonoBehaviour
                 }
             };
 
+            crouchPerformed = i =>
+            {
+                if (i.performed)
+                {
+                    crouchInput = true;
+                }
+            };
+
+            crouchCanceled = i =>
+            {
+                crouchInput = false;
+            };
+
             playerControls.Player.Move.performed += movePerformed;
             playerControls.Player.Look.performed += lookPerformed;
             playerControls.Player.Move.canceled += moveCanceled;
             playerControls.Player.Look.canceled += lookCanceled;
+            playerControls.Player.Crouch.canceled += crouchCanceled;
             playerControls.Player.Attack.performed += attackPerformed;
             playerControls.Player.Dodge.performed += dodgePerformed;
             playerControls.Player.HeavyAttack.performed += heavyAttackPerformed;
             playerControls.Player.Jump.performed += jumpPerformed;
             playerControls.Player.Sprint.performed += sprintPerformed;
+            playerControls.Player.Crouch.performed += crouchPerformed;
         }
 
         playerControls.Enable();
@@ -233,6 +254,8 @@ public class PlayerInputHandler : MonoBehaviour
                 playerControls.Player.Look.performed -= lookPerformed;
             if (lookCanceled != null)
                 playerControls.Player.Look.canceled -= lookCanceled;
+            if (crouchCanceled != null)
+                playerControls.Player.Crouch.canceled -= crouchCanceled;
             if (attackPerformed != null)
                 playerControls.Player.Attack.performed -= attackPerformed;
             if (dodgePerformed != null)
@@ -243,6 +266,8 @@ public class PlayerInputHandler : MonoBehaviour
                 playerControls.Player.Jump.performed -= jumpPerformed;
             if (sprintPerformed != null)
                 playerControls.Player.Sprint.performed -= sprintPerformed;
+            if (crouchPerformed != null)
+                playerControls.Player.Crouch.performed -= crouchPerformed;
 
             playerControls.Disable();
         }
@@ -258,6 +283,7 @@ public class PlayerInputHandler : MonoBehaviour
         HandleDodgeInput();
         HandleJumpInput();
         HandleSprintInput();
+        HandleCrouchInput();
     }
 
     private void HandlePlayerMovementInput()
@@ -385,6 +411,19 @@ public class PlayerInputHandler : MonoBehaviour
             if (player != null)
             {
                 player.ToggleSprint();
+            }
+        }
+    }
+
+    private void HandleCrouchInput()
+    {
+        if (crouchInput)
+        {
+            crouchInput = false;
+
+            if (player != null)
+            {
+                player.PerformCrouch();
             }
         }
     }
