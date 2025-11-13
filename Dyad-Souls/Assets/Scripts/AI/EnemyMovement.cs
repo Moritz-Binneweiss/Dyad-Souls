@@ -32,6 +32,15 @@ public class EnemyMovement : MonoBehaviour
 
     void Update()
     {
+        // Boss-Modus: Komplett deaktiviert wenn Spieler in der Nähe
+        if (IsPlayerNearby())
+        {
+            // Lasse Behavior Tree die komplette Kontrolle
+            // Stoppe alle eigenen Movement-Aktionen
+            return;
+        }
+        
+        // Normal Wandering nur wenn kein Spieler in der Nähe
         timer += Time.deltaTime;
 
         if (isWaiting)
@@ -88,5 +97,25 @@ public class EnemyMovement : MonoBehaviour
         {
             agent.SetDestination(hit.position);
         }
+    }
+    
+    private bool IsPlayerNearby()
+    {
+        // Prüfe ob Spieler in Combat-Reichweite sind
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        
+        foreach (GameObject player in players)
+        {
+            if (player != null)
+            {
+                float distance = Vector3.Distance(transform.position, player.transform.position);
+                if (distance <= 15f) // Kampfreichweite
+                {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
     }
 }

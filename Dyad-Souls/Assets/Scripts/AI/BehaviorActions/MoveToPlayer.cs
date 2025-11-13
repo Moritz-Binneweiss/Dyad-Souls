@@ -21,12 +21,16 @@ public class MoveToPlayer : Action
         Transform targetPlayer = GetClosestPlayer();
         if (agent != null && targetPlayer != null)
         {
+            // Stelle sicher, dass NavMeshAgent aktiv ist
+            agent.enabled = true;
             agent.isStopped = false;
             agent.SetDestination(targetPlayer.position);
 
             // Setze isRunning auf true wenn der Agent zu laufen beginnt
             if (animator != null)
                 animator.SetBool("isRunning", true);
+            
+            Debug.Log($"MoveToPlayer: Moving to {targetPlayer.name} at distance {Vector3.Distance(transform.position, targetPlayer.position):F1}");
         }
     }
 
@@ -41,6 +45,12 @@ public class MoveToPlayer : Action
             return TaskStatus.Failure;
         }
 
+        // Stelle sicher, dass Agent nicht gestoppt ist
+        if (agent.isStopped)
+        {
+            agent.isStopped = false;
+        }
+        
         // Lauf weiter zum nächstgelegenen Spieler
         agent.SetDestination(targetPlayer.position);
 

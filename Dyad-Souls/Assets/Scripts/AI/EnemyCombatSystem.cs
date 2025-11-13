@@ -14,13 +14,13 @@ public class EnemyCombatSystem : MonoBehaviour
 
     [Header("Attack Settings")]
     [SerializeField]
-    private float attackRange = 2f;
+    private float attackRange = 4f; // Größer für Boss!
 
     [SerializeField]
-    private float heavyAttackRange = 2.5f;
+    private float heavyAttackRange = 6f; // Größer für Boss!
 
     [SerializeField]
-    private float rangeAttackRange = 10f;
+    private float rangeAttackRange = 12f;
 
     private Animator animator;
     private bool isAttacking = false;
