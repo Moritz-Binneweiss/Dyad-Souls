@@ -64,10 +64,26 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -844464367804050527, guid: 4d24668e3ecd3024380d300a74b2a470, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: aa531aa977b88f3418f1cf9450b586ea, type: 2}
     - target: {fileID: 919132149155446097, guid: 4d24668e3ecd3024380d300a74b2a470, type: 3}
       propertyPath: m_Name
       value: LightSword
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 4d24668e3ecd3024380d300a74b2a470, type: 3}
+      propertyPath: m_TagString
+      value: PlayerWeapon
+      objectReference: {fileID: 0}
+    - target: {fileID: 3024310350831220548, guid: 4d24668e3ecd3024380d300a74b2a470, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: aa531aa977b88f3418f1cf9450b586ea, type: 2}
+    - target: {fileID: 8032750206264916975, guid: 4d24668e3ecd3024380d300a74b2a470, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: aa531aa977b88f3418f1cf9450b586ea, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
