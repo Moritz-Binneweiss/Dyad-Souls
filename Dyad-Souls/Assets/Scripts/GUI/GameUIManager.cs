@@ -22,6 +22,13 @@ public class GameUIManager : MonoBehaviour
     [SerializeField]
     private GameObject enemyDefeatedText;
 
+    [Header("Player Stamina UI References")]
+    [SerializeField]
+    private Slider playerOneStaminaSlider;
+
+    [SerializeField]
+    private Slider playerTwoStaminaSlider;
+
     private InputSystem_Actions inputActions;
     private bool isPaused;
 
@@ -152,5 +159,16 @@ public class GameUIManager : MonoBehaviour
         {
             enemyDefeatedText.SetActive(false);
         }
+    }
+
+    // Getter für Stamina Slider (für Setup von außen)
+    public Slider GetPlayerOneStaminaSlider()
+    {
+        return playerOneStaminaSlider;
+    }
+
+    public Slider GetPlayerTwoStaminaSlider()
+    {
+        return playerTwoStaminaSlider;
     }
 }

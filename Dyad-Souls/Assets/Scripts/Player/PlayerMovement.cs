@@ -134,6 +134,26 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
+        // Beende Sprint wenn Stamina leer ist
+        if (
+            isSprinting
+            && player.playerStaminaSystem != null
+            && !player.playerStaminaSystem.HasStaminaForSprint()
+        )
+        {
+            isSprinting = false;
+            if (animator != null)
+            {
+                animator.SetBool("isSprinting", false);
+            }
+        }
+
+        // Verbrauche Stamina während Sprint
+        if (isSprinting && moveAmount > 0.1f && player.playerStaminaSystem != null)
+        {
+            player.playerStaminaSystem.ConsumeSprint(Time.deltaTime);
+        }
+
         // Apply gravity and jumping
         ApplyGravityAndJump();
 
@@ -207,6 +227,17 @@ public class PlayerMovement : MonoBehaviour
     {
         if (isGrounded && jumpTimeoutDelta <= 0.0f)
         {
+            // Prüfe Stamina
+            if (player.playerStaminaSystem != null)
+            {
+                if (!player.playerStaminaSystem.ConsumeStamina(
+                        player.playerStaminaSystem.GetJumpCost()
+                    ))
+                {
+                    return; // Nicht genug Stamina
+                }
+            }
+
             verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravityForce);
 
             if (animator != null)
@@ -220,6 +251,16 @@ public class PlayerMovement : MonoBehaviour
 
     public void ToggleSprint()
     {
+        // Nur Sprint aktivieren wenn genug Stamina vorhanden
+        if (
+            !isSprinting
+            && player.playerStaminaSystem != null
+            && !player.playerStaminaSystem.HasStaminaForSprint()
+        )
+        {
+            return; // Nicht genug Stamina zum Sprinten
+        }
+
         isSprinting = !isSprinting;
 
         if (animator != null)
