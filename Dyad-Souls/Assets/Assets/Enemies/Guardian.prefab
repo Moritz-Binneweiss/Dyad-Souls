@@ -74,13 +74,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 29fd29c9a192acd40967fd704db0c2d8, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8126751385628301989}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 29fd29c9a192acd40967fd704db0c2d8, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 8594178002398413449}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 29fd29c9a192acd40967fd704db0c2d8, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 5313511344543175946}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 29fd29c9a192acd40967fd704db0c2d8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4264092039816626104}
@@ -102,24 +96,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 29fd29c9a192acd40967fd704db0c2d8, type: 3}
   m_PrefabInstance: {fileID: 7152586780351378188}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8126751385628301989
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8035123319209627229}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e465ec09659d2a4c8a466c00f52d605, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyCombatSystem
-  attackDamage: 20
-  heavyAttackDamage: 40
-  rangeAttackDamage: 60
-  attackRange: 2
-  heavyAttackRange: 3
-  rangeAttackRange: 8
 --- !u!114 &8594178002398413449
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -142,22 +118,6 @@ MonoBehaviour:
   phase2HealthThreshold: 0.7
   phase3HealthThreshold: 0.3
   bossHealthSlider: {fileID: 0}
---- !u!114 &5313511344543175946
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8035123319209627229}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fff54b255d178c6478ea653059fe96b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BossScript
-  wanderRadius: 15
-  wanderTimer: 5
-  waitTimeAfterArrival: 2
-  movementThreshold: 0.1
 --- !u!95 &4264092039816626104
 Animator:
   serializedVersion: 7
@@ -194,7 +154,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 0
+  m_StoppingDistance: 2.5
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -278,14 +238,12 @@ MonoBehaviour:
       parentIndex: 
       startIndex: 
       variableStartIndex: 
-      JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(-783.9405,-208.7395)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.Repeater","NodeData":{"Offset":"(-1.54986572,122.709717)"},"ID":1,"Name":"Repeater","Instant":true,"SharedIntcount":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":-1},"SharedBoolrepeatForever":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":true},"SharedBoolendOnFailure":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false},"Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Selector","NodeData":{"Offset":"(-4.13201046,146.186768)"},"ID":2,"Name":"Selector","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-181.76088,152.4398)"},"ID":3,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"IsTargetInRange","NodeData":{"Offset":"(-120.987732,170.388611)"},"ID":4,"Name":"Is
-        Target In Range","Instant":true,"SharedGameObjecttarget":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"currentTarget","IsShared":true},"SharedFloatrange":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":3.5}},{"Type":"BehaviorDesigner.Runtime.Tasks.Selector","NodeData":{"Offset":"(134.606934,161.9271)"},"ID":5,"Name":"Selector","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"PerformRangeAttack","NodeData":{"Offset":"(-378.102722,162.926727)"},"ID":6,"Name":"Perform
-        Range Attack","Instant":true,"SharedFloatdamage":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":35},"SharedFloatmaxRange":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":10},"SharedFloatminRange":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":5},"SharedStringanimationTrigger":{"Type":"BehaviorDesigner.Runtime.SharedString","Name":"RangeAttack","IsShared":true,"IsDynamic":true},"SharedFloatattackDuration":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1.8},"SharedFloatcooldownTime":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":5},"SharedFloatattackChance":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":30},"SharedGameObjecttarget":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"currentTarget","IsShared":true},"BooleanfaceTarget":true},{"Type":"PerformHeavyAttack","NodeData":{"Offset":"(-203.102112,162.926727)"},"ID":7,"Name":"Perform
-        Heavy Attack","Instant":true,"SharedFloatdamage":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":50},"SharedFloatattackRange":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":4},"SharedStringanimationTrigger":{"Type":"BehaviorDesigner.Runtime.SharedString","Name":"HeavyAttack","IsShared":true,"IsDynamic":true},"SharedFloatattackDuration":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":2.5},"SharedFloatcooldownTime":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":4},"SharedFloatattackChance":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":40},"SharedGameObjecttarget":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"currentTarget","IsShared":true},"BooleanfaceTarget":true},{"Type":"PerformComboAttack","NodeData":{"Offset":"(4.39767456,156.703918)"},"ID":8,"Name":"Perform
-        Combo Attack","Instant":true,"SharedFloatdamage":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":40},"SharedFloatattackRange":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":3.5},"SharedStringanimationTrigger":{"Type":"BehaviorDesigner.Runtime.SharedString","Name":"AttackLeftRight","IsShared":true,"IsDynamic":true},"SharedFloatattackDuration":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":2},"SharedFloatcooldownTime":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":3},"SharedFloatattackChance":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":50},"SharedGameObjecttarget":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"currentTarget","IsShared":true},"BooleanfaceTarget":true},{"Type":"PerformLeftAttack","NodeData":{"Offset":"(191.063629,163.3706)"},"ID":9,"Name":"Perform
-        Left Attack","Instant":true,"SharedFloatdamage":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":20},"SharedFloatattackRange":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":3},"SharedStringanimationTrigger":{"Type":"BehaviorDesigner.Runtime.SharedString","Name":"AttackLeft","IsShared":true,"IsDynamic":true},"SharedFloatattackDuration":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1},"SharedFloatcooldownTime":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1.5},"SharedFloatattackChance":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":100},"SharedGameObjecttarget":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"currentTarget","IsShared":true},"BooleanfaceTarget":true},{"Type":"PerformRightAttack","NodeData":{"Offset":"(374.396332,156.703979)"},"ID":10,"Name":"Perform
-        Right Attack","Instant":true,"SharedFloatdamage":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":20},"SharedFloatattackRange":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":3},"SharedStringanimationTrigger":{"Type":"BehaviorDesigner.Runtime.SharedString","Name":"AttackRight","IsShared":true,"IsDynamic":true},"SharedFloatattackDuration":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1},"SharedFloatcooldownTime":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1.5},"SharedFloatattackChance":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":100},"SharedGameObjecttarget":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"currentTarget","IsShared":true},"BooleanfaceTarget":true}]}]},{"Type":"MoveToClosestPlayer","NodeData":{"Offset":"(126.573105,146.247147)"},"ID":11,"Name":"Move
-        To Closest Player","Instant":true,"SharedGameObjectplayer1":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"player1","IsShared":true,"GameObjectmValue":0},"SharedGameObjectplayer2":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"player2","IsShared":true,"GameObjectmValue":1},"SharedFloatstoppingDistance":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":2.5},"SingleupdateTargetInterval":0.2,"BooleanuseAnimator":true,"SharedStringanimatorBoolParameter":{"Type":"BehaviorDesigner.Runtime.SharedString","Name":null,"StringmValue":"isRunning"},"SharedGameObjectcurrentTarget":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"currentTarget","IsShared":true}}]}]},"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"currentTarget","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"player1","IsShared":true,"GameObjectmValue":2},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"player2","IsShared":true,"GameObjectmValue":3}]}'
+      JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(-783.9405,-208.7395)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.Repeater","NodeData":{"Offset":"(-1.54986572,122.709717)"},"ID":1,"Name":"Repeater","Instant":true,"SharedIntcount":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":-1},"SharedBoolrepeatForever":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":true},"SharedBoolendOnFailure":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false},"Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Parallel","NodeData":{"Offset":"(1.78777122,141.846588)"},"ID":2,"Name":"Parallel","Instant":true,"AbortTypeabortType":"Self","Children":[{"Type":"MoveToClosestPlayer","NodeData":{"Offset":"(-140.864639,127.883163)"},"ID":3,"Name":"Move
+        To Closest Player","Instant":true,"SharedGameObjectplayer1":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"player1","IsShared":true,"GameObjectmValue":0},"SharedGameObjectplayer2":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"player2","IsShared":true,"GameObjectmValue":1},"SharedFloatstoppingDistance":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":2.5},"SingleupdateTargetInterval":0.2,"BooleanuseAnimator":true,"SharedStringanimatorBoolParameter":{"Type":"BehaviorDesigner.Runtime.SharedString","Name":null,"StringmValue":"isRunning"},"SharedGameObjectcurrentTarget":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"currentTarget","IsShared":true}},{"Type":"BehaviorDesigner.Runtime.Tasks.Selector","NodeData":{"Offset":"(91.6352539,127.883179)"},"ID":4,"Name":"Selector","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"PerformRangeAttack","NodeData":{"Offset":"(-311.402283,180.713989)"},"ID":5,"Name":"Perform
+        Range Attack","Instant":true,"SharedFloatdamage":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":35},"SharedFloatmaxRange":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":10},"SharedFloatminRange":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":5},"SharedStringanimationTrigger":{"Type":"BehaviorDesigner.Runtime.SharedString","Name":"RangeAttack","IsShared":true,"IsDynamic":true},"SharedFloatattackDuration":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1.8},"SharedFloatcooldownTime":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":5},"SharedFloatattackChance":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":30},"SharedGameObjecttarget":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"currentTarget","IsShared":true},"BooleanfaceTarget":true},{"Type":"PerformHeavyAttack","NodeData":{"Offset":"(-134.375427,172.605835)"},"ID":6,"Name":"Perform
+        Heavy Attack","Instant":true,"SharedFloatdamage":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":50},"SharedFloatattackRange":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":4},"SharedStringanimationTrigger":{"Type":"BehaviorDesigner.Runtime.SharedString","Name":"HeavyAttack","IsShared":true,"IsDynamic":true},"SharedFloatattackDuration":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":2.5},"SharedFloatcooldownTime":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":4},"SharedFloatattackChance":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":40},"SharedGameObjecttarget":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"currentTarget","IsShared":true},"BooleanfaceTarget":true},{"Type":"PerformLeftAttack","NodeData":{"Offset":"(73.7338257,178.01123)"},"ID":7,"Name":"Perform
+        Left Attack","Instant":true,"SharedFloatdamage":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":20},"SharedFloatattackRange":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":3},"SharedStringanimationTrigger":{"Type":"BehaviorDesigner.Runtime.SharedString","Name":"AttackLeft","IsShared":true,"IsDynamic":true},"SharedFloatattackDuration":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1},"SharedFloatcooldownTime":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1.5},"SharedFloatattackChance":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":100},"SharedGameObjecttarget":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"currentTarget","IsShared":true},"BooleanfaceTarget":true},{"Type":"PerformRightAttack","NodeData":{"Offset":"(237.2474,182.065247)"},"ID":8,"Name":"Perform
+        Right Attack","Instant":true,"SharedFloatdamage":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":20},"SharedFloatattackRange":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":3},"SharedStringanimationTrigger":{"Type":"BehaviorDesigner.Runtime.SharedString","Name":"AttackRight","IsShared":true,"IsDynamic":true},"SharedFloatattackDuration":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1},"SharedFloatcooldownTime":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1.5},"SharedFloatattackChance":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":100},"SharedGameObjecttarget":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"currentTarget","IsShared":true},"BooleanfaceTarget":true}]}]}]},"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"currentTarget","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"player1","IsShared":true,"GameObjectmValue":2},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"player2","IsShared":true,"GameObjectmValue":3}]}'
       fieldSerializationData:
         typeName: []
         fieldNameHash: 

@@ -154,11 +154,9 @@ public class MoveToClosestPlayer : Action
         // Nur loggen wenn sich das Ziel ändert
         if (newTarget != lastTarget)
         {
-            Debug.Log($"MoveToClosestPlayer: Zielwechsel zu {newTarget.name}");
             lastTarget = newTarget;
         }
 
         currentTarget.Value = newTarget;
-        Debug.Log($"MoveToClosestPlayer: currentTarget gesetzt auf {currentTarget.Value?.name ?? "NULL"}");
     }
 }

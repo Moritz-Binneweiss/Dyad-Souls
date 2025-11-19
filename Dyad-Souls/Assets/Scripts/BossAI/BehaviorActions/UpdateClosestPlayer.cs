@@ -32,8 +32,9 @@ public class UpdateClosestPlayer : Action
         );
 
         // Wähle den näheren Spieler
-        currentTarget.Value =
-            (distanceToPlayer1 < distanceToPlayer2) ? player1.Value : player2.Value;
+        currentTarget.Value = (distanceToPlayer1 < distanceToPlayer2) 
+            ? player1.Value 
+            : player2.Value;
 
         return TaskStatus.Success;
     }

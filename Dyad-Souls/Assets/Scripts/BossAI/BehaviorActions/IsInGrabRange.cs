@@ -3,14 +3,13 @@ using BehaviorDesigner.Runtime.Tasks;
 using UnityEngine;
 
 /// <summary>
-/// Prüft, ob das Ziel in einer bestimmten Reichweite ist
+/// Prüft, ob der Spieler in Grab-Reichweite ist (sehr nah)
 /// </summary>
-public class IsTargetInRange : Conditional
+public class IsInGrabRange : Conditional
 {
-    [RequiredField]
     public SharedGameObject target;
 
-    public SharedFloat range = 3f;
+    public SharedFloat grabRange = 2.5f;
 
     public override TaskStatus OnUpdate()
     {
@@ -21,6 +20,6 @@ public class IsTargetInRange : Conditional
 
         float distance = Vector3.Distance(transform.position, target.Value.transform.position);
 
-        return distance <= range.Value ? TaskStatus.Success : TaskStatus.Failure;
+        return (distance <= grabRange.Value) ? TaskStatus.Success : TaskStatus.Failure;
     }
 }
