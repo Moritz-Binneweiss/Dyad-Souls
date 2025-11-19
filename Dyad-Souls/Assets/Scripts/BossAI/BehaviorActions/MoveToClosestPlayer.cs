@@ -32,16 +32,21 @@ public class MoveToClosestPlayer : Action
     [UnityEngine.Tooltip("Optionales Output: Aktuelles Ziel")]
     public SharedGameObject currentTarget;
 
+    [UnityEngine.Tooltip("Timeout: Nach wie vielen Sekunden gibt die Action Success zurück?")]
+    public SharedFloat timeout = 0.5f;
+
     private NavMeshAgent agent;
     private Animator animator;
     private float nextUpdateTime;
     private GameObject lastTarget;
     private bool isWithinRange = false;
+    private float startTime;
 
     public override void OnStart()
     {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
+        startTime = Time.time;
 
         if (agent == null)
         {
@@ -73,6 +78,12 @@ public class MoveToClosestPlayer : Action
         if (agent == null || player1.Value == null || player2.Value == null)
         {
             return TaskStatus.Failure;
+        }
+
+        // Timeout Check - gibt Success zurück damit der Tree weiterläuft
+        if (Time.time - startTime >= timeout.Value)
+        {
+            return TaskStatus.Success;
         }
 
         // Aktualisiere das Ziel periodisch
@@ -119,7 +130,7 @@ public class MoveToClosestPlayer : Action
             }
         }
 
-        // Diese Action läuft endlos - der Boss folgt immer dem näheren Spieler
+        // Läuft bis zum Timeout
         return TaskStatus.Running;
     }
 
