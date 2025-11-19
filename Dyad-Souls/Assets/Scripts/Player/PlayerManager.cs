@@ -100,6 +100,14 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    public void PerformSpecialAttack()
+    {
+        if (playerCombatSystem != null)
+        {
+            playerCombatSystem.PerformSpecialAttack();
+        }
+    }
+
     public void ToggleSprint()
     {
         if (playerMovement != null)

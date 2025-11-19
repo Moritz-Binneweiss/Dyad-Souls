@@ -139,4 +139,18 @@ public class PlayerCombatSystem : MonoBehaviour
             }
         }
     }
+
+    public void PerformSpecialAttack()
+    {
+        if (animator != null)
+        {
+            // Setze Damage für Special Attack (150)
+            if (weaponDamage != null)
+            {
+                weaponDamage.SetSpecialAttackDamage();
+            }
+
+            animator.SetTrigger("SpecialAttack");
+        }
+    }
 }

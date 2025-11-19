@@ -9,6 +9,18 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 373989f0f6287274c9fa38c7a7873adc, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.03
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 373989f0f6287274c9fa38c7a7873adc, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.03
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 373989f0f6287274c9fa38c7a7873adc, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.03
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 373989f0f6287274c9fa38c7a7873adc, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -47,6 +59,10 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 373989f0f6287274c9fa38c7a7873adc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 373989f0f6287274c9fa38c7a7873adc, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -844464367804050527, guid: 373989f0f6287274c9fa38c7a7873adc, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -98,6 +114,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WeaponDamage
   attackDamage: 50
   heavyAttackDamage: 100
+  specialAttackDamage: 300
 --- !u!1 &3476349092783417869 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -7334951474422550414, guid: 373989f0f6287274c9fa38c7a7873adc, type: 3}

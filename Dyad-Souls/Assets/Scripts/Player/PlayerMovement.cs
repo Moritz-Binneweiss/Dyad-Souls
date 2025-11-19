@@ -105,7 +105,7 @@ public class PlayerMovement : MonoBehaviour
 
             // Set crouching parameter - always update to ensure consistency
             animator.SetBool("isCrouching", isCrouching);
-            
+
             // Optional: Debug output to verify the parameter is being set
             // Debug.Log($"Setting isCrouching to: {isCrouching}");
         }
