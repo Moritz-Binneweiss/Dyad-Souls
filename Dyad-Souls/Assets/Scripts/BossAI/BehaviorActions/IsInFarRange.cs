@@ -7,10 +7,8 @@ using UnityEngine;
 /// </summary>
 public class IsInFarRange : Conditional
 {
-    [Tooltip("Der aktuelle Zielspieler")]
     public SharedGameObject target;
 
-    [Tooltip("Minimale Distanz für Far-Range (größer als Mid-Range)")]
     public SharedFloat farRange = 10f;
 
     public override TaskStatus OnUpdate()
