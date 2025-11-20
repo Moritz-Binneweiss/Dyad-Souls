@@ -114,7 +114,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WeaponDamage
   attackDamage: 50
   heavyAttackDamage: 100
-  specialAttackDamage: 300
+  specialAttackDamage: 25
 --- !u!1 &8980268802264673523 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -7334951474422550414, guid: aa129f7bf9cc9084b88a0b9d26f1ee2f, type: 3}
