@@ -80,6 +80,17 @@ public class PlayerCombatSystem : MonoBehaviour
     {
         if (animator != null)
         {
+            // Prüfe Stamina
+            if (player.playerStaminaSystem != null)
+            {
+                if (!player.playerStaminaSystem.ConsumeStamina(
+                        player.playerStaminaSystem.GetLightAttackCost()
+                    ))
+                {
+                    return; // Nicht genug Stamina
+                }
+            }
+
             // Setze Damage für Light Attack
             if (weaponDamage != null)
             {
@@ -94,6 +105,17 @@ public class PlayerCombatSystem : MonoBehaviour
     {
         if (animator != null && !string.IsNullOrEmpty(heavyAttackAnimation))
         {
+            // Prüfe Stamina
+            if (player.playerStaminaSystem != null)
+            {
+                if (!player.playerStaminaSystem.ConsumeStamina(
+                        player.playerStaminaSystem.GetHeavyAttackCost()
+                    ))
+                {
+                    return; // Nicht genug Stamina
+                }
+            }
+
             // Setze Damage für Heavy Attack (100)
             if (weaponDamage != null)
             {
@@ -130,13 +152,58 @@ public class PlayerCombatSystem : MonoBehaviour
             if (moveAmount > 0.1f)
             {
                 // Player is moving -> Dodge Roll
+                // Prüfe Stamina für Roll
+                if (player.playerStaminaSystem != null)
+                {
+                    if (!player.playerStaminaSystem.ConsumeStamina(
+                            player.playerStaminaSystem.GetDodgeRollCost()
+                        ))
+                    {
+                        return; // Nicht genug Stamina
+                    }
+                }
                 animator.SetTrigger("Dodge");
             }
             else
             {
                 // Player is standing still -> Backstep
+                // Prüfe Stamina für Backstep
+                if (player.playerStaminaSystem != null)
+                {
+                    if (!player.playerStaminaSystem.ConsumeStamina(
+                            player.playerStaminaSystem.GetDodgeBackstepCost()
+                        ))
+                    {
+                        return; // Nicht genug Stamina
+                    }
+                }
                 animator.SetTrigger("DodgeBackstep");
             }
+        }
+    }
+
+    public void PerformSpecialAttack()
+    {
+        if (animator != null)
+        {
+            // Prüfe Stamina
+            if (player.playerStaminaSystem != null)
+            {
+                if (!player.playerStaminaSystem.ConsumeStamina(
+                        player.playerStaminaSystem.GetSpecialAttackCost()
+                    ))
+                {
+                    return; // Nicht genug Stamina
+                }
+            }
+
+            // Setze Damage für Special Attack (150)
+            if (weaponDamage != null)
+            {
+                weaponDamage.SetSpecialAttackDamage();
+            }
+
+            animator.SetTrigger("SpecialAttack");
         }
     }
 }

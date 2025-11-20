@@ -136,7 +136,7 @@ public class EnemyCombatSystem : MonoBehaviour
     #endregion
 
     #region Helper Methods
-    // Fügt allen Spielern in Reichweite Schaden zu
+    // Fügt allen lebenden Spielern in Reichweite Schaden zu
     private void DealDamageInRange(float range, float damage)
     {
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, range);
@@ -146,7 +146,7 @@ public class EnemyCombatSystem : MonoBehaviour
             if (col.CompareTag("Player"))
             {
                 PlayerManager playerManager = col.GetComponent<PlayerManager>();
-                if (playerManager != null)
+                if (playerManager != null && !playerManager.IsDead()) // Nur lebende Spieler
                 {
                     playerManager.TakeDamage(damage);
                     Debug.Log($"Enemy dealt {damage} damage to {col.name}");

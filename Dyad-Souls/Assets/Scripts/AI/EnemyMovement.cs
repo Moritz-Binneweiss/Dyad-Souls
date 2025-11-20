@@ -101,13 +101,18 @@ public class EnemyMovement : MonoBehaviour
     
     private bool IsPlayerNearby()
     {
-        // Prüfe ob Spieler in Combat-Reichweite sind
+        // Prüfe ob lebende Spieler in Combat-Reichweite sind
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
         
         foreach (GameObject player in players)
         {
             if (player != null)
             {
+                // Prüfe ob Spieler lebt
+                PlayerManager playerManager = player.GetComponent<PlayerManager>();
+                if (playerManager != null && playerManager.IsDead())
+                    continue;
+                
                 float distance = Vector3.Distance(transform.position, player.transform.position);
                 if (distance <= 15f) // Kampfreichweite
                 {
