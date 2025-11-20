@@ -8,6 +8,9 @@ public class WeaponDamage : MonoBehaviour
     [SerializeField]
     private float heavyAttackDamage = 100f;
 
+    [SerializeField]
+    private float specialAttackDamage = 200f;
+
     private float currentDamage;
 
     private void Awake()
@@ -33,5 +36,10 @@ public class WeaponDamage : MonoBehaviour
     public void SetDamage(float newDamage)
     {
         currentDamage = newDamage;
+    }
+
+    public void SetSpecialAttackDamage()
+    {
+        currentDamage = specialAttackDamage;
     }
 }

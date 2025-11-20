@@ -31,6 +31,7 @@ public class PlayerInputHandler : MonoBehaviour
     private System.Action<InputAction.CallbackContext> sprintPerformed;
     private System.Action<InputAction.CallbackContext> crouchPerformed;
     private System.Action<InputAction.CallbackContext> crouchCanceled;
+    private System.Action<InputAction.CallbackContext> specialAttackPerformed;
 
     [Header("Player Movement Input")]
     [SerializeField]
@@ -71,6 +72,10 @@ public class PlayerInputHandler : MonoBehaviour
     [Header("Player Crouch Input")]
     [SerializeField]
     bool crouchInput = false;
+
+    [Header("Special Attack Input")]
+    [SerializeField]
+    bool specialAttackInput = false;
 
     private float lastSprintTime = -1f;
     private const float sprintDebounceTime = 0.2f; // Mindestens 0.2 Sekunden zwischen Sprint-Toggles
@@ -197,6 +202,11 @@ public class PlayerInputHandler : MonoBehaviour
                 crouchInput = false;
             };
 
+            specialAttackPerformed = i =>
+            {
+                specialAttackInput = true;
+            };
+
             playerControls.Player.Move.performed += movePerformed;
             playerControls.Player.Look.performed += lookPerformed;
             playerControls.Player.Move.canceled += moveCanceled;
@@ -208,6 +218,7 @@ public class PlayerInputHandler : MonoBehaviour
             playerControls.Player.Jump.performed += jumpPerformed;
             playerControls.Player.Sprint.performed += sprintPerformed;
             playerControls.Player.Crouch.performed += crouchPerformed;
+            playerControls.Player.SpecialAttack.performed += specialAttackPerformed;
         }
 
         playerControls.Enable();
@@ -268,6 +279,8 @@ public class PlayerInputHandler : MonoBehaviour
                 playerControls.Player.Sprint.performed -= sprintPerformed;
             if (crouchPerformed != null)
                 playerControls.Player.Crouch.performed -= crouchPerformed;
+            if (specialAttackPerformed != null)
+                playerControls.Player.SpecialAttack.performed -= specialAttackPerformed;
 
             playerControls.Disable();
         }
@@ -284,6 +297,7 @@ public class PlayerInputHandler : MonoBehaviour
         HandleJumpInput();
         HandleSprintInput();
         HandleCrouchInput();
+        HandleSpecialAttackInput();
     }
 
     private void HandlePlayerMovementInput()
@@ -424,6 +438,19 @@ public class PlayerInputHandler : MonoBehaviour
             if (player != null)
             {
                 player.PerformCrouch();
+            }
+        }
+    }
+
+    private void HandleSpecialAttackInput()
+    {
+        if (specialAttackInput)
+        {
+            specialAttackInput = false;
+
+            if (player != null)
+            {
+                player.PerformSpecialAttack();
             }
         }
     }

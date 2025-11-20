@@ -13,6 +13,9 @@ public class PlayerManager : MonoBehaviour
     [HideInInspector]
     public PlayerCombatSystem playerCombatSystem;
 
+    [HideInInspector]
+    public PlayerStaminaSystem playerStaminaSystem;
+
     private Animator animator;
 
     [Header("Health Settings")]
@@ -33,6 +36,7 @@ public class PlayerManager : MonoBehaviour
     {
         playerMovement = GetComponent<PlayerMovement>();
         playerCombatSystem = GetComponent<PlayerCombatSystem>();
+        playerStaminaSystem = GetComponent<PlayerStaminaSystem>();
         animator = GetComponent<Animator>();
 
         // Initialisiere Health
@@ -97,6 +101,14 @@ public class PlayerManager : MonoBehaviour
         if (playerMovement != null)
         {
             playerMovement.PerformCrouch();
+        }
+    }
+
+    public void PerformSpecialAttack()
+    {
+        if (playerCombatSystem != null)
+        {
+            playerCombatSystem.PerformSpecialAttack();
         }
     }
 
@@ -195,6 +207,12 @@ public class PlayerManager : MonoBehaviour
         {
             healthSlider.gameObject.SetActive(false);
         }
+
+        // Verstecke Stamina Bar
+        if (playerStaminaSystem != null && playerStaminaSystem.GetStaminaSlider() != null)
+        {
+            playerStaminaSystem.GetStaminaSlider().gameObject.SetActive(false);
+        }
     }
 
     public void Revive()
@@ -228,6 +246,12 @@ public class PlayerManager : MonoBehaviour
         if (healthSlider != null)
         {
             healthSlider.gameObject.SetActive(true);
+        }
+
+        // Zeige Stamina Bar wieder
+        if (playerStaminaSystem != null && playerStaminaSystem.GetStaminaSlider() != null)
+        {
+            playerStaminaSystem.GetStaminaSlider().gameObject.SetActive(true);
         }
 
         // Reaktiviere Player-Komponenten
