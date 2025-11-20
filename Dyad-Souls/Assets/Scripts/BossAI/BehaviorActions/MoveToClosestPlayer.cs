@@ -150,24 +150,52 @@ public class MoveToClosestPlayer : Action
 
     private void UpdateClosestTarget()
     {
-        float distanceToPlayer1 = Vector3.Distance(
-            transform.position,
-            player1.Value.transform.position
-        );
-        float distanceToPlayer2 = Vector3.Distance(
-            transform.position,
-            player2.Value.transform.position
-        );
+        // Prüfe ob Spieler leben
+        PlayerManager pm1 = player1.Value != null ? player1.Value.GetComponent<PlayerManager>() : null;
+        PlayerManager pm2 = player2.Value != null ? player2.Value.GetComponent<PlayerManager>() : null;
 
-        GameObject newTarget =
-            (distanceToPlayer1 < distanceToPlayer2) ? player1.Value : player2.Value;
+        bool player1Alive = pm1 != null && !pm1.IsDead();
+        bool player2Alive = pm2 != null && !pm2.IsDead();
 
-        // Nur loggen wenn sich das Ziel ändert
-        if (newTarget != lastTarget)
+        GameObject selectedTarget = null;
+
+        // Wenn beide tot sind
+        if (!player1Alive && !player2Alive)
         {
-            lastTarget = newTarget;
+            currentTarget.Value = null;
+            return;
         }
 
-        currentTarget.Value = newTarget;
+        // Wenn nur einer lebt, wähle diesen
+        if (player1Alive && !player2Alive)
+        {
+            selectedTarget = player1.Value;
+        }
+        else if (player2Alive && !player1Alive)
+        {
+            selectedTarget = player2.Value;
+        }
+        else
+        {
+            // Beide leben - wähle den näheren
+            float distanceToPlayer1 = Vector3.Distance(
+                transform.position,
+                player1.Value.transform.position
+            );
+            float distanceToPlayer2 = Vector3.Distance(
+                transform.position,
+                player2.Value.transform.position
+            );
+
+            selectedTarget = (distanceToPlayer1 < distanceToPlayer2) ? player1.Value : player2.Value;
+        }
+
+        // Nur loggen wenn sich das Ziel ändert
+        if (selectedTarget != lastTarget)
+        {
+            lastTarget = selectedTarget;
+        }
+
+        currentTarget.Value = selectedTarget;
     }
 }
