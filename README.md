@@ -129,13 +129,26 @@ Besprechung:
 Ziel:
 
 -MVP Ziel erreichen
+
 - (Lobby/Vorbereitungsraum)
 - an Problemen arbeiten
 - Dinge Verbessern und erweitern
 - "Präsentation" vorbereiten
 
 Für die Präsentation:
+
 - Technologische Hintergründe zeigen und erklären
 - Prototype zeigen, was bisher alles erreicht wurde
 - Ziele bis zum Ende
 - 10-15min
+
+#### **20.11.2025**
+
+Besprechung:
+
+- Präsentation gehalten
+
+Ziel:
+
+- Nice-To-Have Features anfangen
+- Verbessern und Erweitern
