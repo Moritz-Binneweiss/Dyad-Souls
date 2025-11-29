@@ -2,9 +2,6 @@ using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using UnityEngine;
 
-/// <summary>
-/// Prüft, ob der Spieler in Grab-Reichweite ist (sehr nah)
-/// </summary>
 public class IsInGrabRange : Conditional
 {
     public SharedGameObject target;

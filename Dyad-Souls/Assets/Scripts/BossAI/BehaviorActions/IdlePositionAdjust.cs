@@ -4,9 +4,6 @@ using UnityEngine;
 using UnityEngine.AI;
 using Tooltip = BehaviorDesigner.Runtime.Tasks.TooltipAttribute;
 
-/// <summary>
-/// Kleine Position-Anpassung / Idle-Movement um den Boss lebendiger wirken zu lassen
-/// </summary>
 public class IdlePositionAdjust : Action
 {
     [Tooltip("Dauer der Idle-Anpassung")]
@@ -25,13 +22,14 @@ public class IdlePositionAdjust : Action
 
         if (agent != null)
         {
-            // Zufällige Position in der Nähe
             Vector3 randomDirection = Random.insideUnitSphere * moveRadius.Value;
             randomDirection += transform.position;
-            randomDirection.y = transform.position.y; // Gleiche Höhe beibehalten
+            randomDirection.y = transform.position.y;
 
             NavMeshHit hit;
-            if (NavMesh.SamplePosition(randomDirection, out hit, moveRadius.Value, NavMesh.AllAreas))
+            if (
+                NavMesh.SamplePosition(randomDirection, out hit, moveRadius.Value, NavMesh.AllAreas)
+            )
             {
                 agent.SetDestination(hit.position);
             }

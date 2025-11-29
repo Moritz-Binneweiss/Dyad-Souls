@@ -2,9 +2,6 @@ using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using UnityEngine;
 
-/// <summary>
-/// Heavy Attack für Mid Range
-/// </summary>
 public class AttackHeavy : Action
 {
     public SharedGameObject target;
@@ -28,18 +25,14 @@ public class AttackHeavy : Action
         if (target.Value != null)
         {
             float distance = Vector3.Distance(transform.position, target.Value.transform.position);
-            
+
             if (distance <= attackRange.Value)
             {
                 attackStarted = true;
-                
+
                 Animator animator = GetComponent<Animator>();
                 if (animator != null)
-                {
                     animator.Play(animationName);
-                }
-
-                Debug.Log($"Heavy Attack gestartet: {animationName}");
             }
         }
     }
@@ -47,19 +40,13 @@ public class AttackHeavy : Action
     public override TaskStatus OnUpdate()
     {
         if (!attackStarted)
-        {
             return TaskStatus.Failure;
-        }
 
         timer += Time.deltaTime;
 
         if (timer < attackDuration.Value)
-        {
             return TaskStatus.Running;
-        }
 
-        Debug.Log($"Heavy Attack abgeschlossen: {animationName}");
-        
         return TaskStatus.Success;
     }
 }

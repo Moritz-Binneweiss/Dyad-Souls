@@ -29,7 +29,7 @@ public class LobbyUIManager : MonoBehaviour
 
     private Vector3 gamepadStartPosition;
     private Vector3 keyboardStartPosition;
-    private int gamepadIconPosition = 0; // -1=Left, 0=Center, +1=Right
+    private int gamepadIconPosition = 0;
     private int keyboardIconPosition = 0;
     private bool gamepadReady = false;
     private bool keyboardReady = false;
@@ -81,7 +81,7 @@ public class LobbyUIManager : MonoBehaviour
 
         if (IsGamepad(deviceName))
         {
-            if (gamepadIconPosition != 0) // Nicht in der Mitte
+            if (gamepadIconPosition != 0)
             {
                 gamepadReady = !gamepadReady;
                 if (gamepadReadyText)
@@ -90,7 +90,7 @@ public class LobbyUIManager : MonoBehaviour
         }
         else if (deviceName.Contains("keyboard"))
         {
-            if (keyboardIconPosition != 0) // Nicht in der Mitte
+            if (keyboardIconPosition != 0)
             {
                 keyboardReady = !keyboardReady;
                 if (keyboardReadyText)
@@ -150,7 +150,6 @@ public class LobbyUIManager : MonoBehaviour
         if (!icon)
             return;
 
-        // -1 = Left, 0 = Center, +1 = Right
         float xOffset = posIndex * positionOffset;
         Vector3 target = startPos + new Vector3(xOffset, 0f, 0f);
         icon.localPosition = Vector3.Lerp(icon.localPosition, target, Time.deltaTime * moveSpeed);
@@ -177,28 +176,15 @@ public class LobbyUIManager : MonoBehaviour
 
     private void SavePlayerConfiguration()
     {
-        // Speichere welcher Input welchen Spieler steuert
-        // -1 = Player 1 (Links), +1 = Player 2 (Rechts)
-
-        // Gamepad Position speichern
         if (gamepadIconPosition == -1)
-        {
             PlayerPrefs.SetString("GamepadControls", "Player1");
-        }
         else if (gamepadIconPosition == 1)
-        {
             PlayerPrefs.SetString("GamepadControls", "Player2");
-        }
 
-        // Keyboard Position speichern
         if (keyboardIconPosition == -1)
-        {
             PlayerPrefs.SetString("KeyboardControls", "Player1");
-        }
         else if (keyboardIconPosition == 1)
-        {
             PlayerPrefs.SetString("KeyboardControls", "Player2");
-        }
 
         PlayerPrefs.Save();
     }
@@ -207,9 +193,9 @@ public class LobbyUIManager : MonoBehaviour
 
     public int GetKeyboardPlayerPosition() => keyboardIconPosition;
 
-    public bool IsGamepadPlayerOne() => gamepadIconPosition == -1; // -1 = Left = Player 1
+    public bool IsGamepadPlayerOne() => gamepadIconPosition == -1;
 
-    public bool IsKeyboardPlayerOne() => keyboardIconPosition == -1; // -1 = Left = Player 1
+    public bool IsKeyboardPlayerOne() => keyboardIconPosition == -1;
 
     public void BackToMainMenu() => SceneManager.LoadScene("MainMenu");
 }

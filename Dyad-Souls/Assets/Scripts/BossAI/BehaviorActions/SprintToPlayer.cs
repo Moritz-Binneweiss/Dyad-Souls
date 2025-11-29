@@ -3,9 +3,6 @@ using BehaviorDesigner.Runtime.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
 
-/// <summary>
-/// Sprintet aggressiv zum Spieler (Gap Close für Far Range)
-/// </summary>
 public class SprintToPlayer : Action
 {
     public SharedGameObject target;
@@ -30,22 +27,17 @@ public class SprintToPlayer : Action
     public override TaskStatus OnUpdate()
     {
         if (target.Value == null || agent == null)
-        {
             return TaskStatus.Failure;
-        }
 
         float distance = Vector3.Distance(transform.position, target.Value.transform.position);
 
-        // Wenn nah genug, Sprint erfolgreich beendet
         if (distance <= stoppingDistance.Value)
         {
             agent.speed = originalSpeed;
             return TaskStatus.Success;
         }
 
-        // Bewege zum Spieler
         agent.SetDestination(target.Value.transform.position);
-
         return TaskStatus.Running;
     }
 

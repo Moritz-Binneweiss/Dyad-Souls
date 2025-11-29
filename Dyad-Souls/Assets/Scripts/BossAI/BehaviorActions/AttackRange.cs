@@ -2,19 +2,12 @@ using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using UnityEngine;
 
-/// <summary>
-/// Range Attack für Mid/Far Range
-/// </summary>
 public class AttackRange : Action
 {
     public SharedGameObject target;
-
     public string animationName = "RangeAttack";
-
     public SharedFloat attackDuration = 2.0f;
-
     public SharedFloat attackRange = 8f;
-
     public SharedFloat damage = 30f;
 
     private float timer;
@@ -28,18 +21,14 @@ public class AttackRange : Action
         if (target.Value != null)
         {
             float distance = Vector3.Distance(transform.position, target.Value.transform.position);
-            
+
             if (distance <= attackRange.Value)
             {
                 attackStarted = true;
-                
+
                 Animator animator = GetComponent<Animator>();
                 if (animator != null)
-                {
                     animator.Play(animationName);
-                }
-
-                Debug.Log($"Range Attack gestartet: {animationName}");
             }
         }
     }
@@ -47,19 +36,13 @@ public class AttackRange : Action
     public override TaskStatus OnUpdate()
     {
         if (!attackStarted)
-        {
             return TaskStatus.Failure;
-        }
 
         timer += Time.deltaTime;
 
         if (timer < attackDuration.Value)
-        {
             return TaskStatus.Running;
-        }
 
-        Debug.Log($"Range Attack abgeschlossen: {animationName}");
-        
         return TaskStatus.Success;
     }
 }

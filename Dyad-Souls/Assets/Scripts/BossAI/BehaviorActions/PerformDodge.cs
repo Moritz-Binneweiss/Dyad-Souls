@@ -3,9 +3,6 @@ using BehaviorDesigner.Runtime.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
 
-/// <summary>
-/// Führt eine Dodge-Bewegung aus (Rückwärts oder zur Seite)
-/// </summary>
 public class PerformDodge : Action
 {
     public SharedGameObject target;
@@ -21,7 +18,7 @@ public class PerformDodge : Action
         Backward,
         Left,
         Right,
-        Random
+        Random,
     }
 
     public DodgeDirection dodgeDirection = DodgeDirection.Random;
@@ -35,28 +32,19 @@ public class PerformDodge : Action
         timer = 0f;
         agent = GetComponent<NavMeshAgent>();
 
-        // Spiele Dodge Animation
         Animator animator = GetComponent<Animator>();
         if (animator != null)
-        {
             animator.Play(dodgeAnimationName);
-        }
 
-        // Berechne Dodge-Richtung
         Vector3 directionFromPlayer = Vector3.zero;
         if (target.Value != null)
-        {
             directionFromPlayer = (transform.position - target.Value.transform.position).normalized;
-        }
 
         Vector3 dodgeDir = directionFromPlayer;
 
-        // Wähle Dodge-Richtung
         DodgeDirection actualDirection = dodgeDirection;
         if (dodgeDirection == DodgeDirection.Random)
-        {
             actualDirection = (DodgeDirection)Random.Range(0, 3);
-        }
 
         switch (actualDirection)
         {

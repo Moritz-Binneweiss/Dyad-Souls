@@ -3,10 +3,7 @@ using BehaviorDesigner.Runtime.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
 
-/// <summary>
-/// Bewegt den Boss kontinuierlich zum näheren der beiden Spieler
-/// </summary>
-[TaskDescription("Bewegt den Boss zum näheren Spieler. Wechselt automatisch das Ziel.")]
+[TaskDescription("Moves boss to closest player. Automatically switches targets.")]
 public class MoveToClosestPlayer : Action
 {
     [UnityEngine.Tooltip("Referenz zu Spieler 1")]
@@ -151,8 +148,10 @@ public class MoveToClosestPlayer : Action
     private void UpdateClosestTarget()
     {
         // Prüfe ob Spieler leben
-        PlayerManager pm1 = player1.Value != null ? player1.Value.GetComponent<PlayerManager>() : null;
-        PlayerManager pm2 = player2.Value != null ? player2.Value.GetComponent<PlayerManager>() : null;
+        PlayerManager pm1 =
+            player1.Value != null ? player1.Value.GetComponent<PlayerManager>() : null;
+        PlayerManager pm2 =
+            player2.Value != null ? player2.Value.GetComponent<PlayerManager>() : null;
 
         bool player1Alive = pm1 != null && !pm1.IsDead();
         bool player2Alive = pm2 != null && !pm2.IsDead();
@@ -187,7 +186,8 @@ public class MoveToClosestPlayer : Action
                 player2.Value.transform.position
             );
 
-            selectedTarget = (distanceToPlayer1 < distanceToPlayer2) ? player1.Value : player2.Value;
+            selectedTarget =
+                (distanceToPlayer1 < distanceToPlayer2) ? player1.Value : player2.Value;
         }
 
         // Nur loggen wenn sich das Ziel ändert
