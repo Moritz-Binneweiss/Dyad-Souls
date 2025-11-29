@@ -17,7 +17,7 @@ public class PlayerInputHandler : MonoBehaviour
 
     [Header("Auto-Configure from Lobby")]
     public bool autoConfigureFromLobby = true;
-    public string playerName = "Player1"; // "Player1" oder "Player2"
+    public string playerName = "Player1"; // "Player1" or "Player2"
 
     InputSystem_Actions playerControls;
     private System.Action<InputAction.CallbackContext> movePerformed;
@@ -78,31 +78,18 @@ public class PlayerInputHandler : MonoBehaviour
     bool specialAttackInput = false;
 
     private float lastSprintTime = -1f;
-    private const float sprintDebounceTime = 0.2f; // Mindestens 0.2 Sekunden zwischen Sprint-Toggles
+    private const float sprintDebounceTime = 0.2f;
 
     private void Awake()
     {
-        // Auto-Konfiguration aus Lobby wenn aktiviert
         if (autoConfigureFromLobby)
-        {
             ConfigureDeviceTypeFromLobby();
-        }
 
-        // try to auto-assign player if not set in Inspector
         if (player == null)
         {
             player = GetComponent<PlayerManager>();
             if (player == null)
-            {
                 player = GetComponentInChildren<PlayerManager>();
-            }
-        }
-
-        if (player == null)
-        {
-            Debug.LogWarning(
-                $"PlayerInputHandler auf {gameObject.name} hat keinen zugewiesenen Player!"
-            );
         }
     }
 
@@ -137,75 +124,31 @@ public class PlayerInputHandler : MonoBehaviour
         if (playerControls == null)
         {
             playerControls = new InputSystem_Actions();
-
-            // Binde die Input Actions nur an die spezifischen Devices dieses Players
             BindToSpecificDevices();
 
-            movePerformed = i =>
-            {
-                movement = i.ReadValue<Vector2>();
-            };
-
-            lookPerformed = i =>
-            {
-                cameraInput = i.ReadValue<Vector2>();
-            };
-
-            moveCanceled = i =>
-            {
-                movement = Vector2.zero;
-            };
-
-            lookCanceled = i =>
-            {
-                cameraInput = Vector2.zero;
-            };
-
-            attackPerformed = i =>
-            {
-                attackInput = true;
-            };
-
-            dodgePerformed = i =>
-            {
-                dodgeInput = true;
-            };
-
-            heavyAttackPerformed = i =>
-            {
-                heavyAttackInput = true;
-            };
-
-            jumpPerformed = i =>
-            {
-                jumpInput = true;
-            };
+            movePerformed = i => movement = i.ReadValue<Vector2>();
+            lookPerformed = i => cameraInput = i.ReadValue<Vector2>();
+            moveCanceled = i => movement = Vector2.zero;
+            lookCanceled = i => cameraInput = Vector2.zero;
+            attackPerformed = i => attackInput = true;
+            dodgePerformed = i => dodgeInput = true;
+            heavyAttackPerformed = i => heavyAttackInput = true;
+            jumpPerformed = i => jumpInput = true;
 
             sprintPerformed = i =>
             {
                 if (i.performed)
-                {
                     sprintInput = true;
-                }
             };
 
             crouchPerformed = i =>
             {
                 if (i.performed)
-                {
                     crouchInput = true;
-                }
             };
 
-            crouchCanceled = i =>
-            {
-                crouchInput = false;
-            };
-
-            specialAttackPerformed = i =>
-            {
-                specialAttackInput = true;
-            };
+            crouchCanceled = i => crouchInput = false;
+            specialAttackPerformed = i => specialAttackInput = true;
 
             playerControls.Player.Move.performed += movePerformed;
             playerControls.Player.Look.performed += lookPerformed;
@@ -328,11 +271,7 @@ public class PlayerInputHandler : MonoBehaviour
         if (attackInput)
         {
             attackInput = false;
-
-            if (player != null)
-            {
-                player.PerformLightAttack();
-            }
+            player?.PerformLightAttack();
         }
     }
 
@@ -341,11 +280,7 @@ public class PlayerInputHandler : MonoBehaviour
         if (heavyAttackInput)
         {
             heavyAttackInput = false;
-
-            if (player != null)
-            {
-                player.PerformHeavyAttack();
-            }
+            player?.PerformHeavyAttack();
         }
     }
 
@@ -388,11 +323,7 @@ public class PlayerInputHandler : MonoBehaviour
         if (dodgeInput)
         {
             dodgeInput = false;
-
-            if (player != null)
-            {
-                player.PerformDodge();
-            }
+            player?.PerformDodge();
         }
     }
 
@@ -401,11 +332,7 @@ public class PlayerInputHandler : MonoBehaviour
         if (jumpInput)
         {
             jumpInput = false;
-
-            if (player != null)
-            {
-                player.PerformJump();
-            }
+            player?.PerformJump();
         }
     }
 
@@ -416,16 +343,10 @@ public class PlayerInputHandler : MonoBehaviour
             sprintInput = false;
 
             if (Time.time - lastSprintTime < sprintDebounceTime)
-            {
                 return;
-            }
 
             lastSprintTime = Time.time;
-
-            if (player != null)
-            {
-                player.ToggleSprint();
-            }
+            player?.ToggleSprint();
         }
     }
 
@@ -434,11 +355,7 @@ public class PlayerInputHandler : MonoBehaviour
         if (crouchInput)
         {
             crouchInput = false;
-
-            if (player != null)
-            {
-                player.PerformCrouch();
-            }
+            player?.PerformCrouch();
         }
     }
 
@@ -447,11 +364,7 @@ public class PlayerInputHandler : MonoBehaviour
         if (specialAttackInput)
         {
             specialAttackInput = false;
-
-            if (player != null)
-            {
-                player.PerformSpecialAttack();
-            }
+            player?.PerformSpecialAttack();
         }
     }
 }

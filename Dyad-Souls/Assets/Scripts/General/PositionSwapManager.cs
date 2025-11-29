@@ -48,7 +48,6 @@ public class PositionSwapManager : MonoBehaviour
 
     private void Start()
     {
-        // Versuche automatisch die Spieler zu finden, falls nicht zugewiesen
         if (player1 == null || player2 == null)
         {
             PlayerManager[] players = FindObjectsByType<PlayerManager>(FindObjectsSortMode.None);
@@ -65,19 +64,16 @@ public class PositionSwapManager : MonoBehaviour
         if (player1 == null || player2 == null || isSwapping)
             return;
 
-        // Cooldown Timer herunterzählen
         if (cooldownTimer > 0f)
         {
             cooldownTimer -= Time.deltaTime;
-            return; // Während Cooldown keine neuen Swaps erlauben
+            return;
         }
 
-        // Nur Timer erhöhen wenn BEIDE gleichzeitig halten
         if (player1IsHolding && player2IsHolding)
         {
             combinedHoldTimer += Time.deltaTime;
 
-            // Überprüfe ob beide lang genug gehalten haben
             if (combinedHoldTimer >= requiredHoldTime)
             {
                 SwapPlayerPositions();
@@ -86,11 +82,8 @@ public class PositionSwapManager : MonoBehaviour
         }
         else
         {
-            // Timer zurücksetzen wenn nicht beide halten
             if (combinedHoldTimer > 0f)
-            {
                 combinedHoldTimer = 0f;
-            }
         }
     }
 
@@ -98,7 +91,6 @@ public class PositionSwapManager : MonoBehaviour
     {
         player1IsHolding = holding;
 
-        // Timer zurücksetzen wenn losgelassen
         if (!holding)
             combinedHoldTimer = 0f;
     }
@@ -107,7 +99,6 @@ public class PositionSwapManager : MonoBehaviour
     {
         player2IsHolding = holding;
 
-        // Timer zurücksetzen wenn losgelassen
         if (!holding)
             combinedHoldTimer = 0f;
     }

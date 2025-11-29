@@ -31,26 +31,16 @@ public class EnemyCombatSystem : MonoBehaviour
     }
 
     #region Attack Methods
-    // Führt einen normalen Angriff aus (20 Damage)
+
     public void PerformAttackRight()
     {
         if (isAttacking)
-        {
-            Debug.Log("PerformAttackRight: Already attacking, ignoring");
             return;
-        }
 
         isAttacking = true;
-        Debug.Log("PerformAttackRight: Starting attack, setting isAttacking = true");
 
         if (animator != null)
-        {
             animator.SetTrigger("AttackRight");
-        }
-        else
-        {
-            Debug.LogError("PerformAttackRight: Animator is null!");
-        }
     }
 
     public void PerformAttackLeft()
@@ -61,9 +51,7 @@ public class EnemyCombatSystem : MonoBehaviour
         isAttacking = true;
 
         if (animator != null)
-        {
             animator.SetTrigger("AttackLeft");
-        }
     }
 
     public void PerformAttackLeftRight()
@@ -74,12 +62,9 @@ public class EnemyCombatSystem : MonoBehaviour
         isAttacking = true;
 
         if (animator != null)
-        {
             animator.SetTrigger("AttackLeftRight");
-        }
     }
 
-    // Führt einen schweren Angriff aus (40 Damage)
     public void PerformHeavyAttack()
     {
         if (isAttacking)
@@ -88,12 +73,9 @@ public class EnemyCombatSystem : MonoBehaviour
         isAttacking = true;
 
         if (animator != null)
-        {
             animator.SetTrigger("HeavyAttack");
-        }
     }
 
-    // Führt einen Fernkampf-Angriff aus (60 Damage)
     public void PerformRangeAttack()
     {
         if (isAttacking)
@@ -102,41 +84,24 @@ public class EnemyCombatSystem : MonoBehaviour
         isAttacking = true;
 
         if (animator != null)
-        {
             animator.SetTrigger("RangeAttack");
-        }
     }
     #endregion
 
     #region Animation Events
-    // Wird von Animation Event aufgerufen - Normal Attack
-    public void DealAttackDamage()
-    {
-        DealDamageInRange(attackRange, attackDamage);
-    }
 
-    // Wird von Animation Event aufgerufen - Heavy Attack
-    public void DealHeavyAttackDamage()
-    {
-        DealDamageInRange(heavyAttackRange, heavyAttackDamage);
-    }
+    public void DealAttackDamage() => DealDamageInRange(attackRange, attackDamage);
 
-    // Wird von Animation Event aufgerufen - Range Attack
-    public void DealRangeAttackDamage()
-    {
-        DealDamageInRange(rangeAttackRange, rangeAttackDamage);
-    }
+    public void DealHeavyAttackDamage() => DealDamageInRange(heavyAttackRange, heavyAttackDamage);
 
-    // Wird am Ende jeder Attack-Animation aufgerufen
-    public void OnAttackComplete()
-    {
-        Debug.Log("OnAttackComplete: Setting isAttacking = false");
-        isAttacking = false;
-    }
+    public void DealRangeAttackDamage() => DealDamageInRange(rangeAttackRange, rangeAttackDamage);
+
+    public void OnAttackComplete() => isAttacking = false;
+
     #endregion
 
     #region Helper Methods
-    // Fügt allen lebenden Spielern in Reichweite Schaden zu
+
     private void DealDamageInRange(float range, float damage)
     {
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, range);
@@ -146,50 +111,35 @@ public class EnemyCombatSystem : MonoBehaviour
             if (col.CompareTag("Player"))
             {
                 PlayerManager playerManager = col.GetComponent<PlayerManager>();
-                if (playerManager != null && !playerManager.IsDead()) // Nur lebende Spieler
-                {
+                if (playerManager != null && !playerManager.IsDead())
                     playerManager.TakeDamage(damage);
-                    Debug.Log($"Enemy dealt {damage} damage to {col.name}");
-                }
             }
         }
     }
 
-    public bool IsAttacking()
-    {
-        return isAttacking;
-    }
+    public bool IsAttacking() => isAttacking;
 
-    public float GetAttackRange()
-    {
-        return attackRange;
-    }
+    public float GetAttackRange() => attackRange;
 
-    public float GetHeavyAttackRange()
-    {
-        return heavyAttackRange;
-    }
+    public float GetHeavyAttackRange() => heavyAttackRange;
 
-    public float GetRangeAttackRange()
-    {
-        return rangeAttackRange;
-    }
+    public float GetRangeAttackRange() => rangeAttackRange;
+
     #endregion
 
     #region Gizmos
+
     private void OnDrawGizmosSelected()
     {
-        // Zeige Attack Range
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRange);
 
-        // Zeige Heavy Attack Range
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, heavyAttackRange);
 
-        // Zeige Range Attack Range
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, rangeAttackRange);
     }
+
     #endregion
 }

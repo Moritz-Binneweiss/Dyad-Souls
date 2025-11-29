@@ -78,8 +78,6 @@ public class GameUIManager : MonoBehaviour
         Time.timeScale = 0f;
         isPaused = true;
         inputActions.UI.Enable();
-
-        // Automatische Selektion für Controller/Tastatur-Navigation
         SelectFirstInteractableElement();
     }
 
@@ -87,12 +85,9 @@ public class GameUIManager : MonoBehaviour
     {
         if (pauseUI != null && EventSystem.current != null)
         {
-            // Finde das erste interaktive UI-Element (Button, Slider, etc.)
             Selectable firstSelectable = pauseUI.GetComponentInChildren<Selectable>();
             if (firstSelectable != null && firstSelectable.interactable)
-            {
                 firstSelectable.Select();
-            }
         }
     }
 
@@ -112,8 +107,6 @@ public class GameUIManager : MonoBehaviour
         Time.timeScale = 0f;
         isPaused = true;
         inputActions.UI.Enable();
-
-        // Automatische Selektion für Controller/Tastatur-Navigation
         SelectFirstInteractableElement();
     }
 
@@ -156,19 +149,10 @@ public class GameUIManager : MonoBehaviour
     public void HideEnemyDefeated()
     {
         if (enemyDefeatedText != null)
-        {
             enemyDefeatedText.SetActive(false);
-        }
     }
 
-    // Getter für Stamina Slider (für Setup von außen)
-    public Slider GetPlayerOneStaminaSlider()
-    {
-        return playerOneStaminaSlider;
-    }
+    public Slider GetPlayerOneStaminaSlider() => playerOneStaminaSlider;
 
-    public Slider GetPlayerTwoStaminaSlider()
-    {
-        return playerTwoStaminaSlider;
-    }
+    public Slider GetPlayerTwoStaminaSlider() => playerTwoStaminaSlider;
 }

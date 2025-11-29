@@ -2,9 +2,6 @@ using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using UnityEngine;
 
-/// <summary>
-/// Prüft, ob der Spieler in weiter Entfernung ist
-/// </summary>
 public class IsInFarRange : Conditional
 {
     public SharedGameObject target;

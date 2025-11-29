@@ -38,8 +38,6 @@ public class PlayerManager : MonoBehaviour
         playerCombatSystem = GetComponent<PlayerCombatSystem>();
         playerStaminaSystem = GetComponent<PlayerStaminaSystem>();
         animator = GetComponent<Animator>();
-
-        // Initialisiere Health
         currentHealth = maxHealth;
     }
 
@@ -159,60 +157,36 @@ public class PlayerManager : MonoBehaviour
     {
         isDead = true;
 
-        // Deaktiviere Collider sofort (Player kann nicht mehr getroffen werden)
-        Collider[] colliders = GetComponents<Collider>();
-        foreach (Collider col in colliders)
-        {
+        foreach (Collider col in GetComponents<Collider>())
             col.enabled = false;
-        }
 
-        // Deaktiviere Player-Komponenten sofort
         if (playerMovement != null)
             playerMovement.enabled = false;
-
         if (playerCombatSystem != null)
             playerCombatSystem.enabled = false;
-
         if (playerInputManager != null)
             playerInputManager.enabled = false;
 
-        // Spiele Death Animation ab
         if (animator != null)
-        {
             animator.SetTrigger("Death");
-        }
 
-        // Informiere GameManager über Tod
         GameManager gameManager = FindFirstObjectByType<GameManager>();
         if (gameManager != null)
-        {
             gameManager.OnPlayerDeath(this);
-        }
 
-        // Deaktiviere Player nach Death-Animation
-        Invoke("DisablePlayer", deathAnimationDuration);
+        Invoke(nameof(DisablePlayer), deathAnimationDuration);
     }
 
     private void DisablePlayer()
     {
-        // Deaktiviere alle Renderer (Player wird unsichtbar)
-        Renderer[] renderers = GetComponentsInChildren<Renderer>();
-        foreach (Renderer rend in renderers)
-        {
+        foreach (Renderer rend in GetComponentsInChildren<Renderer>())
             rend.enabled = false;
-        }
 
-        // Verstecke Health Bar
         if (healthSlider != null)
-        {
             healthSlider.gameObject.SetActive(false);
-        }
 
-        // Verstecke Stamina Bar
         if (playerStaminaSystem != null && playerStaminaSystem.GetStaminaSlider() != null)
-        {
             playerStaminaSystem.GetStaminaSlider().gameObject.SetActive(false);
-        }
     }
 
     public void Revive()
@@ -221,67 +195,37 @@ public class PlayerManager : MonoBehaviour
         currentHealth = maxHealth;
         UpdateHealthUI();
 
-        // Reaktiviere Collider
-        Collider[] colliders = GetComponents<Collider>();
-        foreach (Collider col in colliders)
-        {
+        foreach (Collider col in GetComponents<Collider>())
             col.enabled = true;
-        }
 
-        // Reaktiviere Renderer
-        Renderer[] renderers = GetComponentsInChildren<Renderer>();
-        foreach (Renderer rend in renderers)
-        {
+        foreach (Renderer rend in GetComponentsInChildren<Renderer>())
             rend.enabled = true;
-        }
 
-        // Reaktiviere Animator und setze zurück zu Idle
         if (animator != null)
         {
             animator.Rebind();
             animator.Update(0f);
         }
 
-        // Zeige Health Bar wieder
         if (healthSlider != null)
-        {
             healthSlider.gameObject.SetActive(true);
-        }
 
-        // Zeige Stamina Bar wieder
         if (playerStaminaSystem != null && playerStaminaSystem.GetStaminaSlider() != null)
-        {
             playerStaminaSystem.GetStaminaSlider().gameObject.SetActive(true);
-        }
 
-        // Reaktiviere Player-Komponenten
         if (playerMovement != null)
             playerMovement.enabled = true;
-
         if (playerCombatSystem != null)
             playerCombatSystem.enabled = true;
-
         if (playerInputManager != null)
             playerInputManager.enabled = true;
     }
 
-    public bool IsDead()
-    {
-        return isDead;
-    }
+    public bool IsDead() => isDead;
 
-    public float GetCurrentHealth()
-    {
-        return currentHealth;
-    }
+    public float GetCurrentHealth() => currentHealth;
 
-    public float GetMaxHealth()
-    {
-        return maxHealth;
-    }
+    public float GetMaxHealth() => maxHealth;
 
-    public Slider GetHealthSlider()
-    {
-        return healthSlider;
-    }
+    public Slider GetHealthSlider() => healthSlider;
 }
