@@ -210,8 +210,12 @@ public class PlayerManager : MonoBehaviour
         if (healthSlider != null)
             healthSlider.gameObject.SetActive(true);
 
-        if (playerStaminaSystem != null && playerStaminaSystem.GetStaminaSlider() != null)
-            playerStaminaSystem.GetStaminaSlider().gameObject.SetActive(true);
+        if (playerStaminaSystem != null)
+        {
+            if (playerStaminaSystem.GetStaminaSlider() != null)
+                playerStaminaSystem.GetStaminaSlider().gameObject.SetActive(true);
+            playerStaminaSystem.ResetStamina();
+        }
 
         if (playerMovement != null)
             playerMovement.enabled = true;

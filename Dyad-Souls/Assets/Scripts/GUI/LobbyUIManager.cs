@@ -38,6 +38,7 @@ public class LobbyUIManager : MonoBehaviour
     private void Awake()
     {
         inputActions = new InputSystem_Actions();
+        ResetLobbyState();
     }
 
     private void Start()
@@ -47,6 +48,19 @@ public class LobbyUIManager : MonoBehaviour
             gamepadStartPosition = gamepadIcon.localPosition;
         if (keyboardIcon)
             keyboardStartPosition = keyboardIcon.localPosition;
+    }
+
+    private void ResetLobbyState()
+    {
+        gamepadIconPosition = 0;
+        keyboardIconPosition = 0;
+        gamepadReady = false;
+        keyboardReady = false;
+
+        if (gamepadReadyText != null)
+            gamepadReadyText.SetActive(false);
+        if (keyboardReadyText != null)
+            keyboardReadyText.SetActive(false);
     }
 
     private void Update()
@@ -176,6 +190,9 @@ public class LobbyUIManager : MonoBehaviour
 
     private void SavePlayerConfiguration()
     {
+        PlayerPrefs.DeleteKey("GamepadControls");
+        PlayerPrefs.DeleteKey("KeyboardControls");
+
         if (gamepadIconPosition == -1)
             PlayerPrefs.SetString("GamepadControls", "Player1");
         else if (gamepadIconPosition == 1)

@@ -229,6 +229,12 @@ public class PlayerInputHandler : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        if (playerControls != null)
+            playerControls?.Dispose();
+    }
+
     private void Update()
     {
         HandlePlayerMovementInput();
