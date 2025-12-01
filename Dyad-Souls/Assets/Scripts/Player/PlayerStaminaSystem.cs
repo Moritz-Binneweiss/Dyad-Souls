@@ -129,4 +129,11 @@ public class PlayerStaminaSystem : MonoBehaviour
     public float GetMaxStamina() => maxStamina;
 
     public Slider GetStaminaSlider() => staminaSlider;
+
+    public void ResetStamina()
+    {
+        currentStamina = maxStamina;
+        timeSinceLastStaminaUse = 0f;
+        UpdateStaminaUI();
+    }
 }

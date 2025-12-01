@@ -82,6 +82,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator WaveCooldownCoroutine()
     {
         HealAllLivingPlayers();
+        ReviveAllPlayers();
 
         gameUIManager.ShowEnemyDefeated();
         yield return new WaitForSeconds(enemyDefeatedDisplayTime);
@@ -101,7 +102,6 @@ public class GameManager : MonoBehaviour
 
         currentWave++;
         ReviveBoss();
-        ReviveAllPlayers();
 
         isInWaveCooldown = false;
     }
