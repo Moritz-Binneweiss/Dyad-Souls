@@ -40,7 +40,7 @@ public class MainMenuUIManager : MonoBehaviour
         }
     }
 
-    public void StartGame() => SceneManager.LoadScene("Lobby");
+    public void StartGame() => SceneManager.LoadScene("CharacterSelection");
 
     public void QuitGame() => Application.Quit();
 }

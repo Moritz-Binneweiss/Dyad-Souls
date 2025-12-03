@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class LobbyUIManager : MonoBehaviour
+public class CharacterSelectionUIManager : MonoBehaviour
 {
     [Header("Ready Texts")]
     [SerializeField]
