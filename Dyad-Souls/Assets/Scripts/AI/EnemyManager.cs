@@ -107,13 +107,21 @@ public class EnemyManager : MonoBehaviour
             bossHealthSlider.gameObject.SetActive(false);
 
         if (animator != null)
+        {
             animator.SetTrigger("Death");
+        }
+
+        if (behaviorTree != null)
+            behaviorTree.enabled = false;
 
         Invoke(nameof(DisableEnemy), deathAnimationDuration);
     }
 
     private void DisableEnemy()
     {
+        if (animator != null)
+            animator.enabled = false;
+
         foreach (Renderer rend in GetComponentsInChildren<Renderer>())
             rend.enabled = false;
 
@@ -135,9 +143,13 @@ public class EnemyManager : MonoBehaviour
 
         if (animator != null)
         {
+            animator.enabled = true;
             animator.Rebind();
             animator.Update(0f);
         }
+
+        if (behaviorTree != null)
+            behaviorTree.enabled = true;
 
         foreach (Collider col in GetComponents<Collider>())
             col.enabled = true;

@@ -14,20 +14,22 @@ public class EnemyCombatSystem : MonoBehaviour
 
     [Header("Attack Settings")]
     [SerializeField]
-    private float attackRange = 4f; // Größer für Boss!
+    private float attackRange = 2.5f;
 
     [SerializeField]
-    private float heavyAttackRange = 6f; // Größer für Boss!
+    private float heavyAttackRange = 3.5f;
 
     [SerializeField]
     private float rangeAttackRange = 12f;
 
     private Animator animator;
+    private EnemyManager enemyManager;
     private bool isAttacking = false;
 
     void Start()
     {
         animator = GetComponent<Animator>();
+        enemyManager = GetComponent<EnemyManager>();
     }
 
     #region Attack Methods
@@ -104,6 +106,10 @@ public class EnemyCombatSystem : MonoBehaviour
 
     private void DealDamageInRange(float range, float damage)
     {
+        // Don't deal damage if boss is dead
+        if (enemyManager != null && !enemyManager.IsAlive())
+            return;
+
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, range);
 
         foreach (Collider col in hitColliders)

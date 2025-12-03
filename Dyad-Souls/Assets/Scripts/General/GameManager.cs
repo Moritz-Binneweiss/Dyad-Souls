@@ -27,10 +27,15 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private float healthIncreasePerWave = 500f;
 
+    [Header("Game Over Settings")]
+    [SerializeField]
+    private float gameOverDelay = 3f;
+
     private int currentWave = 1;
     private bool isInWaveCooldown = false;
     private float currentCooldownTime = 0f;
     private List<PlayerManager> deadPlayers = new List<PlayerManager>();
+    private bool gameOverTriggered = false;
 
     void Start()
     {
@@ -48,11 +53,20 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (AreAllPlayersDead() && !isInWaveCooldown)
-            gameUIManager.GameOver();
+        if (AreAllPlayersDead() && !isInWaveCooldown && !gameOverTriggered)
+        {
+            gameOverTriggered = true;
+            StartCoroutine(GameOverDelayCoroutine());
+        }
 
         if (bossEnemy != null && !bossEnemy.IsAlive() && !isInWaveCooldown)
             StartWaveCooldown();
+    }
+
+    private IEnumerator GameOverDelayCoroutine()
+    {
+        yield return new WaitForSeconds(gameOverDelay);
+        gameUIManager.GameOver();
     }
 
     public void OnPlayerDeath(PlayerManager player)

@@ -164,6 +164,20 @@ public class PlayerInputHandler : MonoBehaviour
             playerControls.Player.SpecialAttack.performed += specialAttackPerformed;
         }
 
+        // Reset all input state when re-enabled
+        movement = Vector2.zero;
+        cameraInput = Vector2.zero;
+        attackInput = false;
+        dodgeInput = false;
+        heavyAttackInput = false;
+        jumpInput = false;
+        sprintInput = false;
+        crouchInput = false;
+        specialAttackInput = false;
+
+        // Rebind devices on enable (important after scene load)
+        BindToSpecificDevices();
+
         playerControls.Enable();
     }
 
@@ -232,7 +246,52 @@ public class PlayerInputHandler : MonoBehaviour
     private void OnDestroy()
     {
         if (playerControls != null)
-            playerControls?.Dispose();
+        {
+            playerControls.Disable();
+            playerControls.Dispose();
+            playerControls = null;
+        }
+    }
+
+    public void ForceReinitializeInput()
+    {
+        // Completely dispose and recreate input system
+        if (playerControls != null)
+        {
+            playerControls.Disable();
+
+            // Unsubscribe all callbacks
+            if (movePerformed != null)
+                playerControls.Player.Move.performed -= movePerformed;
+            if (moveCanceled != null)
+                playerControls.Player.Move.canceled -= moveCanceled;
+            if (lookPerformed != null)
+                playerControls.Player.Look.performed -= lookPerformed;
+            if (lookCanceled != null)
+                playerControls.Player.Look.canceled -= lookCanceled;
+            if (crouchCanceled != null)
+                playerControls.Player.Crouch.canceled -= crouchCanceled;
+            if (attackPerformed != null)
+                playerControls.Player.Attack.performed -= attackPerformed;
+            if (dodgePerformed != null)
+                playerControls.Player.Dodge.performed -= dodgePerformed;
+            if (heavyAttackPerformed != null)
+                playerControls.Player.HeavyAttack.performed -= heavyAttackPerformed;
+            if (jumpPerformed != null)
+                playerControls.Player.Jump.performed -= jumpPerformed;
+            if (sprintPerformed != null)
+                playerControls.Player.Sprint.performed -= sprintPerformed;
+            if (crouchPerformed != null)
+                playerControls.Player.Crouch.performed -= crouchPerformed;
+            if (specialAttackPerformed != null)
+                playerControls.Player.SpecialAttack.performed -= specialAttackPerformed;
+
+            playerControls.Dispose();
+            playerControls = null;
+        }
+
+        // Recreate everything from scratch
+        OnEnable();
     }
 
     private void Update()

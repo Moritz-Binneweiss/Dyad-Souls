@@ -35,13 +35,23 @@ public class GameUIManager : MonoBehaviour
     private void Awake()
     {
         inputActions = new InputSystem_Actions();
+        // Disable UI actions immediately to prevent blocking player input
+        isPaused = false;
+        inputActions.UI.Disable();
+    }
+
+    private void Start()
+    {
+        // Enable only Pause action for pause functionality
+        // Do NOT enable entire Player action map
+        inputActions.Player.Pause.Enable();
     }
 
     private void OnEnable()
     {
+        // Subscribe to pause and cancel actions
         inputActions.Player.Pause.performed += OnPausePerformed;
         inputActions.UI.Cancel.performed += OnCancelPerformed;
-        inputActions.Player.Enable();
     }
 
     private void OnDisable()
@@ -78,16 +88,19 @@ public class GameUIManager : MonoBehaviour
         Time.timeScale = 0f;
         isPaused = true;
         inputActions.UI.Enable();
-        SelectFirstInteractableElement();
+        SelectFirstInteractableElement(pauseUI);
     }
 
-    private void SelectFirstInteractableElement()
+    private void SelectFirstInteractableElement(GameObject uiPanel)
     {
-        if (pauseUI != null && EventSystem.current != null)
+        if (uiPanel != null && EventSystem.current != null)
         {
-            Selectable firstSelectable = pauseUI.GetComponentInChildren<Selectable>();
+            Selectable firstSelectable = uiPanel.GetComponentInChildren<Selectable>();
             if (firstSelectable != null && firstSelectable.interactable)
+            {
                 firstSelectable.Select();
+                EventSystem.current.SetSelectedGameObject(firstSelectable.gameObject);
+            }
         }
     }
 
@@ -107,18 +120,38 @@ public class GameUIManager : MonoBehaviour
         Time.timeScale = 0f;
         isPaused = true;
         inputActions.UI.Enable();
-        SelectFirstInteractableElement();
+        SelectFirstInteractableElement(gameOverUI);
     }
 
     public void RestartGame()
     {
+        isPaused = false;
         Time.timeScale = 1f;
+
+        // Cleanup input actions before scene load
+        if (inputActions != null)
+        {
+            inputActions.Player.Pause.performed -= OnPausePerformed;
+            inputActions.UI.Cancel.performed -= OnCancelPerformed;
+            inputActions.Disable();
+        }
+
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void QuitGame()
     {
+        isPaused = false;
         Time.timeScale = 1f;
+
+        // Cleanup input actions before scene load
+        if (inputActions != null)
+        {
+            inputActions.Player.Pause.performed -= OnPausePerformed;
+            inputActions.UI.Cancel.performed -= OnCancelPerformed;
+            inputActions.Disable();
+        }
+
         SceneManager.LoadScene("MainMenu");
     }
 

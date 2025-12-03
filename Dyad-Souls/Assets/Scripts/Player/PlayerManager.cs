@@ -191,6 +191,8 @@ public class PlayerManager : MonoBehaviour
 
     public void Revive()
     {
+        CancelInvoke(nameof(DisablePlayer));
+
         isDead = false;
         currentHealth = maxHealth;
         UpdateHealthUI();
@@ -218,11 +220,17 @@ public class PlayerManager : MonoBehaviour
         }
 
         if (playerMovement != null)
+        {
             playerMovement.enabled = true;
+            playerMovement.ResetMovementState();
+        }
         if (playerCombatSystem != null)
             playerCombatSystem.enabled = true;
         if (playerInputManager != null)
+        {
             playerInputManager.enabled = true;
+            playerInputManager.ForceReinitializeInput();
+        }
     }
 
     public bool IsDead() => isDead;

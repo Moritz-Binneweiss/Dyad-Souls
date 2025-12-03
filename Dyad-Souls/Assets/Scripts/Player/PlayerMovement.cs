@@ -64,6 +64,43 @@ public class PlayerMovement : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
         jumpTimeoutDelta = jumpTimeout;
+
+        // Reset basic state on awake (for scene loads)
+        verticalVelocity = 0f;
+        isSprinting = false;
+        isCrouching = false;
+        moveDirection = Vector3.zero;
+    }
+
+    private void OnEnable()
+    {
+        // Reset animator when enabled (after scene load or revival)
+        if (animator != null)
+        {
+            // Reset animator state
+            animator.Rebind();
+            animator.Update(0f);
+
+            // Reset all animator parameters to default values
+            animator.SetFloat("Horizontal", 0f);
+            animator.SetFloat("Vertical", 0f);
+            animator.SetFloat("Speed", 0f);
+            animator.SetBool("isSprinting", false);
+            animator.SetBool("isCrouching", false);
+
+            // Force animator to play default state explicitly
+            // Rebind() doesn't always transition to correct default state
+            animator.Play("HumanoidBlendTree", 0, 0f);
+        }
+    }
+
+    public void ResetMovementState()
+    {
+        verticalVelocity = 0f;
+        jumpTimeoutDelta = jumpTimeout;
+        isSprinting = false;
+        isCrouching = false;
+        moveDirection = Vector3.zero;
     }
 
     public void HandleMovement()
@@ -81,20 +118,7 @@ public class PlayerMovement : MonoBehaviour
         {
             animator.SetFloat("Horizontal", 0, 0.1f, Time.deltaTime);
             animator.SetFloat("Vertical", moveAmount, 0.1f, Time.deltaTime);
-
-            Vector2 move = new Vector2(horizontalInput, verticalInput);
-            bool hasSpeedParameter = false;
-            foreach (AnimatorControllerParameter param in animator.parameters)
-            {
-                if (param.name == "Speed")
-                {
-                    hasSpeedParameter = true;
-                    break;
-                }
-            }
-            if (hasSpeedParameter)
-                animator.SetFloat("Speed", move.magnitude);
-
+            animator.SetFloat("Speed", new Vector2(horizontalInput, verticalInput).magnitude);
             animator.SetBool("isCrouching", isCrouching);
         }
 
@@ -216,20 +240,7 @@ public class PlayerMovement : MonoBehaviour
         isSprinting = !isSprinting;
 
         if (animator != null)
-        {
-            bool hasParameter = false;
-            foreach (AnimatorControllerParameter param in animator.parameters)
-            {
-                if (param.name == "isSprinting")
-                {
-                    hasParameter = true;
-                    break;
-                }
-            }
-
-            if (hasParameter)
-                animator.SetBool("isSprinting", isSprinting);
-        }
+            animator.SetBool("isSprinting", isSprinting);
     }
 
     public void PerformCrouch()
