@@ -124,14 +124,6 @@ public class EnemyManager : MonoBehaviour
 
         foreach (Renderer rend in GetComponentsInChildren<Renderer>())
             rend.enabled = false;
-
-        EnemyMovement movement = GetComponent<EnemyMovement>();
-        if (movement != null)
-            movement.enabled = false;
-
-        EnemyCombatSystem combat = GetComponent<EnemyCombatSystem>();
-        if (combat != null)
-            combat.enabled = false;
     }
 
     public void Revive(float newMaxHealth)
@@ -156,14 +148,6 @@ public class EnemyManager : MonoBehaviour
 
         foreach (Renderer rend in GetComponentsInChildren<Renderer>())
             rend.enabled = true;
-
-        EnemyMovement movement = GetComponent<EnemyMovement>();
-        if (movement != null)
-            movement.enabled = true;
-
-        EnemyCombatSystem combat = GetComponent<EnemyCombatSystem>();
-        if (combat != null)
-            combat.enabled = true;
 
         if (bossHealthSlider != null)
             bossHealthSlider.gameObject.SetActive(true);

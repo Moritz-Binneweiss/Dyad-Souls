@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnemyCombatSystem : MonoBehaviour
+public class EnemyDamage : MonoBehaviour
 {
     [Header("Attack Damage Values")]
     [SerializeField]
@@ -12,7 +12,7 @@ public class EnemyCombatSystem : MonoBehaviour
     [SerializeField]
     private float rangeAttackDamage = 60f;
 
-    [Header("Attack Settings")]
+    [Header("Attack Ranges")]
     [SerializeField]
     private float attackRange = 2.5f;
 
@@ -22,75 +22,14 @@ public class EnemyCombatSystem : MonoBehaviour
     [SerializeField]
     private float rangeAttackRange = 12f;
 
-    private Animator animator;
     private EnemyManager enemyManager;
-    private bool isAttacking = false;
 
     void Start()
     {
-        animator = GetComponent<Animator>();
         enemyManager = GetComponent<EnemyManager>();
     }
 
-    #region Attack Methods
-
-    public void PerformAttackRight()
-    {
-        if (isAttacking)
-            return;
-
-        isAttacking = true;
-
-        if (animator != null)
-            animator.SetTrigger("AttackRight");
-    }
-
-    public void PerformAttackLeft()
-    {
-        if (isAttacking)
-            return;
-
-        isAttacking = true;
-
-        if (animator != null)
-            animator.SetTrigger("AttackLeft");
-    }
-
-    public void PerformAttackLeftRight()
-    {
-        if (isAttacking)
-            return;
-
-        isAttacking = true;
-
-        if (animator != null)
-            animator.SetTrigger("AttackLeftRight");
-    }
-
-    public void PerformHeavyAttack()
-    {
-        if (isAttacking)
-            return;
-
-        isAttacking = true;
-
-        if (animator != null)
-            animator.SetTrigger("HeavyAttack");
-    }
-
-    public void PerformRangeAttack()
-    {
-        if (isAttacking)
-            return;
-
-        isAttacking = true;
-
-        if (animator != null)
-            animator.SetTrigger("RangeAttack");
-    }
-    #endregion
-
-    #region Animation Events
+    #region Animation Events - Called from Boss Animations
 
     public void DealAttackDamage() => DealDamageInRange(attackRange, attackDamage);
 
@@ -98,11 +37,9 @@ public class EnemyCombatSystem : MonoBehaviour
 
     public void DealRangeAttackDamage() => DealDamageInRange(rangeAttackRange, rangeAttackDamage);
 
-    public void OnAttackComplete() => isAttacking = false;
-
     #endregion
 
-    #region Helper Methods
+    #region Damage Logic
 
     private void DealDamageInRange(float range, float damage)
     {
@@ -123,13 +60,21 @@ public class EnemyCombatSystem : MonoBehaviour
         }
     }
 
-    public bool IsAttacking() => isAttacking;
+    #endregion
+
+    #region Public Getters
 
     public float GetAttackRange() => attackRange;
 
     public float GetHeavyAttackRange() => heavyAttackRange;
 
     public float GetRangeAttackRange() => rangeAttackRange;
+
+    public float GetAttackDamage() => attackDamage;
+
+    public float GetHeavyAttackDamage() => heavyAttackDamage;
+
+    public float GetRangeAttackDamage() => rangeAttackDamage;
 
     #endregion
 

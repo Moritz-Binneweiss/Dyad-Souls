@@ -2,31 +2,33 @@ using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using UnityEngine;
 
-public class AttackLeftHand : Action
+public class AttackHeavy : Action
 {
     public SharedGameObject target;
 
-    public string animationName = "AttackLeftHand";
+    public string animationName = "HeavyAttack";
 
-    public SharedFloat attackDuration = 1.5f;
+    public SharedFloat attackDuration = 2.5f;
 
-    public SharedFloat attackRange = 3f;
-
-    public SharedFloat damage = 20f;
-
+    private EnemyDamage enemyDamage;
     private float timer;
     private bool attackStarted;
+
+    public override void OnAwake()
+    {
+        enemyDamage = GetComponent<EnemyDamage>();
+    }
 
     public override void OnStart()
     {
         timer = 0f;
         attackStarted = false;
 
-        if (target.Value != null)
+        if (target.Value != null && enemyDamage != null)
         {
             float distance = Vector3.Distance(transform.position, target.Value.transform.position);
 
-            if (distance <= attackRange.Value)
+            if (distance <= enemyDamage.GetHeavyAttackRange())
             {
                 attackStarted = true;
 

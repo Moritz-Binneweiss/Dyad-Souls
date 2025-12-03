@@ -2,27 +2,33 @@ using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using UnityEngine;
 
-public class AttackRange : Action
+public class AttackRightAndLeft : Action
 {
     public SharedGameObject target;
-    public string animationName = "RangeAttack";
-    public SharedFloat attackDuration = 2.0f;
-    public SharedFloat attackRange = 8f;
-    public SharedFloat damage = 30f;
 
+    public string animationName = "RightAndLeftAttack";
+
+    public SharedFloat attackDuration = 2.5f;
+
+    private EnemyDamage enemyDamage;
     private float timer;
     private bool attackStarted;
+
+    public override void OnAwake()
+    {
+        enemyDamage = GetComponent<EnemyDamage>();
+    }
 
     public override void OnStart()
     {
         timer = 0f;
         attackStarted = false;
 
-        if (target.Value != null)
+        if (target.Value != null && enemyDamage != null)
         {
             float distance = Vector3.Distance(transform.position, target.Value.transform.position);
 
-            if (distance <= attackRange.Value)
+            if (distance <= enemyDamage.GetAttackRange())
             {
                 attackStarted = true;
 
