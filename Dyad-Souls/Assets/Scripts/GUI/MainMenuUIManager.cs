@@ -13,11 +13,7 @@ public class MainMenuUIManager : MonoBehaviour
         inputActions = new InputSystem_Actions();
     }
 
-    private void Start()
-    {
-        // Automatische Selektion für Controller/Tastatur-Navigation beim Start
-        SelectFirstInteractableElement();
-    }
+    private void Start() => SelectFirstInteractableElement();
 
     private void OnEnable()
     {
@@ -34,27 +30,17 @@ public class MainMenuUIManager : MonoBehaviour
         inputActions?.Dispose();
     }
 
-    //TODO: UI Interaktion mit Controller und Tastatur geht hier  und wo anders noch nicht von Anfang an, erst nach neuem loaden der Szene
     private void SelectFirstInteractableElement()
     {
         if (EventSystem.current != null)
         {
-            // Finde das erste interaktive UI-Element (Button, Slider, etc.)
             Selectable firstSelectable = GetComponentInChildren<Selectable>();
             if (firstSelectable != null && firstSelectable.interactable)
-            {
                 firstSelectable.Select();
-            }
         }
     }
 
-    public void StartGame()
-    {
-        SceneManager.LoadScene("Lobby");
-    }
+    public void StartGame() => SceneManager.LoadScene("CharacterSelection");
 
-    public void QuitGame()
-    {
-        Application.Quit();
-    }
+    public void QuitGame() => Application.Quit();
 }

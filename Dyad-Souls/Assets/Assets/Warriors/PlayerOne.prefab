@@ -161,13 +161,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2718012662934244654}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.61625755, y: 0.00040233895, z: -0.03012454, w: 0.7869683}
-  m_LocalPosition: {x: 0.020397728, y: -0.0009502191, z: -0.013722478}
+  m_LocalRotation: {x: 0.43829736, y: -0.5285812, z: -0.40089157, w: 0.60645145}
+  m_LocalPosition: {x: -0.004, y: 0.145, z: 0.136}
   m_LocalScale: {x: 1.0933648, y: 1.0933652, z: 1.0933642}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 314405693831563778}
-  m_LocalEulerAnglesHint: {x: -185, y: -262, z: 93}
+  m_LocalEulerAnglesHint: {x: -186.189, y: -266.714, z: 107.223}
 --- !u!1 &4418652611532975492
 GameObject:
   m_ObjectHideFlags: 0
@@ -271,6 +271,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7589549440262640345}
   - component: {fileID: 7589549440269581657}
+  - component: {fileID: 705476547602794295}
   - component: {fileID: 6324400770030813063}
   - component: {fileID: 7021411843234633046}
   - component: {fileID: 9016876083239070741}
@@ -324,6 +325,29 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &705476547602794295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7589549440262278969}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e76d4e9165769a40a13c7549b40bd11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerStaminaSystem
+  maxStamina: 100
+  staminaRegenRate: 10
+  staminaRegenDelay: 1
+  staminaSlider: {fileID: 0}
+  sprintCostPerSecond: 15
+  lightAttackCost: 10
+  heavyAttackCost: 25
+  specialAttackCost: 50
+  dodgeRollCost: 20
+  dodgeBackstepCost: 15
+  jumpCost: 30
 --- !u!114 &6324400770030813063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -392,6 +416,7 @@ MonoBehaviour:
   playerInputManager: {fileID: 6324400770030813063}
   playerMovement: {fileID: 0}
   playerCombatSystem: {fileID: 0}
+  playerStaminaSystem: {fileID: 0}
   maxHealth: 100
   healthSlider: {fileID: 0}
   deathAnimationDuration: 2.5

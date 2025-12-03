@@ -8,10 +8,10 @@ public class PlayerStaminaSystem : MonoBehaviour
     private float maxStamina = 100f;
 
     [SerializeField]
-    private float staminaRegenRate = 10f; // Stamina pro Sekunde
+    private float staminaRegenRate = 10f;
 
     [SerializeField]
-    private float staminaRegenDelay = 1f; // Verzögerung nach Verbrauch
+    private float staminaRegenDelay = 1f;
 
     [Header("UI Reference")]
     [SerializeField]
@@ -54,7 +54,6 @@ public class PlayerStaminaSystem : MonoBehaviour
 
     private void Update()
     {
-        // Regeneriere Stamina nach Verzögerung
         if (timeSinceLastStaminaUse >= staminaRegenDelay)
         {
             RegenerateStamina();
@@ -100,15 +99,9 @@ public class PlayerStaminaSystem : MonoBehaviour
         }
     }
 
-    public bool HasStamina(float amount)
-    {
-        return currentStamina >= amount;
-    }
+    public bool HasStamina(float amount) => currentStamina >= amount;
 
-    public bool HasStaminaForSprint()
-    {
-        return currentStamina > 0;
-    }
+    public bool HasStaminaForSprint() => currentStamina > 0;
 
     private void UpdateStaminaUI()
     {
@@ -119,17 +112,28 @@ public class PlayerStaminaSystem : MonoBehaviour
         }
     }
 
-    // Getter für Stamina Costs - für externe Abfragen
     public float GetLightAttackCost() => lightAttackCost;
+
     public float GetHeavyAttackCost() => heavyAttackCost;
+
     public float GetSpecialAttackCost() => specialAttackCost;
+
     public float GetDodgeRollCost() => dodgeRollCost;
+
     public float GetDodgeBackstepCost() => dodgeBackstepCost;
+
     public float GetJumpCost() => jumpCost;
 
-    // Getter für aktuellen Status
     public float GetCurrentStamina() => currentStamina;
+
     public float GetMaxStamina() => maxStamina;
 
     public Slider GetStaminaSlider() => staminaSlider;
+
+    public void ResetStamina()
+    {
+        currentStamina = maxStamina;
+        timeSinceLastStaminaUse = 0f;
+        UpdateStaminaUI();
+    }
 }

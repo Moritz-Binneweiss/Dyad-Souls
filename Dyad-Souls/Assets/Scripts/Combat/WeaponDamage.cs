@@ -18,28 +18,13 @@ public class WeaponDamage : MonoBehaviour
         currentDamage = attackDamage;
     }
 
-    public float GetDamage()
-    {
-        return currentDamage;
-    }
+    public float GetDamage() => currentDamage;
 
-    public void SetLightAttackDamage()
-    {
-        currentDamage = attackDamage;
-    }
+    public void SetLightAttackDamage() => currentDamage = attackDamage;
 
-    public void SetHeavyAttackDamage()
-    {
-        currentDamage = heavyAttackDamage;
-    }
+    public void SetHeavyAttackDamage() => currentDamage = heavyAttackDamage;
 
-    public void SetDamage(float newDamage)
-    {
-        currentDamage = newDamage;
-    }
+    public void SetDamage(float newDamage) => currentDamage = newDamage;
 
-    public void SetSpecialAttackDamage()
-    {
-        currentDamage = specialAttackDamage;
-    }
+    public void SetSpecialAttackDamage() => currentDamage = specialAttackDamage;
 }

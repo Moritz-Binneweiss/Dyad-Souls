@@ -35,13 +35,23 @@ public class GameUIManager : MonoBehaviour
     private void Awake()
     {
         inputActions = new InputSystem_Actions();
+        // Disable UI actions immediately to prevent blocking player input
+        isPaused = false;
+        inputActions.UI.Disable();
+    }
+
+    private void Start()
+    {
+        // Enable only Pause action for pause functionality
+        // Do NOT enable entire Player action map
+        inputActions.Player.Pause.Enable();
     }
 
     private void OnEnable()
     {
+        // Subscribe to pause and cancel actions
         inputActions.Player.Pause.performed += OnPausePerformed;
         inputActions.UI.Cancel.performed += OnCancelPerformed;
-        inputActions.Player.Enable();
     }
 
     private void OnDisable()
@@ -78,20 +88,18 @@ public class GameUIManager : MonoBehaviour
         Time.timeScale = 0f;
         isPaused = true;
         inputActions.UI.Enable();
-
-        // Automatische Selektion für Controller/Tastatur-Navigation
-        SelectFirstInteractableElement();
+        SelectFirstInteractableElement(pauseUI);
     }
 
-    private void SelectFirstInteractableElement()
+    private void SelectFirstInteractableElement(GameObject uiPanel)
     {
-        if (pauseUI != null && EventSystem.current != null)
+        if (uiPanel != null && EventSystem.current != null)
         {
-            // Finde das erste interaktive UI-Element (Button, Slider, etc.)
-            Selectable firstSelectable = pauseUI.GetComponentInChildren<Selectable>();
+            Selectable firstSelectable = uiPanel.GetComponentInChildren<Selectable>();
             if (firstSelectable != null && firstSelectable.interactable)
             {
                 firstSelectable.Select();
+                EventSystem.current.SetSelectedGameObject(firstSelectable.gameObject);
             }
         }
     }
@@ -112,19 +120,38 @@ public class GameUIManager : MonoBehaviour
         Time.timeScale = 0f;
         isPaused = true;
         inputActions.UI.Enable();
-
-        // Automatische Selektion für Controller/Tastatur-Navigation
-        SelectFirstInteractableElement();
+        SelectFirstInteractableElement(gameOverUI);
     }
 
     public void RestartGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        isPaused = false;
         Time.timeScale = 1f;
+
+        // Cleanup input actions before scene load
+        if (inputActions != null)
+        {
+            inputActions.Player.Pause.performed -= OnPausePerformed;
+            inputActions.UI.Cancel.performed -= OnCancelPerformed;
+            inputActions.Disable();
+        }
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void QuitGame()
     {
+        isPaused = false;
+        Time.timeScale = 1f;
+
+        // Cleanup input actions before scene load
+        if (inputActions != null)
+        {
+            inputActions.Player.Pause.performed -= OnPausePerformed;
+            inputActions.UI.Cancel.performed -= OnCancelPerformed;
+            inputActions.Disable();
+        }
+
         SceneManager.LoadScene("MainMenu");
     }
 
@@ -156,19 +183,10 @@ public class GameUIManager : MonoBehaviour
     public void HideEnemyDefeated()
     {
         if (enemyDefeatedText != null)
-        {
             enemyDefeatedText.SetActive(false);
-        }
     }
 
-    // Getter für Stamina Slider (für Setup von außen)
-    public Slider GetPlayerOneStaminaSlider()
-    {
-        return playerOneStaminaSlider;
-    }
+    public Slider GetPlayerOneStaminaSlider() => playerOneStaminaSlider;
 
-    public Slider GetPlayerTwoStaminaSlider()
-    {
-        return playerTwoStaminaSlider;
-    }
+    public Slider GetPlayerTwoStaminaSlider() => playerTwoStaminaSlider;
 }

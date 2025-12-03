@@ -27,14 +27,18 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private float healthIncreasePerWave = 500f;
 
+    [Header("Game Over Settings")]
+    [SerializeField]
+    private float gameOverDelay = 3f;
+
     private int currentWave = 1;
     private bool isInWaveCooldown = false;
     private float currentCooldownTime = 0f;
     private List<PlayerManager> deadPlayers = new List<PlayerManager>();
+    private bool gameOverTriggered = false;
 
     void Start()
     {
-        // Finde alle Player automatisch, falls nicht zugewiesen
         if (players.Count == 0)
         {
             PlayerManager[] foundPlayers = FindObjectsByType<PlayerManager>(
@@ -43,26 +47,26 @@ public class GameManager : MonoBehaviour
             players.AddRange(foundPlayers);
         }
 
-        // Finde Boss automatisch, falls nicht zugewiesen
         if (bossEnemy == null)
-        {
             bossEnemy = FindFirstObjectByType<EnemyManager>();
-        }
     }
 
     void Update()
     {
-        // Prüfe ob alle Spieler tot sind
-        if (AreAllPlayersDead() && !isInWaveCooldown)
+        if (AreAllPlayersDead() && !isInWaveCooldown && !gameOverTriggered)
         {
-            gameUIManager.GameOver();
+            gameOverTriggered = true;
+            StartCoroutine(GameOverDelayCoroutine());
         }
 
-        // Prüfe ob Boss tot ist
         if (bossEnemy != null && !bossEnemy.IsAlive() && !isInWaveCooldown)
-        {
             StartWaveCooldown();
-        }
+    }
+
+    private IEnumerator GameOverDelayCoroutine()
+    {
+        yield return new WaitForSeconds(gameOverDelay);
+        gameUIManager.GameOver();
     }
 
     public void OnPlayerDeath(PlayerManager player)
@@ -78,11 +82,9 @@ public class GameManager : MonoBehaviour
         foreach (PlayerManager player in players)
         {
             if (player != null && !player.IsDead())
-            {
                 return false;
-            }
         }
-        return players.Count > 0; // Nur true wenn es Spieler gibt und alle tot sind
+        return players.Count > 0;
     }
 
     private void StartWaveCooldown()
@@ -93,19 +95,16 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator WaveCooldownCoroutine()
     {
-        // Heile alle lebenden Spieler sofort
         HealAllLivingPlayers();
+        ReviveAllPlayers();
 
-        // Zeige "Enemy Defeated" Text für 5 Sekunden
         gameUIManager.ShowEnemyDefeated();
         yield return new WaitForSeconds(enemyDefeatedDisplayTime);
         gameUIManager.HideEnemyDefeated();
 
-        // Cooldown Timer mit UI-Update
         currentCooldownTime = waveCooldownTime;
         while (currentCooldownTime > 0)
         {
-            // Zeige Countdown-Text an
             int secondsRemaining = Mathf.CeilToInt(currentCooldownTime);
             gameUIManager.ShowWaveCountdown(currentWave + 1, secondsRemaining);
 
@@ -113,17 +112,10 @@ public class GameManager : MonoBehaviour
             currentCooldownTime -= 0.1f;
         }
 
-        // Verstecke Countdown-Text
         gameUIManager.HideWaveCountdown();
 
-        // Starte nächste Wave
         currentWave++;
-
-        // Belebe Boss wieder
         ReviveBoss();
-
-        // Belebe tote Spieler wieder
-        ReviveAllPlayers();
 
         isInWaveCooldown = false;
     }
@@ -132,7 +124,6 @@ public class GameManager : MonoBehaviour
     {
         if (bossEnemy != null)
         {
-            // Erhöhe Boss Health
             float newMaxHealth = bossEnemy.GetMaxHealth() + healthIncreasePerWave;
             bossEnemy.Revive(newMaxHealth);
         }
@@ -156,18 +147,12 @@ public class GameManager : MonoBehaviour
         {
             if (player != null && !player.IsDead())
             {
-                // Heile Spieler vollständig
                 float missingHealth = player.GetMaxHealth() - player.GetCurrentHealth();
                 if (missingHealth > 0)
-                {
                     player.Heal(missingHealth);
-                }
             }
         }
     }
 
-    public int GetCurrentWave()
-    {
-        return currentWave;
-    }
+    public int GetCurrentWave() => currentWave;
 }

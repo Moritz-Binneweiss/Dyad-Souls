@@ -16,20 +16,20 @@ public class LockOnTarget : MonoBehaviour
     private float lockOnRange = 30f;
 
     [SerializeField]
-    private float lockOnBreakDistance = 35f; // Distanz, bei der Lock-On automatisch bricht (etwas größer als Range)
+    private float lockOnBreakDistance = 35f;
 
     [Header("UI References")]
     [SerializeField]
     private GameObject lockOnIndicatorUI;
 
     [SerializeField]
-    private RectTransform lockOnIndicatorRect; // RectTransform für Positionierung
+    private RectTransform lockOnIndicatorRect;
 
     [SerializeField]
-    private Vector3 uiOffset = Vector3.up * 2f; // Offset über dem Enemy (z.B. über dem Kopf)
+    private Vector3 uiOffset = Vector3.up * 2f;
 
     [SerializeField]
-    private float uiSmoothSpeed = 1f; // Wie schnell das UI dem Enemy folgt (höher = direkter)
+    private float uiSmoothSpeed = 1f;
 
     [Header("Target")]
     [SerializeField]
@@ -41,34 +41,21 @@ public class LockOnTarget : MonoBehaviour
 
     private void Awake()
     {
-        // Auto-assign Player wenn nicht gesetzt
         if (player == null)
-        {
             player = GetComponent<PlayerManager>();
-        }
 
-        // Auto-assign PlayerInputHandler wenn nicht gesetzt
         if (playerInputHandler == null)
-        {
             playerInputHandler = GetComponent<PlayerInputHandler>();
-        }
 
-        // Finde Enemy automatisch falls nicht zugewiesen
         if (targetEnemy == null)
-        {
             targetEnemy = FindFirstObjectByType<EnemyManager>();
-        }
 
-        // Deaktiviere UI-Indikator zu Beginn
         if (lockOnIndicatorUI != null)
         {
             lockOnIndicatorUI.SetActive(false);
 
-            // Auto-assign RectTransform wenn nicht gesetzt
             if (lockOnIndicatorRect == null)
-            {
                 lockOnIndicatorRect = lockOnIndicatorUI.GetComponent<RectTransform>();
-            }
         }
     }
 
@@ -78,14 +65,10 @@ public class LockOnTarget : MonoBehaviour
         {
             inputActions = new InputSystem_Actions();
 
-            // Registriere LockOn Input
             lockOnPerformed = i =>
             {
-                // Prüfe ob Input vom korrekten Device kommt
                 if (playerInputHandler != null && IsCorrectDevice(i.control.device))
-                {
                     ToggleLockOn();
-                }
             };
 
             inputActions.Player.LockOnTarget.performed += lockOnPerformed;
@@ -114,23 +97,16 @@ public class LockOnTarget : MonoBehaviour
 
     private void Update()
     {
-        // Prüfe Distanz zum Enemy und aktualisiere UI
         UpdateLockOnIndicator();
 
-        // Aktualisiere UI-Position auch in Update für schnellere Reaktion
         if (isLockOnActive && lockOnIndicatorRect != null && targetEnemy != null)
-        {
             UpdateUIPosition();
-        }
     }
 
     private void LateUpdate()
     {
-        // Zusätzliches Update in LateUpdate für extra Smoothness
         if (isLockOnActive && lockOnIndicatorRect != null && targetEnemy != null)
-        {
             UpdateUIPosition();
-        }
     }
 
     private bool IsCorrectDevice(UnityEngine.InputSystem.InputDevice device)
@@ -150,43 +126,30 @@ public class LockOnTarget : MonoBehaviour
 
     private void ToggleLockOn()
     {
-        // Wenn Lock-On deaktiviert werden soll
         if (isLockOnActive)
         {
             DeactivateLockOn();
             return;
         }
 
-        // Wenn Lock-On aktiviert werden soll, prüfe erst die Bedingungen
         if (targetEnemy == null || player == null)
-        {
             return;
-        }
 
-        // Prüfe ob Enemy in Range ist
         float distanceToEnemy = Vector3.Distance(
             player.transform.position,
             targetEnemy.transform.position
         );
 
         if (distanceToEnemy > lockOnRange)
-        {
             return;
-        }
 
-        // Prüfe ob Enemy am Leben ist
         if (!targetEnemy.IsAlive())
-        {
             return;
-        }
 
-        // Aktiviere Lock-On
         isLockOnActive = true;
 
         if (player.playerCamera != null)
-        {
             player.playerCamera.SetLockOnTarget(targetEnemy.transform);
-        }
 
         UpdateLockOnIndicator();
     }
@@ -208,50 +171,27 @@ public class LockOnTarget : MonoBehaviour
         if (lockOnIndicatorUI == null || targetEnemy == null || player == null)
             return;
 
-        // Prüfe ob Enemy in Range ist
         float distanceToEnemy = Vector3.Distance(
             player.transform.position,
             targetEnemy.transform.position
         );
 
-        // Prüfe ob Enemy am Leben ist
         bool isEnemyAlive = targetEnemy.IsAlive();
-
-        // Verwende lockOnBreakDistance für automatisches Deaktivieren (größere Toleranz)
         bool isInBreakRange = distanceToEnemy <= lockOnBreakDistance;
-
-        // Zeige UI nur wenn: Lock-On aktiv, Enemy in normaler Range und Enemy am Leben
         bool isInNormalRange = distanceToEnemy <= lockOnRange;
         bool shouldShowUI = isLockOnActive && isInNormalRange && isEnemyAlive;
 
         lockOnIndicatorUI.SetActive(shouldShowUI);
 
-        // Automatisches Deaktivieren nur wenn außerhalb der Break-Range oder Enemy tot
         if (isLockOnActive && (!isInBreakRange || !isEnemyAlive))
-        {
             DeactivateLockOn();
-        }
     }
 
-    // Public Getter für andere Skripte
-    public bool IsLockedOn()
-    {
-        return isLockOnActive;
-    }
+    public bool IsLockedOn() => isLockOnActive;
 
-    public EnemyManager GetLockedTarget()
-    {
-        if (isLockOnActive)
-        {
-            return targetEnemy;
-        }
-        return null;
-    }
+    public EnemyManager GetLockedTarget() => isLockOnActive ? targetEnemy : null;
 
-    public float GetLockOnRange()
-    {
-        return lockOnRange;
-    }
+    public float GetLockOnRange() => lockOnRange;
 
     private void UpdateUIPosition()
     {
@@ -262,40 +202,28 @@ public class LockOnTarget : MonoBehaviour
         )
             return;
 
-        // Berechne Welt-Position mit Offset (z.B. über dem Kopf des Enemies)
         Vector3 worldPosition = targetEnemy.transform.position + uiOffset;
-
-        // Konvertiere Welt-Position zu Screen-Position
         Vector3 targetScreenPosition = player.playerCamera.cameraObject.WorldToScreenPoint(
             worldPosition
         );
 
-        // Prüfe ob Target vor der Kamera ist
         if (targetScreenPosition.z > 0)
         {
-            // Smooth Interpolation zur Zielposition (verhindert Ruckeln)
             Vector3 smoothedPosition = Vector3.Lerp(
                 lockOnIndicatorRect.position,
                 targetScreenPosition,
                 Time.deltaTime * uiSmoothSpeed
             );
 
-            // Setze UI-Position
             lockOnIndicatorRect.position = smoothedPosition;
 
-            // UI sichtbar, wenn vor der Kamera
             if (!lockOnIndicatorUI.activeSelf && isLockOnActive)
-            {
                 lockOnIndicatorUI.SetActive(true);
-            }
         }
         else
         {
-            // Target ist hinter der Kamera - verstecke UI
             if (lockOnIndicatorUI.activeSelf)
-            {
                 lockOnIndicatorUI.SetActive(false);
-            }
         }
     }
 }

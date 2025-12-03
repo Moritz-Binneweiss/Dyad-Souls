@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour
@@ -32,7 +31,7 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField]
     LayerMask collideWithLayers;
 
-    private const float _inputThreshold = 0.01f; // Threshold für Input (verhindert Mikro-Bewegungen)
+    private const float _inputThreshold = 0.01f;
 
     [Header("Camera Values")]
     private Vector3 cameraVelocity;
@@ -53,10 +52,10 @@ public class PlayerCamera : MonoBehaviour
     private Transform lockOnTarget;
 
     [SerializeField]
-    private float lockOnRotationSpeed = 10f; // Geschwindigkeit der Lock-On Rotation
+    private float lockOnRotationSpeed = 10f;
 
     [SerializeField]
-    private float lockOnHeightOffset = 1.5f; // Höhen-Offset zum Anvisieren (z.B. Oberkörper statt Füße)
+    private float lockOnHeightOffset = 1.5f;
 
     private void Start()
     {
@@ -69,15 +68,10 @@ public class PlayerCamera : MonoBehaviour
         {
             HandleFollowTarget();
 
-            // Verwende Lock-On Rotation wenn aktiv, ansonsten normale Rotation
             if (isLockedOn && lockOnTarget != null)
-            {
                 HandleLockOnRotations();
-            }
             else
-            {
                 HandleRotations();
-            }
 
             HandleCollisions();
         }
@@ -99,7 +93,6 @@ public class PlayerCamera : MonoBehaviour
         if (player == null || player.playerInputManager == null)
             return;
 
-        // Nur rotieren wenn es signifikanten Input gibt (wie im ThirdPersonController)
         float cameraHorizontalInput = player.playerInputManager.cameraHorizontalInput;
         float cameraVerticalInput = player.playerInputManager.cameraVerticalInput;
 
@@ -134,7 +127,6 @@ public class PlayerCamera : MonoBehaviour
         cameraPivotTransform.localRotation = targetRotation;
     }
 
-    // Utility Methode aus ThirdPersonController - Normalisiert Winkel
     private static float ClampAngle(float angle, float min, float max)
     {
         if (angle < -360f)
@@ -148,11 +140,9 @@ public class PlayerCamera : MonoBehaviour
     {
         targetCameraZPosition = cameraZPosition;
         RaycastHit hit;
-        // Richtung für Collisionserkennung
         Vector3 direction = cameraObject.transform.position - cameraPivotTransform.position;
         direction.Normalize();
 
-        // Wir gucken ob ein Objekt vor uns ist von der Kamera
         if (
             Physics.SphereCast(
                 cameraPivotTransform.position,
@@ -164,14 +154,12 @@ public class PlayerCamera : MonoBehaviour
             )
         )
         {
-            // Ignoriere Kollisionen mit dem eigenen Spieler und seinen Children (z.B. Waffe)
             if (hit.transform.IsChildOf(player.transform) || hit.transform == player.transform)
             {
-                // Tue nichts - ignoriere diese Kollision
+                // Ignore collisions with player and their children
             }
             else
             {
-                // Wenn ja, nehmen wir die Distanz zwischen Kamera und Objekt
                 float distanceFromHitObject = Vector3.Distance(
                     cameraPivotTransform.position,
                     hit.point
@@ -197,47 +185,39 @@ public class PlayerCamera : MonoBehaviour
     {
         if (lockOnTarget == null)
         {
-            // Wenn Target verloren geht, wechsle zurück zu normaler Rotation
             isLockedOn = false;
             return;
         }
 
-        // Berechne die Zielposition mit Höhen-Offset (z.B. Oberkörper des Enemies)
         Vector3 targetPosition = lockOnTarget.position + Vector3.up * lockOnHeightOffset;
 
-        // Berechne die Richtung vom Kamera-Pivot zum Target (für horizontale Rotation)
         Vector3 directionToTarget = targetPosition - transform.position;
-        directionToTarget.y = 0; // Ignoriere Y-Achse für horizontale Rotation
+        directionToTarget.y = 0;
         directionToTarget.Normalize();
 
-        // Berechne Ziel-Rotation (horizontal)
         if (directionToTarget != Vector3.zero)
         {
             float targetYAngle =
                 Mathf.Atan2(directionToTarget.x, directionToTarget.z) * Mathf.Rad2Deg;
 
-            // Smooth Angle Interpolation für flüssige Bewegung
             leftAndRightLookAngle = Mathf.LerpAngle(
                 leftAndRightLookAngle,
                 targetYAngle,
                 Time.deltaTime * lockOnRotationSpeed
             );
 
-            // Normalisiere den Winkel
             leftAndRightLookAngle = ClampAngle(
                 leftAndRightLookAngle,
                 float.MinValue,
                 float.MaxValue
             );
 
-            // Wende horizontale Rotation an
             Vector3 cameraRotation = Vector3.zero;
             cameraRotation.y = leftAndRightLookAngle;
             Quaternion targetRotation = Quaternion.Euler(cameraRotation);
             transform.rotation = targetRotation;
         }
 
-        // Berechne vertikalen Winkel zum Target (MIT Höhen-Offset)
         Vector3 fullDirectionToTarget = targetPosition - cameraPivotTransform.position;
         float horizontalDistance = new Vector3(
             fullDirectionToTarget.x,
@@ -245,31 +225,26 @@ public class PlayerCamera : MonoBehaviour
             fullDirectionToTarget.z
         ).magnitude;
 
-        // Verhindere Division durch Null
         if (horizontalDistance > 0.01f)
         {
             float targetVerticalAngle =
                 Mathf.Atan2(fullDirectionToTarget.y, horizontalDistance) * Mathf.Rad2Deg;
 
-            // Smooth vertical angle interpolation
             upAndDownLookAngle = Mathf.LerpAngle(
                 upAndDownLookAngle,
                 targetVerticalAngle,
                 Time.deltaTime * lockOnRotationSpeed
             );
 
-            // Clamp vertical angle
             upAndDownLookAngle = Mathf.Clamp(upAndDownLookAngle, minumPivot, maximumPivot);
         }
 
-        // Wende vertikale Rotation an
         Vector3 pivotRotation = Vector3.zero;
         pivotRotation.x = upAndDownLookAngle;
         Quaternion targetPivotRotation = Quaternion.Euler(pivotRotation);
         cameraPivotTransform.localRotation = targetPivotRotation;
     }
 
-    // Public Methoden für Lock-On System
     public void SetLockOnTarget(Transform target)
     {
         lockOnTarget = target;
@@ -282,8 +257,5 @@ public class PlayerCamera : MonoBehaviour
         isLockedOn = false;
     }
 
-    public bool IsLockedOn()
-    {
-        return isLockedOn;
-    }
+    public bool IsLockedOn() => isLockedOn;
 }
