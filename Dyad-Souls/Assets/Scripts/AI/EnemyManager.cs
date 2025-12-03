@@ -12,49 +12,16 @@ public class EnemyManager : MonoBehaviour
     [SerializeField]
     private float maxHealth = 100f;
 
-    [Header("Death Animation Settings")]
-    [SerializeField]
-    private float deathAnimationDuration = 3f;
-
-    [Header("Boss Combat Settings (Elden Ring Style)")]
-    [SerializeField]
-    private float baseCooldownMin = 1.5f;
-
-    [SerializeField]
-    private float baseCooldownMax = 3.5f;
-
-    [SerializeField]
-    private float heavyAttackCooldown = 4f;
-
-    [SerializeField]
-    private float rangeAttackCooldown = 6f;
-
-    [SerializeField]
-    private float comboCooldown = 2f;
-
-    [Header("Boss Phases")]
-    [SerializeField]
-    private float phase2HealthThreshold = 0.7f;
-
-    [SerializeField]
-    private float phase3HealthThreshold = 0.3f;
-
     private float currentHealth;
 
     [SerializeField]
     private Slider bossHealthSlider;
+
     private bool isAlive = true;
 
-    private float lastAttackTime;
-    private float currentCooldown;
-    private int currentPhase = 1;
-    private string lastAttackType = "";
-    private int consecutiveAttacks = 0;
-    private bool isInCooldown = false;
-
-    // Events
-    public System.Action<int> OnPhaseChanged;
-    public System.Action<string> OnAttackExecuted;
+    [Header("Death Animation Settings")]
+    [SerializeField]
+    private float deathAnimationDuration = 3f;
 
     void Start()
     {
@@ -62,13 +29,6 @@ public class EnemyManager : MonoBehaviour
         behaviorTree = GetComponent<BehaviorTree>();
         currentHealth = maxHealth;
         UpdateHealthUI();
-        SetRandomCooldown();
-    }
-
-    void Update()
-    {
-        UpdateCooldown();
-        CheckPhaseTransition();
     }
 
     public void TakeDamage(float damage)
@@ -189,127 +149,4 @@ public class EnemyManager : MonoBehaviour
     public float GetMaxHealth() => maxHealth;
 
     public bool IsAlive() => isAlive;
-
-    #region Boss Combat System (Elden Ring Style)
-
-    private void UpdateCooldown()
-    {
-        if (isInCooldown && Time.time >= lastAttackTime + currentCooldown)
-            isInCooldown = false;
-    }
-
-    private void CheckPhaseTransition()
-    {
-        float healthPercentage = currentHealth / maxHealth;
-        int newPhase = 1;
-
-        if (healthPercentage <= phase3HealthThreshold)
-            newPhase = 3;
-        else if (healthPercentage <= phase2HealthThreshold)
-            newPhase = 2;
-
-        if (newPhase != currentPhase)
-        {
-            currentPhase = newPhase;
-            OnPhaseChanged?.Invoke(currentPhase);
-        }
-    }
-
-    private void SetRandomCooldown()
-    {
-        currentCooldown = Random.Range(baseCooldownMin, baseCooldownMax);
-    }
-
-    public bool CanAttack() => !isInCooldown && isAlive;
-
-    public void StartAttackCooldown(string attackType)
-    {
-        lastAttackTime = Time.time;
-        lastAttackType = attackType;
-        isInCooldown = true;
-
-        switch (attackType)
-        {
-            case "Heavy":
-                currentCooldown = heavyAttackCooldown;
-                break;
-            case "Range":
-                currentCooldown = rangeAttackCooldown;
-                break;
-            case "LeftRight":
-                currentCooldown = comboCooldown;
-                break;
-            default:
-                SetRandomCooldown();
-                break;
-        }
-
-        switch (currentPhase)
-        {
-            case 2:
-                currentCooldown *= 0.8f;
-                break;
-            case 3:
-                currentCooldown *= 0.6f;
-                break;
-        }
-
-        OnAttackExecuted?.Invoke(attackType);
-    }
-
-    public string GetBestAttackForSituation(
-        float playerDistance,
-        bool playerBehind,
-        string lastAttack
-    )
-    {
-        if (consecutiveAttacks >= 4)
-        {
-            consecutiveAttacks = 0;
-            return "Reposition";
-        }
-
-        consecutiveAttacks++;
-        float aggressionBonus = (currentPhase - 1) * 0.2f;
-
-        if (playerDistance > 8f)
-            return Random.value < (0.6f + aggressionBonus) ? "Range" : "Heavy";
-        else if (playerBehind)
-            return Random.value < 0.7f ? "LeftRight" : "Left";
-        else if (playerDistance < 3f)
-        {
-            float rand = Random.value + aggressionBonus;
-            if (rand < 0.3f)
-                return "Right";
-            else if (rand < 0.6f)
-                return "Left";
-            else if (rand < 0.8f)
-                return "LeftRight";
-            else
-                return "Heavy";
-        }
-        else
-        {
-            float rand = Random.value;
-            if (rand < 0.25f)
-                return "Right";
-            else if (rand < 0.45f)
-                return "Left";
-            else if (rand < 0.65f)
-                return "Heavy";
-            else if (rand < 0.85f)
-                return "LeftRight";
-            else
-                return "Range";
-        }
-    }
-
-    public float GetHealthPercentage() => currentHealth / maxHealth;
-
-    public int GetCurrentPhase() => currentPhase;
-
-    public float GetRemainingCooldown() =>
-        Mathf.Max(0, (lastAttackTime + currentCooldown) - Time.time);
-
-    #endregion
 }
