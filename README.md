@@ -163,3 +163,5 @@ Besprechung:
 Ziel:
 
 - Weitere Animations hinzufügen
+- Verbessern und Erweitern
+- Special Effects anfangen
