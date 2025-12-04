@@ -25,12 +25,19 @@ public class PlayerManager : MonoBehaviour
     [SerializeField]
     private Slider healthSlider;
 
+    [SerializeField]
+    private float healthRegenRate = 2f;
+
+    [SerializeField]
+    private float healthRegenDelay = 5f;
+
     [Header("Death Animation Settings")]
     [SerializeField]
     private float deathAnimationDuration = 2.5f;
 
     private float currentHealth;
     private bool isDead = false;
+    private float timeSinceLastDamage;
 
     private void Awake()
     {
@@ -51,6 +58,23 @@ public class PlayerManager : MonoBehaviour
         if (playerMovement != null && !isDead)
         {
             playerMovement.HandleMovement();
+        }
+
+        if (!isDead)
+        {
+            RegenerateHealth();
+        }
+    }
+
+    private void RegenerateHealth()
+    {
+        timeSinceLastDamage += Time.deltaTime;
+
+        if (timeSinceLastDamage >= healthRegenDelay && currentHealth < maxHealth)
+        {
+            currentHealth += healthRegenRate * Time.deltaTime;
+            currentHealth = Mathf.Min(currentHealth, maxHealth);
+            UpdateHealthUI();
         }
     }
 
@@ -125,6 +149,7 @@ public class PlayerManager : MonoBehaviour
 
         currentHealth -= damage;
         currentHealth = Mathf.Max(0, currentHealth);
+        timeSinceLastDamage = 0f;
 
         UpdateHealthUI();
 
@@ -195,6 +220,7 @@ public class PlayerManager : MonoBehaviour
 
         isDead = false;
         currentHealth = maxHealth;
+        timeSinceLastDamage = 0f;
         UpdateHealthUI();
 
         foreach (Collider col in GetComponents<Collider>())
