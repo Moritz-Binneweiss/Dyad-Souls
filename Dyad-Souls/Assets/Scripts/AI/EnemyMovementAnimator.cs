@@ -3,7 +3,7 @@ using UnityEngine.AI;
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(NavMeshAgent))]
-public class BossMovementAnimator : MonoBehaviour
+public class EnemyMovementAnimator : MonoBehaviour
 {
     private Animator animator;
     private NavMeshAgent agent;
