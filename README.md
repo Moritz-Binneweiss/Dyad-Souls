@@ -152,3 +152,14 @@ Ziel:
 
 - Nice-To-Have Features anfangen
 - Verbessern und Erweitern
+
+#### **04.12.2025**
+
+Besprechung:
+
+- Refactoring and Bug fixing gezeigt
+- Neue Animations gezeigt
+
+Ziel:
+
+- Weitere Animations hinzufügen
