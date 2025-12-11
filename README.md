@@ -164,4 +164,30 @@ Ziel:
 
 - Weitere Animations hinzufügen
 - Verbessern und Erweitern
+
+#### **11.12.2025**
+
+Besprechung:
+
+- Neue Animations gezeigt
+- Cascadeur angeschaut
+
+Ziel:
+
+- Weitere Animations hinzufügen
+- Verbessern und Erweitern
 - Special Effects anfangen
+- Cascadeur Tool ausprobieren
+
+#### **18.12.2025**
+
+Besprechung:
+
+- 
+
+Ziel:
+
+- Weitere Animations hinzufügen
+- Verbessern und Erweitern
+- Special Effects erweitern
+- Sound Effects anfangen
