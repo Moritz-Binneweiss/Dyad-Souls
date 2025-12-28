@@ -39,6 +39,28 @@ public class LockOnTarget : MonoBehaviour
     private System.Action<InputAction.CallbackContext> lockOnPerformed;
     private bool isLockOnActive = false;
 
+    public void UpdateTargetEnemy(EnemyManager newTarget)
+    {
+        targetEnemy = newTarget;
+
+        // If currently locked on, update the lock-on to the new target
+        if (isLockOnActive && player != null && player.playerCamera != null && newTarget != null)
+        {
+            player.playerCamera.SetLockOnTarget(newTarget.transform);
+        }
+    }
+
+    public void SetTargetEnemy(EnemyManager newTarget)
+    {
+        targetEnemy = newTarget;
+
+        // If currently locked on, update the lock-on to the new target
+        if (isLockOnActive && player != null && player.playerCamera != null && newTarget != null)
+        {
+            player.playerCamera.SetLockOnTarget(newTarget.transform);
+        }
+    }
+
     private void Awake()
     {
         if (player == null)

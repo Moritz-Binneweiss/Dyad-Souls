@@ -1,4 +1,5 @@
 using BehaviorDesigner.Runtime;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,6 +17,9 @@ public class EnemyManager : MonoBehaviour
 
     [SerializeField]
     private Slider bossHealthSlider;
+
+    [SerializeField]
+    private TextMeshProUGUI bossNameText;
 
     private bool isAlive = true;
 
@@ -63,8 +67,9 @@ public class EnemyManager : MonoBehaviour
         foreach (Collider col in GetComponents<Collider>())
             col.enabled = false;
 
-        if (bossHealthSlider != null)
-            bossHealthSlider.gameObject.SetActive(false);
+        // Don't hide health bar - let GameManager handle the phase transition
+        // if (bossHealthSlider != null)
+        //     bossHealthSlider.gameObject.SetActive(false);
 
         if (animator != null)
         {
@@ -113,6 +118,20 @@ public class EnemyManager : MonoBehaviour
             bossHealthSlider.gameObject.SetActive(true);
 
         UpdateHealthUI();
+    }
+
+    public void ResetToFullHealth()
+    {
+        currentHealth = maxHealth;
+        UpdateHealthUI();
+    }
+
+    public void SetBossName(string newName)
+    {
+        if (bossNameText != null)
+        {
+            bossNameText.text = newName;
+        }
     }
 
     void OnTriggerEnter(Collider other)

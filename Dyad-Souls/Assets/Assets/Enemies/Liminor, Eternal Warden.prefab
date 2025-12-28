@@ -9,6 +9,18 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 29fd29c9a192acd40967fd704db0c2d8, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 29fd29c9a192acd40967fd704db0c2d8, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 29fd29c9a192acd40967fd704db0c2d8, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 29fd29c9a192acd40967fd704db0c2d8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -48,22 +60,42 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 29fd29c9a192acd40967fd704db0c2d8, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4609501501685250347, guid: 29fd29c9a192acd40967fd704db0c2d8, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -7933205989634994717, guid: 7dc426fee944ede498b2ee37aacaa437, type: 3}
     - target: {fileID: -4609501501685250347, guid: 29fd29c9a192acd40967fd704db0c2d8, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: aa531aa977b88f3418f1cf9450b586ea, type: 2}
+    - target: {fileID: -4396642182433536433, guid: 29fd29c9a192acd40967fd704db0c2d8, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -8839368762345780380, guid: 7dc426fee944ede498b2ee37aacaa437, type: 3}
     - target: {fileID: -4396642182433536433, guid: 29fd29c9a192acd40967fd704db0c2d8, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: aa531aa977b88f3418f1cf9450b586ea, type: 2}
     - target: {fileID: 919132149155446097, guid: 29fd29c9a192acd40967fd704db0c2d8, type: 3}
       propertyPath: m_Name
-      value: Guardian
+      value: Liminor, Eternal Warden
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 29fd29c9a192acd40967fd704db0c2d8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 29fd29c9a192acd40967fd704db0c2d8, type: 3}
       propertyPath: m_TagString
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 1630794972795428178, guid: 29fd29c9a192acd40967fd704db0c2d8, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 2959467708922500008, guid: 7dc426fee944ede498b2ee37aacaa437, type: 3}
     - target: {fileID: 1630794972795428178, guid: 29fd29c9a192acd40967fd704db0c2d8, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -129,16 +161,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20ac4fdedc0416948a173ba5cef1f969, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyManager
-  maxHealth: 500
-  deathAnimationDuration: 3
-  baseCooldownMin: 1.5
-  baseCooldownMax: 3.5
-  heavyAttackCooldown: 4
-  rangeAttackCooldown: 6
-  comboCooldown: 2
-  phase2HealthThreshold: 0.7
-  phase3HealthThreshold: 0.3
+  maxHealth: 1000
   bossHealthSlider: {fileID: 0}
+  bossNameText: {fileID: 0}
+  deathAnimationDuration: 3
 --- !u!95 &4264092039816626104
 Animator:
   serializedVersion: 7

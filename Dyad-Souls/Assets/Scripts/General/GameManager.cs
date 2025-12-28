@@ -17,23 +17,38 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameUIManager gameUIManager;
 
-    [Header("Wave Settings")]
+    [Header("Boss Phase Settings")]
     [SerializeField]
-    private float waveCooldownTime = 5f;
+    private Material phase2SkyboxMaterial;
 
     [SerializeField]
-    private float enemyDefeatedDisplayTime = 5f;
+    private GameObject phase1BossModel;
 
     [SerializeField]
-    private float healthIncreasePerWave = 500f;
+    private GameObject phase2BossModel;
+
+    [SerializeField]
+    private GameObject phase1Ground;
+
+    [SerializeField]
+    private GameObject phase2Ground;
+
+    [SerializeField]
+    private GameObject phase1Arena;
+
+    [SerializeField]
+    private GameObject phase2Arena;
+
+    [SerializeField]
+    private float phase2TransitionDelay = 2f;
 
     [Header("Game Over Settings")]
     [SerializeField]
     private float gameOverDelay = 3f;
 
-    private int currentWave = 1;
-    private bool isInWaveCooldown = false;
-    private float currentCooldownTime = 0f;
+    private int currentPhase = 1;
+    private bool isInPhaseTransition = false;
+    private Material originalSkyboxMaterial;
     private List<PlayerManager> deadPlayers = new List<PlayerManager>();
     private bool gameOverTriggered = false;
 
@@ -49,18 +64,45 @@ public class GameManager : MonoBehaviour
 
         if (bossEnemy == null)
             bossEnemy = FindFirstObjectByType<EnemyManager>();
+
+        // Store original skybox
+        originalSkyboxMaterial = RenderSettings.skybox;
+
+        // Setup Phase 1 - activate phase 1 models
+        if (phase1BossModel != null)
+            phase1BossModel.SetActive(true);
+        if (phase2BossModel != null)
+            phase2BossModel.SetActive(false);
+        if (phase1Ground != null)
+            phase1Ground.SetActive(true);
+        if (phase2Ground != null)
+            phase2Ground.SetActive(false);
+        if (phase1Arena != null)
+            phase1Arena.SetActive(true);
+        if (phase2Arena != null)
+            phase2Arena.SetActive(false);
     }
 
     void Update()
     {
-        if (AreAllPlayersDead() && !isInWaveCooldown && !gameOverTriggered)
+        if (AreAllPlayersDead() && !isInPhaseTransition && !gameOverTriggered)
         {
             gameOverTriggered = true;
             StartCoroutine(GameOverDelayCoroutine());
         }
 
-        if (bossEnemy != null && !bossEnemy.IsAlive() && !isInWaveCooldown)
-            StartWaveCooldown();
+        // Check for Phase 2 transition (when Phase 1 boss is defeated)
+        if (currentPhase == 1 && !isInPhaseTransition && bossEnemy != null && !bossEnemy.IsAlive())
+        {
+            StartPhase2Transition();
+        }
+
+        // Check for game win (Phase 2 boss defeated)
+        if (currentPhase == 2 && !isInPhaseTransition && bossEnemy != null && !bossEnemy.IsAlive())
+        {
+            isInPhaseTransition = true;
+            StartCoroutine(VictoryCoroutine());
+        }
     }
 
     private IEnumerator GameOverDelayCoroutine()
@@ -87,72 +129,76 @@ public class GameManager : MonoBehaviour
         return players.Count > 0;
     }
 
-    private void StartWaveCooldown()
+    private void StartPhase2Transition()
     {
-        isInWaveCooldown = true;
-        StartCoroutine(WaveCooldownCoroutine());
+        isInPhaseTransition = true;
+        StartCoroutine(Phase2TransitionCoroutine());
     }
 
-    private IEnumerator WaveCooldownCoroutine()
+    private IEnumerator Phase2TransitionCoroutine()
     {
-        HealAllLivingPlayers();
-        ReviveAllPlayers();
+        yield return new WaitForSeconds(phase2TransitionDelay);
 
-        gameUIManager.ShowEnemyDefeated();
-        yield return new WaitForSeconds(enemyDefeatedDisplayTime);
-        gameUIManager.HideEnemyDefeated();
-
-        currentCooldownTime = waveCooldownTime;
-        while (currentCooldownTime > 0)
+        // Change skybox
+        if (phase2SkyboxMaterial != null)
         {
-            int secondsRemaining = Mathf.CeilToInt(currentCooldownTime);
-            gameUIManager.ShowWaveCountdown(currentWave + 1, secondsRemaining);
-
-            yield return new WaitForSeconds(0.1f);
-            currentCooldownTime -= 0.1f;
+            RenderSettings.skybox = phase2SkyboxMaterial;
+            DynamicGI.UpdateEnvironment();
         }
 
-        gameUIManager.HideWaveCountdown();
+        // Switch boss models
+        if (phase1BossModel != null)
+            phase1BossModel.SetActive(false);
+        if (phase2BossModel != null)
+            phase2BossModel.SetActive(true);
 
-        currentWave++;
-        ReviveBoss();
+        // Switch ground and arena (Ground -> Ground2, BasicArena -> BasicArena2)
+        if (phase1Ground != null)
+            phase1Ground.SetActive(false);
+        if (phase2Ground != null)
+            phase2Ground.SetActive(true);
+        if (phase1Arena != null)
+            phase1Arena.SetActive(false);
+        if (phase2Arena != null)
+            phase2Arena.SetActive(true);
 
-        isInWaveCooldown = false;
-    }
+        // Update boss reference to Phase 2 boss (Liminor)
+        if (phase2BossModel != null)
+        {
+            EnemyManager phase2Boss = phase2BossModel.GetComponent<EnemyManager>();
+            if (phase2Boss != null)
+            {
+                bossEnemy = phase2Boss;
 
-    private void ReviveBoss()
-    {
+                // Update all player lock-on targets to new boss
+                LockOnTarget[] lockOnScripts = FindObjectsByType<LockOnTarget>(
+                    FindObjectsSortMode.None
+                );
+                foreach (LockOnTarget lockOn in lockOnScripts)
+                {
+                    lockOn.SetTargetEnemy(phase2Boss);
+                }
+            }
+        }
+
+        // Reset boss health to full and set name
         if (bossEnemy != null)
         {
-            float newMaxHealth = bossEnemy.GetMaxHealth() + healthIncreasePerWave;
-            bossEnemy.Revive(newMaxHealth);
+            bossEnemy.ResetToFullHealth();
+            bossEnemy.SetBossName("Liminor, Eternal Warden");
         }
+
+        currentPhase = 2;
+        isInPhaseTransition = false;
     }
 
-    private void ReviveAllPlayers()
+    private IEnumerator VictoryCoroutine()
     {
-        foreach (PlayerManager player in deadPlayers)
-        {
-            if (player != null)
-            {
-                player.Revive();
-            }
-        }
-        deadPlayers.Clear();
+        yield return new WaitForSeconds(1f); // Short delay before showing victory
+        gameUIManager.ShowVictory();
+        yield return new WaitForSeconds(7f); // Wait for fade animation to complete
+        // You can add victory screen transition here
     }
 
-    private void HealAllLivingPlayers()
-    {
-        foreach (PlayerManager player in players)
-        {
-            if (player != null && !player.IsDead())
-            {
-                float missingHealth = player.GetMaxHealth() - player.GetCurrentHealth();
-                if (missingHealth > 0)
-                    player.Heal(missingHealth);
-            }
-        }
-    }
-
-    public int GetCurrentWave() => currentWave;
+    public int GetCurrentPhase() => currentPhase;
 }
