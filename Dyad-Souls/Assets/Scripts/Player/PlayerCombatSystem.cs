@@ -12,6 +12,7 @@ public class PlayerCombatSystem : MonoBehaviour
     private GameObject currentSword;
     private Collider weaponCollider;
     private WeaponDamage weaponDamage;
+    private GameObject trailEffect;
 
     [Header("Combat Settings")]
     [SerializeField]
@@ -55,6 +56,14 @@ public class PlayerCombatSystem : MonoBehaviour
             weaponCollider.enabled = false;
 
         weaponDamage = currentSword.GetComponentInChildren<WeaponDamage>();
+
+        // Find and disable Trail effect
+        Transform trailTransform = currentSword.transform.Find("Trail");
+        if (trailTransform != null)
+        {
+            trailEffect = trailTransform.gameObject;
+            trailEffect.SetActive(false);
+        }
     }
 
     public void PerformAttack()
@@ -109,6 +118,19 @@ public class PlayerCombatSystem : MonoBehaviour
     {
         if (weaponCollider != null)
             weaponCollider.enabled = false;
+    }
+
+    // Animation Event Methods for Trail Effect
+    public void SlashEffectOn()
+    {
+        if (trailEffect != null)
+            trailEffect.SetActive(true);
+    }
+
+    public void SlashEffectOff()
+    {
+        if (trailEffect != null)
+            trailEffect.SetActive(false);
     }
 
     public void PerformDodge()
