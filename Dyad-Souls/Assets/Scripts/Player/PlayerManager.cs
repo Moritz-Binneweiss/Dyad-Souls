@@ -38,6 +38,9 @@ public class PlayerManager : MonoBehaviour
     private float currentHealth;
     private bool isDead = false;
     private float timeSinceLastDamage;
+    private bool isAttacking = false;
+
+    public bool IsAttacking => isAttacking;
 
     private void Awake()
     {
@@ -88,7 +91,7 @@ public class PlayerManager : MonoBehaviour
 
     public void PerformLightAttack()
     {
-        if (playerCombatSystem != null)
+        if (playerCombatSystem != null && !isAttacking)
         {
             playerCombatSystem.PerformAttack();
         }
@@ -96,7 +99,7 @@ public class PlayerManager : MonoBehaviour
 
     public void PerformHeavyAttack()
     {
-        if (playerCombatSystem != null)
+        if (playerCombatSystem != null && !isAttacking)
         {
             playerCombatSystem.PerformHeavyAttack();
         }
@@ -264,6 +267,11 @@ public class PlayerManager : MonoBehaviour
     public float GetCurrentHealth() => currentHealth;
 
     public float GetMaxHealth() => maxHealth;
+
+    public void SetAttacking(bool attacking)
+    {
+        isAttacking = attacking;
+    }
 
     public Slider GetHealthSlider() => healthSlider;
 }

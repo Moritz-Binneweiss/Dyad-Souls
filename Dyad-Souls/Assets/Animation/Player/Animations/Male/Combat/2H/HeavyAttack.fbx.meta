@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 63218bf056437764099d383d1e38de4a
+guid: cfc4952b93e863741b5868ab592ef3ee
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -31,7 +31,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: HumanM@Attack2H01
+      name: HeavyAttack
       takeName: Untitled
       internalID: 3094330708855449807
       firstFrame: 0
@@ -968,8 +968,7 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 2faa610713d3b3c439473daa55e8c60a,
-    type: 3}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 2faa610713d3b3c439473daa55e8c60a, type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 3
   humanoidOversampling: 1

@@ -13,10 +13,8 @@ public class PlayerCombatSystem : MonoBehaviour
     private Collider weaponCollider;
     private WeaponDamage weaponDamage;
     private GameObject trailEffect;
-
-    [Header("Combat Settings")]
-    [SerializeField]
-    private string heavyAttackAnimation = "HeavyAttack";
+    private GameObject waterfowlEffect;
+    private GameObject windSlashEffect;
 
     private void Awake()
     {
@@ -64,6 +62,22 @@ public class PlayerCombatSystem : MonoBehaviour
             trailEffect = trailTransform.gameObject;
             trailEffect.SetActive(false);
         }
+
+        // Find and disable WaterfowlDance effect
+        Transform waterfowlDanceTransform = currentSword.transform.Find("WaterfowlEffect");
+        if (waterfowlDanceTransform != null)
+        {
+            waterfowlEffect = waterfowlDanceTransform.gameObject;
+            waterfowlEffect.SetActive(false);
+        }
+
+        // Find and disable WindSlash effect
+        Transform windSlashTransform = currentSword.transform.Find("WindSlash");
+        if (windSlashTransform != null)
+        {
+            windSlashEffect = windSlashTransform.gameObject;
+            windSlashEffect.SetActive(false);
+        }
     }
 
     public void PerformAttack()
@@ -89,7 +103,7 @@ public class PlayerCombatSystem : MonoBehaviour
 
     public void PerformHeavyAttack()
     {
-        if (animator != null && !string.IsNullOrEmpty(heavyAttackAnimation))
+        if (animator != null)
         {
             if (player.playerStaminaSystem != null)
             {
@@ -104,7 +118,7 @@ public class PlayerCombatSystem : MonoBehaviour
             if (weaponDamage != null)
                 weaponDamage.SetHeavyAttackDamage();
 
-            animator.CrossFade(heavyAttackAnimation, 0.2f, 0);
+            animator.SetTrigger("HeavyAttack");
         }
     }
 
@@ -131,6 +145,19 @@ public class PlayerCombatSystem : MonoBehaviour
     {
         if (trailEffect != null)
             trailEffect.SetActive(false);
+    }
+
+    // Animation Event Methods for WindSlash Effect
+    public void WindSlashesOn()
+    {
+        if (windSlashEffect != null)
+            windSlashEffect.SetActive(true);
+    }
+
+    public void WindSlashesOff()
+    {
+        if (windSlashEffect != null)
+            windSlashEffect.SetActive(false);
     }
 
     public void PerformDodge()
