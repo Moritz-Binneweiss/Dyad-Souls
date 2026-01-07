@@ -183,7 +183,7 @@ Ziel:
 
 Besprechung:
 
-- 
+- Ziele vorgestellt
 
 Ziel:
 
@@ -191,3 +191,17 @@ Ziel:
 - Verbessern und Erweitern
 - Special Effects erweitern
 - Sound Effects anfangen
+
+#### **08.01.2026**
+
+Besprechung:
+
+- Polishing Effekte (Slashes, Environmental, etc.)
+- Phase 2 (Design, Boss, Effekte, etc.)
+- Updated Models
+
+Ziel:
+
+- Cinematics
+- Kleinigkeiten (Camera Shake, Collider für Wände, etc.)
+- Verbesserungen und kleine Erweiterungen
