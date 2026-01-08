@@ -183,6 +183,8 @@ Ziel:
 
 Besprechung:
 
+- Effects Shader gezeigt und gefragt -> 
+- Cascadeur wurde ganz kurz angetestet
 - Ziele vorgestellt
 
 Ziel:
@@ -199,9 +201,16 @@ Besprechung:
 - Polishing Effekte (Slashes, Environmental, etc.)
 - Phase 2 (Design, Boss, Effekte, etc.)
 - Updated Models
+- Subtrees in Behaviour Trees 
 
 Ziel:
 
 - Cinematics
 - Kleinigkeiten (Camera Shake, Collider für Wände, etc.)
 - Verbesserungen und kleine Erweiterungen
+
+- Präsentation:
+- Technische Herausforderungen
+- Technik (wie funktioniert was)
+- Features
+
