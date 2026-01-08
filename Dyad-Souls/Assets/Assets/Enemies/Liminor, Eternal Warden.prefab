@@ -161,6 +161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20ac4fdedc0416948a173ba5cef1f969, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyManager
+  behaviorTree: {fileID: 0}
   maxHealth: 1000
   bossHealthSlider: {fileID: 0}
   bossNameText: {fileID: 0}
