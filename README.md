@@ -2,12 +2,47 @@
 
 ## **Mitwirkende**
 
-- **Moritz Binneweiß** - Lead Developer
-- **Sebastian Schuster** - Lead Developer
+- **Moritz Binneweiß** - Models, Designs, Development
+- **Sebastian Schuster** - Animations, Effects, Development
+
+Unity Version: 6000.2.6f2
 
 ### **Figma Board**
 
 - https://www.figma.com/board/uUtF92ZtxAHNdhbk2m4GBN/Blood---Honor?node-id=0-1&t=b68sJGUsaQNf1V7O-1
+
+## Verwendete Assets
+
+- Asset 2: `Name + (Optional) Publisher + <Link>`
+- Asset 3: `Name + (Optional) Publisher + <Link>`
+
+## Steuerung
+
+|           Taste           |             Funktion             |
+| :-----------------------: | :------------------------------: |
+|           **W**           |         Vorwärts bewegen         |
+|           **S**           |        Rückwärts bewegen         |
+|           **A**           |        Nach links bewegen        |
+|           **D**           |       Nach rechts bewegen        |
+|         **Maus**          | Umschauen / Blickrichtung ändern |
+| **LMB (Linke Maustaste)** |             Schießen             |
+|           **R**           |            Nachladen             |
+
+## Beschreibung des Projektes
+
+Dieses Prototyping-Projekt dient als Grundlage zur Evaluierung der ECS-Architektur (Entity Component System) in Unity und implementiert ein rudimentäres Kampfsystem mit Raycasting für Treffererkennung. Das Hauptziel ist die Optimierung der Performance bei einer hohen Anzahl von interagierenden Spielobjekten durch die Nutzung des Unity DOTS (Data-Oriented Technology Stack) Ansatzes. Die Asset-Pipeline ist so konfiguriert, dass sie Asynchrone Ladevorgänge unterstützt, um Ladezeiten zu minimieren und ein flüssiges Spielerlebnis zu gewährleisten.
+
+## Verwendete Technologien
+
+- Für die hoch performante Simulation des Gameplays wird primär der Data-Oriented Technology Stack (DOTS) genutzt.
+- Speziell kommen hier die Module Entitys, Jobs und der Burst Compiler zum Einsatz, um die Parallelisierung und Effizienz der Komponentenverarbeitung zu maximieren.
+- [...]
+
+## Besondere Herausforderungen / Lessions Learned
+
+## (Optional) Besondere Leistung
+
+---
 
 ## **Features**
 
@@ -183,7 +218,7 @@ Ziel:
 
 Besprechung:
 
-- Effects Shader gezeigt und gefragt -> 
+- Effects Shader gezeigt und gefragt ->
 - Cascadeur wurde ganz kurz angetestet
 - Ziele vorgestellt
 
@@ -201,7 +236,7 @@ Besprechung:
 - Polishing Effekte (Slashes, Environmental, etc.)
 - Phase 2 (Design, Boss, Effekte, etc.)
 - Updated Models
-- Subtrees in Behaviour Trees 
+- Subtrees in Behaviour Trees
 
 Ziel:
 
@@ -213,4 +248,3 @@ Ziel:
 - Technische Herausforderungen
 - Technik (wie funktioniert was)
 - Features
-
