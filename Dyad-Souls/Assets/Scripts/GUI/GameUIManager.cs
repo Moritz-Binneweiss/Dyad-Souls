@@ -17,10 +17,7 @@ public class GameUIManager : MonoBehaviour
     private GameObject gameOverUI;
 
     [SerializeField]
-    private TextMeshProUGUI waveCountdownText;
-
-    [SerializeField]
-    private GameObject enemyDefeatedText;
+    private GameObject victoryUI;
 
     [Header("Player Stamina UI References")]
     [SerializeField]
@@ -155,35 +152,17 @@ public class GameUIManager : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
-    public void ShowWaveCountdown(int nextWave, int seconds)
+    public void ShowVictory()
     {
-        if (waveCountdownText != null)
+        if (victoryUI != null)
         {
-            waveCountdownText.text = $"Wave {nextWave} starting in {seconds}...";
-            waveCountdownText.gameObject.SetActive(true);
+            this.victoryUI.SetActive(true);
+            VictoryUI victoryUI = this.victoryUI.GetComponent<VictoryUI>();
+            if (victoryUI != null)
+            {
+                StartCoroutine(victoryUI.ShowVictorySequence());
+            }
         }
-    }
-
-    public void HideWaveCountdown()
-    {
-        if (waveCountdownText != null)
-        {
-            waveCountdownText.gameObject.SetActive(false);
-        }
-    }
-
-    public void ShowEnemyDefeated()
-    {
-        if (enemyDefeatedText != null)
-        {
-            enemyDefeatedText.SetActive(true);
-        }
-    }
-
-    public void HideEnemyDefeated()
-    {
-        if (enemyDefeatedText != null)
-            enemyDefeatedText.SetActive(false);
     }
 
     public Slider GetPlayerOneStaminaSlider() => playerOneStaminaSlider;

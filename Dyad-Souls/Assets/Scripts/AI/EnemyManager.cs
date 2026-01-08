@@ -1,4 +1,5 @@
 using BehaviorDesigner.Runtime;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,6 +7,9 @@ public class EnemyManager : MonoBehaviour
 {
     [Header("Components")]
     private Animator animator;
+    
+    [Header("Behavior Tree Selection")]
+    [SerializeField]
     private BehaviorTree behaviorTree;
 
     [Header("Health Settings")]
@@ -17,6 +21,9 @@ public class EnemyManager : MonoBehaviour
     [SerializeField]
     private Slider bossHealthSlider;
 
+    [SerializeField]
+    private TextMeshProUGUI bossNameText;
+
     private bool isAlive = true;
 
     [Header("Death Animation Settings")]
@@ -26,7 +33,13 @@ public class EnemyManager : MonoBehaviour
     void Start()
     {
         animator = GetComponent<Animator>();
-        behaviorTree = GetComponent<BehaviorTree>();
+        
+        // If no behavior tree is assigned, try to get one from the component
+        if (behaviorTree == null)
+        {
+            behaviorTree = GetComponent<BehaviorTree>();
+        }
+        
         currentHealth = maxHealth;
         UpdateHealthUI();
     }
@@ -63,8 +76,9 @@ public class EnemyManager : MonoBehaviour
         foreach (Collider col in GetComponents<Collider>())
             col.enabled = false;
 
-        if (bossHealthSlider != null)
-            bossHealthSlider.gameObject.SetActive(false);
+        // Don't hide health bar - let GameManager handle the phase transition
+        // if (bossHealthSlider != null)
+        //     bossHealthSlider.gameObject.SetActive(false);
 
         if (animator != null)
         {
@@ -113,6 +127,20 @@ public class EnemyManager : MonoBehaviour
             bossHealthSlider.gameObject.SetActive(true);
 
         UpdateHealthUI();
+    }
+
+    public void ResetToFullHealth()
+    {
+        currentHealth = maxHealth;
+        UpdateHealthUI();
+    }
+
+    public void SetBossName(string newName)
+    {
+        if (bossNameText != null)
+        {
+            bossNameText.text = newName;
+        }
     }
 
     void OnTriggerEnter(Collider other)

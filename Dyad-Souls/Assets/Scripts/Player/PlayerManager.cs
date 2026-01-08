@@ -25,12 +25,22 @@ public class PlayerManager : MonoBehaviour
     [SerializeField]
     private Slider healthSlider;
 
+    [SerializeField]
+    private float healthRegenRate = 2f;
+
+    [SerializeField]
+    private float healthRegenDelay = 5f;
+
     [Header("Death Animation Settings")]
     [SerializeField]
     private float deathAnimationDuration = 2.5f;
 
     private float currentHealth;
     private bool isDead = false;
+    private float timeSinceLastDamage;
+    private bool isAttacking = false;
+
+    public bool IsAttacking => isAttacking;
 
     private void Awake()
     {
@@ -52,6 +62,23 @@ public class PlayerManager : MonoBehaviour
         {
             playerMovement.HandleMovement();
         }
+
+        if (!isDead)
+        {
+            RegenerateHealth();
+        }
+    }
+
+    private void RegenerateHealth()
+    {
+        timeSinceLastDamage += Time.deltaTime;
+
+        if (timeSinceLastDamage >= healthRegenDelay && currentHealth < maxHealth)
+        {
+            currentHealth += healthRegenRate * Time.deltaTime;
+            currentHealth = Mathf.Min(currentHealth, maxHealth);
+            UpdateHealthUI();
+        }
     }
 
     private void LateUpdate()
@@ -64,7 +91,7 @@ public class PlayerManager : MonoBehaviour
 
     public void PerformLightAttack()
     {
-        if (playerCombatSystem != null)
+        if (playerCombatSystem != null && !isAttacking)
         {
             playerCombatSystem.PerformAttack();
         }
@@ -72,7 +99,7 @@ public class PlayerManager : MonoBehaviour
 
     public void PerformHeavyAttack()
     {
-        if (playerCombatSystem != null)
+        if (playerCombatSystem != null && !isAttacking)
         {
             playerCombatSystem.PerformHeavyAttack();
         }
@@ -125,6 +152,7 @@ public class PlayerManager : MonoBehaviour
 
         currentHealth -= damage;
         currentHealth = Mathf.Max(0, currentHealth);
+        timeSinceLastDamage = 0f;
 
         UpdateHealthUI();
 
@@ -195,6 +223,7 @@ public class PlayerManager : MonoBehaviour
 
         isDead = false;
         currentHealth = maxHealth;
+        timeSinceLastDamage = 0f;
         UpdateHealthUI();
 
         foreach (Collider col in GetComponents<Collider>())
@@ -238,6 +267,11 @@ public class PlayerManager : MonoBehaviour
     public float GetCurrentHealth() => currentHealth;
 
     public float GetMaxHealth() => maxHealth;
+
+    public void SetAttacking(bool attacking)
+    {
+        isAttacking = attacking;
+    }
 
     public Slider GetHealthSlider() => healthSlider;
 }

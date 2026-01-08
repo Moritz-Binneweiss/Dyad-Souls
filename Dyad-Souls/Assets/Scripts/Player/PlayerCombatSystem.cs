@@ -12,10 +12,9 @@ public class PlayerCombatSystem : MonoBehaviour
     private GameObject currentSword;
     private Collider weaponCollider;
     private WeaponDamage weaponDamage;
-
-    [Header("Combat Settings")]
-    [SerializeField]
-    private string heavyAttackAnimation = "HeavyAttack";
+    private GameObject trailEffect;
+    private GameObject waterfowlEffect;
+    private GameObject windSlashEffect;
 
     private void Awake()
     {
@@ -55,6 +54,30 @@ public class PlayerCombatSystem : MonoBehaviour
             weaponCollider.enabled = false;
 
         weaponDamage = currentSword.GetComponentInChildren<WeaponDamage>();
+
+        // Find and disable Trail effect
+        Transform trailTransform = currentSword.transform.Find("Trail");
+        if (trailTransform != null)
+        {
+            trailEffect = trailTransform.gameObject;
+            trailEffect.SetActive(false);
+        }
+
+        // Find and disable WaterfowlDance effect
+        Transform waterfowlDanceTransform = currentSword.transform.Find("WaterfowlEffect");
+        if (waterfowlDanceTransform != null)
+        {
+            waterfowlEffect = waterfowlDanceTransform.gameObject;
+            waterfowlEffect.SetActive(false);
+        }
+
+        // Find and disable WindSlash effect
+        Transform windSlashTransform = currentSword.transform.Find("WindSlash");
+        if (windSlashTransform != null)
+        {
+            windSlashEffect = windSlashTransform.gameObject;
+            windSlashEffect.SetActive(false);
+        }
     }
 
     public void PerformAttack()
@@ -80,7 +103,7 @@ public class PlayerCombatSystem : MonoBehaviour
 
     public void PerformHeavyAttack()
     {
-        if (animator != null && !string.IsNullOrEmpty(heavyAttackAnimation))
+        if (animator != null)
         {
             if (player.playerStaminaSystem != null)
             {
@@ -95,7 +118,7 @@ public class PlayerCombatSystem : MonoBehaviour
             if (weaponDamage != null)
                 weaponDamage.SetHeavyAttackDamage();
 
-            animator.CrossFade(heavyAttackAnimation, 0.2f, 0);
+            animator.SetTrigger("HeavyAttack");
         }
     }
 
@@ -109,6 +132,32 @@ public class PlayerCombatSystem : MonoBehaviour
     {
         if (weaponCollider != null)
             weaponCollider.enabled = false;
+    }
+
+    // Animation Event Methods for Trail Effect
+    public void SlashEffectOn()
+    {
+        if (trailEffect != null)
+            trailEffect.SetActive(true);
+    }
+
+    public void SlashEffectOff()
+    {
+        if (trailEffect != null)
+            trailEffect.SetActive(false);
+    }
+
+    // Animation Event Methods for WindSlash Effect
+    public void WindSlashesOn()
+    {
+        if (windSlashEffect != null)
+            windSlashEffect.SetActive(true);
+    }
+
+    public void WindSlashesOff()
+    {
+        if (windSlashEffect != null)
+            windSlashEffect.SetActive(false);
     }
 
     public void PerformDodge()
