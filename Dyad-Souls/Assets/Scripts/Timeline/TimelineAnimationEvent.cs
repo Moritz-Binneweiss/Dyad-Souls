@@ -11,7 +11,8 @@ using UnityEngine.Playables;
 public class TimelineAnimationEvent : MonoBehaviour
 {
     [Header("Timeline Reference")]
-    [SerializeField] private PlayableDirector slashTimeline;
+    [SerializeField]
+    private PlayableDirector slashTimeline;
 
     /// <summary>
     /// Rufe diese Funktion als Animation Event auf

@@ -7,7 +7,7 @@ public class EnemyManager : MonoBehaviour
 {
     [Header("Components")]
     private Animator animator;
-    
+
     [Header("Behavior Tree Selection")]
     [SerializeField]
     private BehaviorTree behaviorTree;
@@ -33,13 +33,13 @@ public class EnemyManager : MonoBehaviour
     void Start()
     {
         animator = GetComponent<Animator>();
-        
+
         // If no behavior tree is assigned, try to get one from the component
         if (behaviorTree == null)
         {
             behaviorTree = GetComponent<BehaviorTree>();
         }
-        
+
         currentHealth = maxHealth;
         UpdateHealthUI();
     }

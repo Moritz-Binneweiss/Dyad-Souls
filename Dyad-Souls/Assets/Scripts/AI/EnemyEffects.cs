@@ -16,15 +16,14 @@ public class EnemyEffects : MonoBehaviour
     [Header("Earthshaker Effect Parts")]
     private GameObject earthShatter;
     private GameObject spikes;
-    private GameObject shockwave; 
+    private GameObject shockwave;
 
     [Header("Earthquake Effect Parts")]
     private GameObject shock;
     private GameObject dust;
     private GameObject rocks;
     private GameObject fireExplosion;
-    
-    
+
     private void Start()
     {
         InitializeEarthshaker();
@@ -64,8 +63,7 @@ public class EnemyEffects : MonoBehaviour
         }
     }
 
-
-//Earthshaker Actionevents
+    //Earthshaker Actionevents
     public void EarthshakerEffectOn()
     {
         if (earthshakerEffect != null)
@@ -73,6 +71,7 @@ public class EnemyEffects : MonoBehaviour
             earthshakerEffect.SetActive(true);
         }
     }
+
     public void EarthshakerEffectOff()
     {
         if (earthshakerEffect != null)
@@ -88,6 +87,7 @@ public class EnemyEffects : MonoBehaviour
             earthShatter.SetActive(true);
         }
     }
+
     public void EarthShatterOff()
     {
         if (earthShatter != null)
@@ -103,6 +103,7 @@ public class EnemyEffects : MonoBehaviour
             spikes.SetActive(true);
         }
     }
+
     public void SpikesOff()
     {
         if (spikes != null)
@@ -118,6 +119,7 @@ public class EnemyEffects : MonoBehaviour
             shockwave.SetActive(true);
         }
     }
+
     public void ShockwaveOff()
     {
         if (shockwave != null)
@@ -126,8 +128,7 @@ public class EnemyEffects : MonoBehaviour
         }
     }
 
-
-//Earthquake Actionevents
+    //Earthquake Actionevents
     public void SmashOn()
     {
         if (earthquakeEffect != null)
@@ -135,6 +136,7 @@ public class EnemyEffects : MonoBehaviour
             earthquakeEffect.SetActive(true);
         }
     }
+
     public void SmashOff()
     {
         if (earthquakeEffect != null)
@@ -150,6 +152,7 @@ public class EnemyEffects : MonoBehaviour
             shock.SetActive(true);
         }
     }
+
     public void ShockOff()
     {
         if (shock != null)
@@ -165,6 +168,7 @@ public class EnemyEffects : MonoBehaviour
             dust.SetActive(true);
         }
     }
+
     public void DustOff()
     {
         if (dust != null)
@@ -180,6 +184,7 @@ public class EnemyEffects : MonoBehaviour
             rocks.SetActive(true);
         }
     }
+
     public void RocksOff()
     {
         if (rocks != null)
@@ -195,6 +200,7 @@ public class EnemyEffects : MonoBehaviour
             fireExplosion.SetActive(true);
         }
     }
+
     public void FireExplosionOff()
     {
         if (fireExplosion != null)
@@ -202,5 +208,4 @@ public class EnemyEffects : MonoBehaviour
             fireExplosion.SetActive(false);
         }
     }
-
 }
