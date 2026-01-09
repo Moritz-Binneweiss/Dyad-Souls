@@ -57,9 +57,32 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField]
     private float lockOnHeightOffset = 1.5f;
 
+    [Header("Camera Shake Settings")]
+    [SerializeField]
+    private float shakeIntensity = 0.3f;
+
+    [SerializeField]
+    private float shakeDuration = 0.2f;
+
+    private float shakeTimer = 0f;
+    private Vector3 originalPivotPosition;
+
+    private Rect originalViewportRect;
+    private bool isFullscreen = false;
+    private bool isTransitioning = false;
+
+    [Header("Transition Settings")]
+    [SerializeField]
+    private float transitionDuration = 0.8f;
+
     private void Start()
     {
         cameraZPosition = cameraObject.transform.localPosition.z;
+        if (cameraPivotTransform != null)
+            originalPivotPosition = cameraPivotTransform.localPosition;
+
+        if (cameraObject != null)
+            originalViewportRect = cameraObject.rect;
     }
 
     public void HandleAllCameraActions()
@@ -74,7 +97,29 @@ public class PlayerCamera : MonoBehaviour
                 HandleRotations();
 
             HandleCollisions();
+            HandleCameraShake();
         }
+    }
+
+    private void HandleCameraShake()
+    {
+        if (shakeTimer > 0f)
+        {
+            shakeTimer -= Time.deltaTime;
+
+            Vector3 shakeOffset = Random.insideUnitSphere * shakeIntensity;
+            cameraPivotTransform.localPosition = originalPivotPosition + shakeOffset;
+
+            if (shakeTimer <= 0f)
+            {
+                cameraPivotTransform.localPosition = originalPivotPosition;
+            }
+        }
+    }
+
+    public void TriggerShake()
+    {
+        shakeTimer = shakeDuration;
     }
 
     private void HandleFollowTarget()
@@ -258,4 +303,68 @@ public class PlayerCamera : MonoBehaviour
     }
 
     public bool IsLockedOn() => isLockedOn;
+
+    public void SetFullscreen(bool fullscreen)
+    {
+        if (isTransitioning)
+            return;
+
+        isFullscreen = fullscreen;
+
+        if (cameraObject != null)
+        {
+            if (fullscreen)
+            {
+                StartCoroutine(TransitionToFullscreen());
+            }
+            else
+            {
+                cameraObject.rect = originalViewportRect;
+            }
+        }
+    }
+
+    private System.Collections.IEnumerator TransitionToFullscreen()
+    {
+        isTransitioning = true;
+
+        Rect startRect = cameraObject.rect;
+        Rect targetRect = new Rect(0, 0, 1, 1);
+
+        float elapsed = 0f;
+
+        while (elapsed < transitionDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / transitionDuration;
+
+            // Smooth step for better transition feel
+            t = t * t * (3f - 2f * t);
+
+            // Interpolate viewport rect
+            cameraObject.rect = new Rect(
+                Mathf.Lerp(startRect.x, targetRect.x, t),
+                Mathf.Lerp(startRect.y, targetRect.y, t),
+                Mathf.Lerp(startRect.width, targetRect.width, t),
+                Mathf.Lerp(startRect.height, targetRect.height, t)
+            );
+
+            yield return null;
+        }
+
+        cameraObject.rect = targetRect;
+        isTransitioning = false;
+    }
+
+    public void DisableCamera()
+    {
+        if (cameraObject != null)
+            cameraObject.enabled = false;
+    }
+
+    public void EnableCamera()
+    {
+        if (cameraObject != null)
+            cameraObject.enabled = true;
+    }
 }

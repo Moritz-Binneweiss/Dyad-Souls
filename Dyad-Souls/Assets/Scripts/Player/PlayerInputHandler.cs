@@ -80,6 +80,8 @@ public class PlayerInputHandler : MonoBehaviour
     private float lastSprintTime = -1f;
     private const float sprintDebounceTime = 0.2f;
 
+    private Gamepad currentGamepad;
+
     private void Awake()
     {
         if (autoConfigureFromLobby)
@@ -198,6 +200,7 @@ public class PlayerInputHandler : MonoBehaviour
                     mouse,
                 };
             }
+            currentGamepad = null;
         }
         else
         {
@@ -206,7 +209,30 @@ public class PlayerInputHandler : MonoBehaviour
             if (gamepad != null)
             {
                 playerControls.devices = new UnityEngine.InputSystem.InputDevice[] { gamepad };
+                currentGamepad = gamepad;
             }
+        }
+    }
+
+    public void TriggerVibration(
+        float lowFrequency = 0.5f,
+        float highFrequency = 0.5f,
+        float duration = 0.2f
+    )
+    {
+        if (currentGamepad != null)
+        {
+            currentGamepad.SetMotorSpeeds(lowFrequency, highFrequency);
+            StartCoroutine(StopVibrationAfterDelay(duration));
+        }
+    }
+
+    private System.Collections.IEnumerator StopVibrationAfterDelay(float delay)
+    {
+        yield return new UnityEngine.WaitForSeconds(delay);
+        if (currentGamepad != null)
+        {
+            currentGamepad.SetMotorSpeeds(0f, 0f);
         }
     }
 
@@ -250,6 +276,11 @@ public class PlayerInputHandler : MonoBehaviour
             playerControls.Disable();
             playerControls.Dispose();
             playerControls = null;
+        }
+
+        if (currentGamepad != null)
+        {
+            currentGamepad.SetMotorSpeeds(0f, 0f);
         }
     }
 

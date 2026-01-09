@@ -156,6 +156,14 @@ public class PlayerManager : MonoBehaviour
 
         UpdateHealthUI();
 
+        // Trigger camera shake
+        if (playerCamera != null)
+            playerCamera.TriggerShake();
+
+        // Trigger gamepad vibration
+        if (playerInputManager != null)
+            playerInputManager.TriggerVibration(0.5f, 0.8f, 0.2f);
+
         if (currentHealth <= 0)
         {
             Die();
@@ -202,7 +210,41 @@ public class PlayerManager : MonoBehaviour
         if (gameManager != null)
             gameManager.OnPlayerDeath(this);
 
+        HandleCameraOnDeath();
+
         Invoke(nameof(DisablePlayer), deathAnimationDuration);
+    }
+
+    private void HandleCameraOnDeath()
+    {
+        // Find all players
+        PlayerManager[] allPlayers = FindObjectsByType<PlayerManager>(FindObjectsSortMode.None);
+
+        // Check if there's any other living player
+        bool hasOtherLivingPlayer = false;
+        PlayerManager otherLivingPlayer = null;
+
+        foreach (PlayerManager otherPlayer in allPlayers)
+        {
+            if (otherPlayer != this && !otherPlayer.IsDead())
+            {
+                hasOtherLivingPlayer = true;
+                otherLivingPlayer = otherPlayer;
+                break;
+            }
+        }
+
+        // Only disable this camera if there's another living player
+        if (hasOtherLivingPlayer)
+        {
+            if (playerCamera != null)
+                playerCamera.DisableCamera();
+
+            // Set other player's camera to fullscreen
+            if (otherLivingPlayer != null && otherLivingPlayer.playerCamera != null)
+                otherLivingPlayer.playerCamera.SetFullscreen(true);
+        }
+        // If no other living player, keep camera active for game over screen
     }
 
     private void DisablePlayer()
