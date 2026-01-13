@@ -77,8 +77,26 @@ Dyad Souls ist ein kooperatives 3D Souls-like Bossfight-Spiel für zwei Spieler 
 
 - **Behavior Designer** von Opsive (https://assetstore.unity.com/packages/tools/visual-scripting/behavior-designer-behavior-trees-for-everyone-15277) - Behavior Tree System für Boss-AI (bereitgestellt von den Betreuern)
 - **Behavior Designer - Movement Pack** von Opsive - Erweiterte Movement Actions für Behavior Trees (bereitgestellt von den Betreuern)
+
 - **UMotion Pro** von Soxware Interactive (https://assetstore.unity.com/packages/tools/animation/umotion-pro-animation-editor-95991) - Professional Animation Editor (bereitgestellt von den Betreuern)
--
+
+- **Scene Switcher Pro** von Ajay Uthaman (https://assetstore.unity.com/packages/tools/gui/scene-switcher-pro-313355) für schnelleres Scene Switching
+
+- **FREE - 32 RPG Animations** von Blink, ein paar Animationen erweitert oder direkt verwendet (https://assetstore.unity.com/packages/3d/animations/free-32-rpg-animations-215058)
+
+- **Free Quick Effects Vol. 1** von Gabriel Aguiar Prod, ein paar Effekte erweitert oder direkt verwendet (https://assetstore.unity.com/packages/vfx/particles/free-quick-effects-vol-1-304424)
+
+- **Giant Animations FREE** von Kevin Iglesias, ein paar Animationen erweitert oder direkt verwendet (https://assetstore.unity.com/packages/p/giant-animations-free-215962)
+
+- **Giant Monster Model - Golem** von Kevin Iglesias, Model erweitert zu unserer eigenen Varianten (https://assetstore.unity.com/packages/p/giant-monster-model-golem-278960)
+
+- **Human Basic Motions FREE** von Kevin Iglesias, ein paar Animationen erweitert oder direkt verwendet (https://assetstore.unity.com/packages/3d/animations/human-basic-motions-free-154271)
+
+- **Particle Pack** von Unity Technologies, ein paar Effekte erweitert oder direkt verwendet (https://assetstore.unity.com/packages/p/particle-pack-127325)
+
+- **Blender Material und Texture Palette** von Imphenzia, für Coloring der 3D Assets (https://imphenzia.com/assets)
+
+- **Cinematic Cutscene** erstellt aus Referenzbildern und Prompt von DeeVid AI (https://deevid.ai/de/image-to-video?utm_source=google&utm_medium=cpc&utm_campaign=de-competitor&utm_term=kaiber&utm_content=pc&gad_source=1&gad_campaignid=22753869722&gbraid=0AAAAAq898mOdAFCz08IgmKlupgCQCRGXy&gclid=Cj0KCQiAgbnKBhDgARIsAGCDdlcOOl_qlBdYVUjZ4OVjlCZ-byazqxuQ_hwl8JQ2pTDeb5BV-MS3pVgaAtK2EALw_wcB)
 
 ## Steuerung
 
