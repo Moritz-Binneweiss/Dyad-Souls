@@ -7,67 +7,99 @@
 
 Unity Version: 6000.2.6f2
 
-### **Figma Board**
+### Figma Board
 
-- https://www.figma.com/board/uUtF92ZtxAHNdhbk2m4GBN/Blood---Honor?node-id=0-1&t=b68sJGUsaQNf1V7O-1
+https://www.figma.com/board/uUtF92ZtxAHNdhbk2m4GBN/Dyad-Souls?node-id=0-1&t=A3mF4doLudXmPWks-1
 
-## Verwendete Assets
+### GitHub Repo
 
-- Asset 2: `Name + (Optional) Publisher + <Link>`
-- Asset 3: `Name + (Optional) Publisher + <Link>`
+https://github.com/Moritz-Binneweiss/Dyad-Souls
 
-## Steuerung
+### Link zum Video
 
-|           Taste           |             Funktion             |
-| :-----------------------: | :------------------------------: |
-|           **W**           |         Vorwärts bewegen         |
-|           **S**           |        Rückwärts bewegen         |
-|           **A**           |        Nach links bewegen        |
-|           **D**           |       Nach rechts bewegen        |
-|         **Maus**          | Umschauen / Blickrichtung ändern |
-| **LMB (Linke Maustaste)** |             Schießen             |
-|           **R**           |            Nachladen             |
+-
+
+## Start-Up Guide
+
+1. Projekt auf GitHub (z.B. als Zip) herunterladen
+2. Zip entpacken
+3. Projekt in Unity (Version: 6000.2.6f2) starten/öffnen
+4. MainMenu Scene öffnen
+5. Charakterauswahl treffen für Player 1 und Player 2
+6. Arena Scene wird geladen und das Spiel beginnt
 
 ## Beschreibung des Projektes
 
-Dieses Prototyping-Projekt dient als Grundlage zur Evaluierung der ECS-Architektur (Entity Component System) in Unity und implementiert ein rudimentäres Kampfsystem mit Raycasting für Treffererkennung. Das Hauptziel ist die Optimierung der Performance bei einer hohen Anzahl von interagierenden Spielobjekten durch die Nutzung des Unity DOTS (Data-Oriented Technology Stack) Ansatzes. Die Asset-Pipeline ist so konfiguriert, dass sie Asynchrone Ladevorgänge unterstützt, um Ladezeiten zu minimieren und ein flüssiges Spielerlebnis zu gewährleisten.
+Dyad Souls ist ein kooperatives 3D Souls-like Bossfight-Spiel für zwei Spieler im Splitscreen. Inspiriert von Dark Souls und Elden Ring, müssen zwei Spieler gleichzeitig gegen einen KI-gesteuerten Boss kämpfen, der durch einen komplexen Behavior Tree gesteuert wird. Die Spieler müssen ihre Ausdauer (Stamina) managen, Angriffen ausweichen und den perfekten Moment zum Zuschlagen finden. Das Projekt setzt auf Unity's neues Input System für gerätebasiertes Multiplayer-Gameplay und nutzt UMotion Pro für hochwertige Kampfanimationen.
 
 ## Verwendete Technologien
 
-- Für die hoch performante Simulation des Gameplays wird primär der Data-Oriented Technology Stack (DOTS) genutzt.
-- Speziell kommen hier die Module Entitys, Jobs und der Burst Compiler zum Einsatz, um die Parallelisierung und Effizienz der Komponentenverarbeitung zu maximieren.
-- [...]
+- **Unity 6000.2.6f2** als Game Engine mit Universal Render Pipeline (URP)
+- **Unity's neues Input System** für flexible Controller- und Keyboard-Unterstützung
+- **Behavior Designer** (Third-Party Asset) mit Movement Pack für komplexe KI-Verhaltensmuster des Bosses
+- **UMotion Pro** für Animations Erstellung und bearbeitung
+- **NavMesh** für Boss-Pathfinding und Bewegung
+- **Unity Animator** mit State Machines für Player- und Boss-Animationen
+- **Animation Events** für präzises Timing von Damage-Triggern während Angriffen
+- **CharacterController** für physikbasierte Spielerbewegung
+- **Cinemachine** für dynamische Splitscreen-Kamera mit automatischer Anpassung
+- **Coroutines** für zeitbasierte Effekte (Camera Shake, Stamina Regeneration, etc.)
+- **Partikel System** für Erstellung von Specifal Effects
+- **Blender** für Erstellung und bearbeitung der 3D Models und Assets
 
 ## Besondere Herausforderungen / Lessions Learned
 
-## (Optional) Besondere Leistung
+- **Behavior Tree Komplexität**: Die Entwicklung eines umfangreichen Behaviour Trees erforderte ausführliche auseinandersetzung und stellt oft Probleme dar, aufgrund von wenig Erfahrung mit dem Tool.
 
----
+- **Animation-Code Synchronisation**: Die präzise Synchronisation von Animations-Events mit Code-Logic (Damage-Dealing, Attack-Ranges) war kritisch für den Bossfight. Die Zentralisierung in `EnemyDamage.cs` löste Inkonsistenzen. Aber dennoch war es ein häufiges Fehlerkriterium.
 
-## **Features**
+- **Input System Device Binding**: Das Binden der Input-Devices (Keyboard vs. Gamepad) vorallem beim Charater Selector hatte anfangs erstmal ein bisschen Verständnis und beharrlichkeit erfordert.
 
-- Souls like Bossfight (Gladiator Koop TagTeam)
-- Split Screen mit variablen Ansichten
-- 2 Player (einer im Fight, einer Support)
-- Bosse Wellenbasiert, wird schwieriger (versch. Phasen, mehr Leben, versch. Attacken u. Animationen)
-- Player haben Health - und Staminabar
+- **Animationen**: Um erfolgreiche Animationen umzusetzen, selbst mit einem Tool wie UMotion Pro ist immernoch sehr sehr Zeitaufwendig und selbst dann gibt es immer etwas zu verbessern. Das Thema ist und erfordert sehr intensive Auseinandersetzung und Übung.
 
-## **Gameplay**
+## Besondere Leistungen
 
-- Lobby -> Auswahl für Start Rolle
-- Beide gleiches Start Equipment
-- Support macht Quests für Buffs, etc.
-- Durch gleichzeitiges betätigen eines Buttons wird die Position getauscht
-- Sobald Boss besiegt gibt es eine Belohnung z.B 3 Chests und der zu dem Zeitpunkt aktuelle Support entscheidet für den jeweils anderen
+- **Vollständig implementierter Behavior Tree**: Entwicklung eines komplexen, Boss-AI-Systems mit 10+ Custom Actions und intelligenter Entscheidungsfindung basierend auf Spieler-Proximity und Boss-Health.
 
-## **Technische Details**
+- **Elden Ring-inspiriertes Damage Preview System**: Implementation einer visuellen Ghost Health Bar für den Boss, die Schaden visuell anzeigt bevor er abgezogen wird.
 
-- Behaviour Tree Designer + Movement Pack
-- UMotionPro
+- **Poliertes Combat Feel**: Integration von Camera Shake, Gamepad-Vibration, Stamina-Management, Dodge-Rolls, Attack-Buffering und responsive Movement für ein authentisches Souls-like Gefühl.
 
-## **Protokolle**
+- **Dynamische Kamera**: Smooth Transitions zwischen Splitscreen und Fullscreen mit Coroutine-basierter Animation, die sich an Player-Tod anpasst.
 
-#### **02.10.2025**
+- **Umfangreiches Animation System**: Über 25+ Animationen für Player und Boss, erstellt und oder bearbeitet mit UMotion Pro.
+
+- **Selbst erstellte Assets**: Background, Models und Animationen wurden eigenständig erstellt, bearbeitet oder erweitert von Images, Golem Asset von Kevin Iglesias, Mixamo und weiteren Inspirationen.
+
+- **Zweite Phase des Boss**: Phase Transition, anderes Movement, Model, Effects, etc.
+
+## Verwendete Assets
+
+- **Behavior Designer** von Opsive (https://assetstore.unity.com/packages/tools/visual-scripting/behavior-designer-behavior-trees-for-everyone-15277) - Behavior Tree System für Boss-AI (bereitgestellt von den Betreuern)
+- **Behavior Designer - Movement Pack** von Opsive - Erweiterte Movement Actions für Behavior Trees (bereitgestellt von den Betreuern)
+- **UMotion Pro** von Soxware Interactive (https://assetstore.unity.com/packages/tools/animation/umotion-pro-animation-editor-95991) - Professional Animation Editor (bereitgestellt von den Betreuern)
+-
+
+## Steuerung
+
+| Taste (Tastatur & Maus) / Button (Gamepad) |                          Funktion                          |
+| :----------------------------------------: | :--------------------------------------------------------: |
+|          **W,A,S,D / Left Stick**          |                          Bewegung                          |
+|           **Maus / Right Stick**           |                       Kamera bewegen                       |
+|    **Linke Maustaste / Right Shoulder**    |                      Leichter Angriff                      |
+|    **Rechte Maustaste / Right Trigger**    |                      Schwerer Angriff                      |
+|   **Mittlere Maustaste / Left Trigger**    |                      Spezial Angriff                       |
+|          **Space / Button South**          |                          Springen                          |
+|     **Left Shift / Left Stick Press**      |                          Sprinten                          |
+|       **Left Control / Button East**       |                     Ausweichen / Rolle                     |
+|            **C / Button West**             |                           Ducken                           |
+|         **Escape / Start Button**          |                           Pause                            |
+|         **F / Right Stick Press**          |              Fokussieren (wenn in Reichweite)              |
+|            **E / Button North**            | Interagieren / Positionstausch (beide gleichzeitig halten) |
+
+## Protokolle
+
+#### **02.10.2024**
 
 Besprechung:
 
@@ -94,7 +126,7 @@ Für die Präsentation:
 - MVP (Minimum Viable Product)
 - Nice-To-Haves
 
-#### **16.10.2025**
+#### **16.10.2024**
 
 Besprechung:
 
@@ -110,7 +142,7 @@ Ziel:
 - minimaler Bosskampf möglich
 - Prototyp über die ganzen Funktionen
 
-#### **23.10.2025**
+#### **23.10.2024**
 
 Besprechung:
 
@@ -124,7 +156,7 @@ Ziel:
 - Attack Buffer
 - Elden Ring Wiki (Boss AI Behaviour Inspiration)
 
-#### **30.10.2025**
+#### **30.10.2024**
 
 Besprechung:
 
@@ -137,7 +169,7 @@ Ziel:
 - an MVP weiterarbeiten
 - Fokus auf den einen Bossfight
 
-#### **06.11.2025**
+#### **06.11.2024**
 
 Besprechung:
 
@@ -152,7 +184,7 @@ Ziel:
 - Behaviour Tree Bugs beheben und verbessern
 - eigene Basic Assets anfertigen
 
-#### **13.11.2025**
+#### **13.11.2024**
 
 Besprechung:
 
@@ -177,7 +209,7 @@ Für die Präsentation:
 - Ziele bis zum Ende
 - 10-15min
 
-#### **20.11.2025**
+#### **20.11.2024**
 
 Besprechung:
 
@@ -188,7 +220,7 @@ Ziel:
 - Nice-To-Have Features anfangen
 - Verbessern und Erweitern
 
-#### **04.12.2025**
+#### **04.12.2024**
 
 Besprechung:
 
@@ -200,7 +232,7 @@ Ziel:
 - Weitere Animations hinzufügen
 - Verbessern und Erweitern
 
-#### **11.12.2025**
+#### **11.12.2024**
 
 Besprechung:
 
@@ -214,7 +246,7 @@ Ziel:
 - Special Effects anfangen
 - Cascadeur Tool ausprobieren
 
-#### **18.12.2025**
+#### **18.12.2024**
 
 Besprechung:
 
@@ -244,7 +276,22 @@ Ziel:
 - Kleinigkeiten (Camera Shake, Collider für Wände, etc.)
 - Verbesserungen und kleine Erweiterungen
 
-- Präsentation:
-- Technische Herausforderungen
-- Technik (wie funktioniert was)
-- Features
+Präsentation:
+
+- 15 min
+- Technische Herausforderungen erklären
+- Technik zeigen (Behavior Trees, Animation Events, Splitscreen System)
+- Features demonstrieren
+- Gameplay präsentieren
+
+#### **13.01.2026**
+
+Abschluss:
+
+- Ghost Health Bar System implementiert (Elden Ring-style Damage Preview)
+- Smooth Camera Transitions zwischen Splitscreen und Fullscreen
+- Camera Shake und Gamepad Vibration bei Damage
+- Code Cleanup und Refactoring
+- Animation Events optimiert
+- Behavior Tree erweitert mit Subtrees
+- Finales Polishing und Bug Fixes
