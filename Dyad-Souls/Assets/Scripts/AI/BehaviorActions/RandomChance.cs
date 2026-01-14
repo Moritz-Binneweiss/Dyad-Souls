@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class RandomChance : Conditional
 {
-    [Tooltip("Probability of success (0.0 to 1.0)")]
     [Range(0f, 1f)]
     public SharedFloat probability = 0.5f;
 
