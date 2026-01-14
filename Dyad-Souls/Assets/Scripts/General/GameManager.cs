@@ -42,6 +42,13 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject phase2Arena;
 
+    [Header("Phase 2 Effects")]
+    [SerializeField]
+    private GameObject meteorRainEffect;
+
+    [SerializeField]
+    private GameObject bloodRainEffect;
+
     [SerializeField]
     private float phase2TransitionDelay = 2f;
 
@@ -87,6 +94,12 @@ public class GameManager : MonoBehaviour
             phase1Arena.SetActive(true);
         if (phase2Arena != null)
             phase2Arena.SetActive(false);
+
+        // Deactivate Phase 2 effects
+        if (meteorRainEffect != null)
+            meteorRainEffect.SetActive(false);
+        if (bloodRainEffect != null)
+            bloodRainEffect.SetActive(false);
     }
 
     void Update()
@@ -280,6 +293,12 @@ public class GameManager : MonoBehaviour
                 }
             }
 
+            // Activate Phase 2 effects
+            if (meteorRainEffect != null)
+                meteorRainEffect.SetActive(true);
+            if (bloodRainEffect != null)
+                bloodRainEffect.SetActive(true);
+
             // Give player a brief moment to see Phase 2 boss before combat starts
             yield return new WaitForSeconds(phase2BossIntroDuration);
 
@@ -355,6 +374,12 @@ public class GameManager : MonoBehaviour
                     bossBT.enabled = false;
                 }
             }
+
+            // Activate Phase 2 effects
+            if (meteorRainEffect != null)
+                meteorRainEffect.SetActive(true);
+            if (bloodRainEffect != null)
+                bloodRainEffect.SetActive(true);
 
             // Give player a brief moment to see Phase 2 boss before combat starts
             yield return new WaitForSeconds(phase2BossIntroDuration);
