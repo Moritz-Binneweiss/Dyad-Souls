@@ -141,7 +141,6 @@ public class PlayerCamera : MonoBehaviour
         float cameraHorizontalInput = player.playerInputManager.cameraHorizontalInput;
         float cameraVerticalInput = player.playerInputManager.cameraVerticalInput;
 
-        // Berechne Input-Magnitude für Threshold-Check
         float inputMagnitude =
             cameraHorizontalInput * cameraHorizontalInput
             + cameraVerticalInput * cameraVerticalInput;
@@ -153,19 +152,16 @@ public class PlayerCamera : MonoBehaviour
             upAndDownLookAngle -= (cameraVerticalInput * upAndDownRotationSpeed) * Time.deltaTime;
         }
 
-        // Clamp Winkel mit besserer Normalisierung (wie ThirdPersonController)
         leftAndRightLookAngle = ClampAngle(leftAndRightLookAngle, float.MinValue, float.MaxValue);
         upAndDownLookAngle = Mathf.Clamp(upAndDownLookAngle, minumPivot, maximumPivot);
 
         Vector3 cameraRotation = Vector3.zero;
         Quaternion targetRotation;
 
-        // Horizontale Rotation (Y-Achse)
         cameraRotation.y = leftAndRightLookAngle;
         targetRotation = Quaternion.Euler(cameraRotation);
         transform.rotation = targetRotation;
 
-        // Vertikale Rotation (X-Achse) am Pivot
         cameraRotation = Vector3.zero;
         cameraRotation.x = upAndDownLookAngle;
         targetRotation = Quaternion.Euler(cameraRotation);
@@ -338,10 +334,8 @@ public class PlayerCamera : MonoBehaviour
             elapsed += Time.deltaTime;
             float t = elapsed / transitionDuration;
 
-            // Smooth step for better transition feel
             t = t * t * (3f - 2f * t);
 
-            // Interpolate viewport rect
             cameraObject.rect = new Rect(
                 Mathf.Lerp(startRect.x, targetRect.x, t),
                 Mathf.Lerp(startRect.y, targetRect.y, t),

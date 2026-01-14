@@ -74,10 +74,10 @@ public class PhaseTransition : MonoBehaviour
     {
         isPlaying = true;
 
-        // 1. IMMEDIATELY pause time (before any delays)
+        // 1. Immediately pause time (before any delays)
         Time.timeScale = 0f;
 
-        // 2. Brief freeze moment (Elden Ring style)
+        // 2. Briefly freeze moment
         yield return new WaitForSecondsRealtime(pauseDurationBeforeFade);
 
         // 3. Fade to black
@@ -87,7 +87,7 @@ public class PhaseTransition : MonoBehaviour
             yield return StartCoroutine(FadeToBlack());
         }
 
-        // 4. Prepare video while screen is black (so no preview is visible)
+        // 4. Prepare video while screen is black
         if (videoPlayer != null && phaseTransitionVideo != null)
         {
             videoPlayer.clip = phaseTransitionVideo;
@@ -100,7 +100,7 @@ public class PhaseTransition : MonoBehaviour
             }
         }
 
-        // 5. Start playing video BEFORE showing display (prevents preview frame)
+        // 5. Start playing video before showing display (prevents preview frame)
         if (videoPlayer != null)
         {
             videoPlayer.Play();

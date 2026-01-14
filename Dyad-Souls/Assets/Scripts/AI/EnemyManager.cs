@@ -244,5 +244,7 @@ public class EnemyManager : MonoBehaviour
 
     public float GetMaxHealth() => maxHealth;
 
+    public float GetHealthPercentage() => (currentHealth / maxHealth) * 100f;
+
     public bool IsAlive() => isAlive;
 }

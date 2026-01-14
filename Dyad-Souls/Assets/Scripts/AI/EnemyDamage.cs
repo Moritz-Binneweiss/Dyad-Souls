@@ -43,7 +43,6 @@ public class EnemyDamage : MonoBehaviour
 
     private void DealDamageInRange(float range, float damage)
     {
-        // Don't deal damage if boss is dead
         if (enemyManager != null && !enemyManager.IsAlive())
             return;
 
