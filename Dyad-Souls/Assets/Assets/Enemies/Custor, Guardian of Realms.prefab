@@ -149,8 +149,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20ac4fdedc0416948a173ba5cef1f969, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyManager
-  maxHealth: 500
+  behaviorTree: {fileID: 0}
+  maxHealth: 1
   bossHealthSlider: {fileID: 0}
+  ghostHealthFill: {fileID: 0}
+  ghostHealthDelay: 0.5
+  ghostHealthSpeed: 2
   bossNameText: {fileID: 0}
   deathAnimationDuration: 3
 --- !u!95 &7678453371607398920
