@@ -96,7 +96,7 @@ Dyad Souls ist ein kooperatives 3D Souls-like Bossfight-Spiel für zwei Spieler 
 
 - **Blender Material und Texture Palette** von Imphenzia, für Coloring der 3D Assets (https://imphenzia.com/assets)
 
-- **Cinematic Cutscene** erstellt aus Referenzbildern und Prompt von DeeVid AI (https://deevid.ai/de/image-to-video?utm_source=google&utm_medium=cpc&utm_campaign=de-competitor&utm_term=kaiber&utm_content=pc&gad_source=1&gad_campaignid=22753869722&gbraid=0AAAAAq898mOdAFCz08IgmKlupgCQCRGXy&gclid=Cj0KCQiAgbnKBhDgARIsAGCDdlcOOl_qlBdYVUjZ4OVjlCZ-byazqxuQ_hwl8JQ2pTDeb5BV-MS3pVgaAtK2EALw_wcB)
+- **Cinematic Cutscene** erstellt aus Referenzbildern und Prompt von DeeVid AI (https://deevid.ai/de/image-to-video?utm_source=google&utm_medium=cpc&utm_campaign=de-competitor&utm_term=kaiber&utm_content=pc&gad_source=1&gad_campaignid=22753869722&gbraid=0AAAAAq898mOdAFCz08IgmKlupgCQCRGXy&gclid=Cj0KCQiAgbnKBhDgARIsAGCDdlcOOl_qlBdYVUjZ4OVjlCZ-byazqxuQ_hwl8JQ2pTDeb5BV-MS3pVgaAtK2EALw_wcB) erweitert mit Real-Time Intermediate Flow Estimation for Video Frame Interpolation(https://github.com/hzwer/ECCV2022-RIFE und der https://nmkd.itch.io/flowframes) und zusätzlich hochskaliert von Wink (https://wink.ai/ai-upscaler/upload) und danach selbst noch farblich korrigiert
 
 ## Steuerung
 
