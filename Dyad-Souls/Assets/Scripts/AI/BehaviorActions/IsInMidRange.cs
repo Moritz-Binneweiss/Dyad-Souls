@@ -13,6 +13,11 @@ public class IsInMidRange : Conditional
         if (target.Value == null)
             return TaskStatus.Failure;
 
+        // Check if player is dead
+        PlayerManager playerManager = target.Value.GetComponent<PlayerManager>();
+        if (playerManager != null && playerManager.IsDead())
+            return TaskStatus.Failure;
+
         float distance = Vector3.Distance(transform.position, target.Value.transform.position);
         return (distance > closeRange.Value && distance <= midRange.Value)
             ? TaskStatus.Success

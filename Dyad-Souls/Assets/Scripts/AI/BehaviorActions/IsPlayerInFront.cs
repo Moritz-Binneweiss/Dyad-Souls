@@ -12,6 +12,11 @@ public class IsPlayerInFront : Conditional
         if (target.Value == null)
             return TaskStatus.Failure;
 
+        // Check if player is dead
+        PlayerManager playerManager = target.Value.GetComponent<PlayerManager>();
+        if (playerManager != null && playerManager.IsDead())
+            return TaskStatus.Failure;
+
         Vector3 directionToTarget = (target.Value.transform.position - transform.position).normalized;
         float angle = Vector3.Angle(transform.forward, directionToTarget);
 
