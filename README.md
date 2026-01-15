@@ -49,29 +49,31 @@ Dyad Souls ist ein kooperatives 3D Souls-like Bossfight-Spiel für zwei Spieler 
 
 ## Besondere Herausforderungen / Lessions Learned
 
-- **Behavior Tree Komplexität**: Die Entwicklung eines umfangreichen Behaviour Trees erforderte ausführliche auseinandersetzung und stellt oft Probleme dar, aufgrund von wenig Erfahrung mit dem Tool.
+- **Behavior Tree Komplexität**: Die Entwicklung eines umfangreichen Behaviour Trees erforderte ausführliche auseinandersetzung und stellt oft Probleme dar, da wir das Tool zum ersten mal benutzt hatten.
 
-- **Animation-Code Synchronisation**: Die präzise Synchronisation von Animations-Events mit Code-Logic (Damage-Dealing, Attack-Ranges) war kritisch für den Bossfight. Die Zentralisierung in `EnemyDamage.cs` löste Inkonsistenzen. Aber dennoch war es ein häufiges Fehlerkriterium.
+- **Animation-Code Synchronisation**: Die Synchronisation von Animations-Events mit Code-Logic (Damage-Dealing, Attack-Ranges) war kritisch für den Bossfight. Die Zentralisierung in `EnemyDamage.cs` löste Inkonsistenzen. Aber dennoch war es ein häufiges Fehlerkriterium.
 
-- **Input System Device Binding**: Das Binden der Input-Devices (Keyboard vs. Gamepad) vorallem beim Charater Selector hatte anfangs erstmal ein bisschen Verständnis und beharrlichkeit erfordert.
+- **Input System Device Binding**: Das Binden der Input-Devices (Keyboard vs. Gamepad) vorallem beim Charater Selector hatte anfangs erstmal ein bisschen Verständnis und beharrlichkeit erfordert um damit es richtig funktioniert.
 
-- **Animationen**: Um erfolgreiche Animationen umzusetzen, selbst mit einem Tool wie UMotion Pro ist immernoch sehr sehr Zeitaufwendig und selbst dann gibt es immer etwas zu verbessern. Das Thema ist und erfordert sehr intensive Auseinandersetzung und Übung.
+- **Animationen**: Um erfolgreiche Animationen umzusetzen, selbst mit einem Tool wie UMotion Pro ist immernoch sehr sehr Zeitaufwendig und selbst dann gibt es immer wieder etwas zu verbessern. Das Thema ist und erfordert sehr intensive Auseinandersetzung und Übung.
+
+- **Generell**: Man muss sagen durch viele verschiedenen Komponenten im Spiel war oft die Herausforderung den Scope Creep unter Kontrolle zu halten, da wenn man viele verschiedene Elemente umsetzt, hat man ja nicht für alles genügend Zeit und dadurch könnte man bei allem immer wieder verbesserungen einbringen.
 
 ## Besondere Leistungen
 
-- **Vollständig implementierter Behavior Tree**: Entwicklung eines komplexen, Boss-AI-Systems mit 10+ Custom Actions und intelligenter Entscheidungsfindung basierend auf Spieler-Proximity und Boss-Health.
+- **Vollständig implementierter Behavior Tree**: Komplexes Boss-AI-Systems mit 10+ Custom Actions und Entscheidungsfindung basierend auf Spieler-Proximity, Prozentzahlen und Boss-Health.
 
 - **Elden Ring-inspiriertes Damage Preview System**: Implementation einer visuellen Ghost Health Bar für den Boss, die Schaden visuell anzeigt bevor er abgezogen wird.
 
-- **Poliertes Combat Feel**: Integration von Camera Shake, Gamepad-Vibration, Stamina-Management, Dodge-Rolls, Attack-Buffering und responsive Movement für ein authentisches Souls-like Gefühl.
+- **Polished Combat Feel**: Integration von Camera Shake, Gamepad-Vibration, Stamina-Management, Health Regeneration, Dodge-Rolls, Poisitionstausch, Attack-Buffering und responsives Movement.
 
 - **Dynamische Kamera**: Smooth Transitions zwischen Splitscreen und Fullscreen mit Coroutine-basierter Animation, die sich an Player-Tod anpasst.
 
-- **Umfangreiches Animation System**: Über 25+ Animationen für Player und Boss, erstellt und oder bearbeitet mit UMotion Pro.
+- **Umfangreiches Animation System**: Insgesamt über 25+ Animationen erstellt und oder bearbeitet mit UMotion Pro.
 
 - **Selbst erstellte Assets**: Background, Models und Animationen wurden eigenständig erstellt, bearbeitet oder erweitert von Images, Golem Asset von Kevin Iglesias, Mixamo und weiteren Inspirationen.
 
-- **Zweite Phase des Boss**: Phase Transition, anderes Movement, Model, Effects, etc.
+- **Zweite Phase des Boss**: Phase Transition Cutscene, anderes Movement und Animationen, anderer Behaviour Tree, anderes Model, Effekte, etc.
 
 ## Verwendete Assets
 
@@ -308,7 +310,7 @@ Präsentation:
 - Features demonstrieren
 - Gameplay präsentieren
 
-#### **13.01.2026**
+#### **15.01.2026**
 
 Abschluss:
 
@@ -319,3 +321,4 @@ Abschluss:
 - Animation Events optimiert
 - Behavior Tree erweitert mit Subtrees
 - Finales Polishing und Bug Fixes
+- Finale Präsentation gehalten
