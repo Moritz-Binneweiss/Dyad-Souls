@@ -71,8 +71,6 @@ public class PerformDodge : Action
                 agent.SetDestination(hit.position);
             }
         }
-
-        Debug.Log($"Boss dodged {actualDirection}!");
     }
 
     public override TaskStatus OnUpdate()

@@ -158,6 +158,8 @@ MonoBehaviour:
   playerStaminaSystem: {fileID: 0}
   maxHealth: 100
   healthSlider: {fileID: 0}
+  healthRegenRate: 2
+  healthRegenDelay: 5
   deathAnimationDuration: 2.5
 --- !u!114 &7333759715161754770
 MonoBehaviour:
@@ -199,7 +201,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCombatSystem
   swordPrefab: {fileID: 7661818459648418256, guid: 0462ea6322c3b74469a990343c1225f3, type: 3}
   rightHandBone: {fileID: 2709226524424051908}
-  heavyAttackAnimation: HeavyAttack
 --- !u!143 &5261837910350671540
 CharacterController:
   m_ObjectHideFlags: 0
@@ -334,6 +335,9 @@ MonoBehaviour:
   upAndDownLookAngle: 0
   lockOnRotationSpeed: 10
   lockOnHeightOffset: 1.5
+  shakeIntensity: 0.2
+  shakeDuration: 0.2
+  transitionDuration: 0.8
 --- !u!1 &4894850462857980027
 GameObject:
   m_ObjectHideFlags: 0

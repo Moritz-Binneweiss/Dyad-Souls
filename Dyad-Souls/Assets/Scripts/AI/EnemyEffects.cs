@@ -3,35 +3,61 @@ using UnityEngine;
 
 public class EnemyEffects : MonoBehaviour
 {
-    // Earthshaker Animation Effect
-    // Prefab = "Liminor, Eternal Warden", Tag = "Enemy"
-    // Animation = "Earthshaker"
-
+    [Header("Earthshaker Effect Parts")]
     [SerializeField]
     private GameObject earthshakerEffect;
 
-    [SerializeField]
-    private GameObject earthquakeEffect;
+    private GameObject[] earthshakerEffectParts;
+    private Vector3[] earthshakerEffectPartsOriginalPositions;
 
-    [Header("Earthshaker Effect Parts")]
-    private GameObject earthShatter;
-    private GameObject spikes;
-    private GameObject shockwave; 
+    [SerializeField]
+    private Vector3 earthshakerPositionOffset = Vector3.zero;
 
     [Header("Earthquake Effect Parts")]
-    private GameObject shock;
-    private GameObject dust;
-    private GameObject rocks;
-    private GameObject fireExplosion;
-    
-    
+    [SerializeField]
+    private GameObject earthquakeEffect;
+    private GameObject[] earthquakeEffectParts;
+    private Vector3[] earthquakeEffectPartsOriginalPositions;
+
+    [SerializeField]
+    private Vector3 earthquakePositionOffset = Vector3.zero;
+
+    [Header("Stomp1 Effect Parts")]
+    [SerializeField]
+    private GameObject stomp1Effect;
+    private GameObject[] stomp1Stones;
+    private Vector3[] stomp1StonesOriginalPositions;
+
+    [SerializeField]
+    private Vector3 stomp1PositionOffset = Vector3.zero;
+
+    [Header("Stomp2 Effect Parts")]
+    [SerializeField]
+    private GameObject stomp2Effect;
+    private GameObject[] stomp2Stones;
+    private Vector3[] stomp2StonesOriginalPositions;
+
+    [SerializeField]
+    private Vector3 stomp2PositionOffset = Vector3.zero;
+
+    [Header("Bestial Roar Effect Parts")]
+    [SerializeField]
+    private GameObject bestialRoarEffect;
+    private GameObject[] bestialRoarEffectParts;
+    private Vector3[] bestialRoarEffectPartsOriginalPositions;
+
+    [SerializeField]
+    private Vector3 bestialRoarPositionOffset = Vector3.zero;
+
     private void Start()
     {
         InitializeEarthshaker();
         InitializeEarthquake();
+        InitializeStomp1();
+        InitializeStomp2();
+        InitializeBestialRoar();
     }
 
-    // ===== EARTHSHAKER INITIALIZATION =====
     private void InitializeEarthshaker()
     {
         if (earthshakerEffect == null)
@@ -41,13 +67,21 @@ public class EnemyEffects : MonoBehaviour
 
         if (earthshakerEffect != null)
         {
-            earthShatter = earthshakerEffect.transform.Find("EarthShatter")?.gameObject;
-            spikes = earthshakerEffect.transform.Find("Spikes")?.gameObject;
-            shockwave = earthshakerEffect.transform.Find("Shockwave")?.gameObject;
+            int childCount = earthshakerEffect.transform.childCount;
+            earthshakerEffectParts = new GameObject[childCount];
+            earthshakerEffectPartsOriginalPositions = new Vector3[childCount];
+
+            for (int i = 0; i < childCount; i++)
+            {
+                earthshakerEffectParts[i] = earthshakerEffect.transform.GetChild(i).gameObject;
+                earthshakerEffectPartsOriginalPositions[i] = earthshakerEffectParts[i]
+                    .transform
+                    .localPosition;
+                SetParticleSystemToWorld(earthshakerEffectParts[i]);
+            }
         }
     }
 
-    // ===== EARTHQUAKE INITIALIZATION =====
     private void InitializeEarthquake()
     {
         if (earthquakeEffect == null)
@@ -57,150 +91,320 @@ public class EnemyEffects : MonoBehaviour
 
         if (earthquakeEffect != null)
         {
-            shock = earthquakeEffect.transform.Find("Shock")?.gameObject;
-            dust = earthquakeEffect.transform.Find("Dust")?.gameObject;
-            rocks = earthquakeEffect.transform.Find("Rocks")?.gameObject;
-            fireExplosion = earthquakeEffect.transform.Find("FireExplosion")?.gameObject;
+            int childCount = earthquakeEffect.transform.childCount;
+            earthquakeEffectParts = new GameObject[childCount];
+            earthquakeEffectPartsOriginalPositions = new Vector3[childCount];
+
+            for (int i = 0; i < childCount; i++)
+            {
+                earthquakeEffectParts[i] = earthquakeEffect.transform.GetChild(i).gameObject;
+                earthquakeEffectPartsOriginalPositions[i] = earthquakeEffectParts[i]
+                    .transform
+                    .localPosition;
+                SetParticleSystemToWorld(earthquakeEffectParts[i]);
+            }
         }
     }
 
+    private void InitializeStomp1()
+    {
+        if (stomp1Effect == null)
+        {
+            stomp1Effect = transform.Find("Stomp1Effect")?.gameObject;
+        }
 
-//Earthshaker Actionevents
+        if (stomp1Effect != null)
+        {
+            int childCount = stomp1Effect.transform.childCount;
+            stomp1Stones = new GameObject[childCount];
+            stomp1StonesOriginalPositions = new Vector3[childCount];
+
+            for (int i = 0; i < childCount; i++)
+            {
+                stomp1Stones[i] = stomp1Effect.transform.GetChild(i).gameObject;
+                stomp1StonesOriginalPositions[i] = stomp1Stones[i].transform.localPosition;
+                SetParticleSystemToWorld(stomp1Stones[i]);
+            }
+        }
+    }
+
+    private void InitializeStomp2()
+    {
+        if (stomp2Effect == null)
+        {
+            stomp2Effect = transform.Find("Stomp2Effect")?.gameObject;
+        }
+
+        if (stomp2Effect != null)
+        {
+            int childCount = stomp2Effect.transform.childCount;
+            stomp2Stones = new GameObject[childCount];
+            stomp2StonesOriginalPositions = new Vector3[childCount];
+
+            for (int i = 0; i < childCount; i++)
+            {
+                stomp2Stones[i] = stomp2Effect.transform.GetChild(i).gameObject;
+                stomp2StonesOriginalPositions[i] = stomp2Stones[i].transform.localPosition;
+                SetParticleSystemToWorld(stomp2Stones[i]);
+            }
+        }
+    }
+
+    private void InitializeBestialRoar()
+    {
+        if (bestialRoarEffect == null)
+        {
+            bestialRoarEffect = transform.Find("BestialRoarEffect")?.gameObject;
+        }
+
+        if (bestialRoarEffect != null)
+        {
+            int childCount = bestialRoarEffect.transform.childCount;
+            bestialRoarEffectParts = new GameObject[childCount];
+            bestialRoarEffectPartsOriginalPositions = new Vector3[childCount];
+
+            for (int i = 0; i < childCount; i++)
+            {
+                bestialRoarEffectParts[i] = bestialRoarEffect.transform.GetChild(i).gameObject;
+                bestialRoarEffectPartsOriginalPositions[i] = bestialRoarEffectParts[i]
+                    .transform
+                    .localPosition;
+                SetParticleSystemToWorld(bestialRoarEffectParts[i]);
+            }
+        }
+    }
+
     public void EarthshakerEffectOn()
     {
-        if (earthshakerEffect != null)
+        if (
+            earthshakerEffect != null
+            && earthshakerEffectParts != null
+            && earthshakerEffectPartsOriginalPositions != null
+        )
         {
-            earthshakerEffect.SetActive(true);
+            Vector3 bossPosition = transform.position + earthshakerPositionOffset;
+
+            for (int i = 0; i < earthshakerEffectParts.Length; i++)
+            {
+                if (earthshakerEffectParts[i] != null)
+                {
+                    Vector3 relativePosition = earthshakerEffectPartsOriginalPositions[i];
+
+                    earthshakerEffectParts[i].transform.SetParent(null);
+                    earthshakerEffectParts[i].transform.position = bossPosition + relativePosition;
+                    earthshakerEffectParts[i].SetActive(true);
+                }
+            }
         }
     }
+
     public void EarthshakerEffectOff()
     {
-        if (earthshakerEffect != null)
+        if (earthshakerEffect != null && earthshakerEffectParts != null)
         {
-            earthshakerEffect.SetActive(false);
+            foreach (GameObject effect in earthshakerEffectParts)
+            {
+                if (effect != null)
+                {
+                    ParticleSystem[] particleSystems =
+                        effect.GetComponentsInChildren<ParticleSystem>();
+                    foreach (ParticleSystem ps in particleSystems)
+                    {
+                        ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+                    }
+
+                    effect.SetActive(false);
+                    effect.transform.SetParent(earthshakerEffect.transform);
+                }
+            }
         }
     }
 
-    public void EarthShatterOn()
+    public void EarthquakeEffectOn()
     {
-        if (earthShatter != null)
+        if (
+            earthquakeEffect != null
+            && earthquakeEffectParts != null
+            && earthquakeEffectPartsOriginalPositions != null
+        )
         {
-            earthShatter.SetActive(true);
-        }
-    }
-    public void EarthShatterOff()
-    {
-        if (earthShatter != null)
-        {
-            earthShatter.SetActive(false);
+            Vector3 bossPosition = transform.position + earthquakePositionOffset;
+
+            for (int i = 0; i < earthquakeEffectParts.Length; i++)
+            {
+                if (earthquakeEffectParts[i] != null)
+                {
+                    Vector3 relativePosition = earthquakeEffectPartsOriginalPositions[i];
+
+                    earthquakeEffectParts[i].transform.SetParent(null);
+                    earthquakeEffectParts[i].transform.position = bossPosition + relativePosition;
+                    earthquakeEffectParts[i].SetActive(true);
+                }
+            }
         }
     }
 
-    public void SpikesOn()
+    public void EarthquakeEffectOff()
     {
-        if (spikes != null)
+        if (earthquakeEffect != null && earthquakeEffectParts != null)
         {
-            spikes.SetActive(true);
-        }
-    }
-    public void SpikesOff()
-    {
-        if (spikes != null)
-        {
-            spikes.SetActive(false);
+            foreach (GameObject effect in earthquakeEffectParts)
+            {
+                if (effect != null)
+                {
+                    ParticleSystem[] particleSystems =
+                        effect.GetComponentsInChildren<ParticleSystem>();
+                    foreach (ParticleSystem ps in particleSystems)
+                    {
+                        ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+                    }
+
+                    effect.SetActive(false);
+                    effect.transform.SetParent(earthquakeEffect.transform);
+                }
+            }
         }
     }
 
-    public void ShockwaveOn()
+    public void StompOneEffectOn()
     {
-        if (shockwave != null)
+        if (stomp1Effect != null && stomp1Stones != null && stomp1StonesOriginalPositions != null)
         {
-            shockwave.SetActive(true);
-        }
-    }
-    public void ShockwaveOff()
-    {
-        if (shockwave != null)
-        {
-            shockwave.SetActive(false);
+            Vector3 bossPosition = transform.position + stomp1PositionOffset;
+
+            for (int i = 0; i < stomp1Stones.Length; i++)
+            {
+                if (stomp1Stones[i] != null)
+                {
+                    Vector3 relativePosition = stomp1StonesOriginalPositions[i];
+
+                    stomp1Stones[i].transform.SetParent(null);
+                    stomp1Stones[i].transform.position = bossPosition + relativePosition;
+                    stomp1Stones[i].SetActive(true);
+                }
+            }
         }
     }
 
+    public void StompOneEffectOff()
+    {
+        if (stomp1Effect != null && stomp1Stones != null)
+        {
+            foreach (GameObject stone in stomp1Stones)
+            {
+                if (stone != null)
+                {
+                    ParticleSystem[] particleSystems =
+                        stone.GetComponentsInChildren<ParticleSystem>();
+                    foreach (ParticleSystem ps in particleSystems)
+                    {
+                        ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+                    }
 
-//Earthquake Actionevents
-    public void SmashOn()
-    {
-        if (earthquakeEffect != null)
-        {
-            earthquakeEffect.SetActive(true);
-        }
-    }
-    public void SmashOff()
-    {
-        if (earthquakeEffect != null)
-        {
-            earthquakeEffect.SetActive(false);
-        }
-    }
-
-    public void ShockOn()
-    {
-        if (shock != null)
-        {
-            shock.SetActive(true);
-        }
-    }
-    public void ShockOff()
-    {
-        if (shock != null)
-        {
-            shock.SetActive(false);
+                    stone.SetActive(false);
+                    stone.transform.SetParent(stomp1Effect.transform);
+                }
+            }
         }
     }
 
-    public void DustOn()
+    public void StompTwoEffectOn()
     {
-        if (dust != null)
+        if (stomp2Effect != null && stomp2Stones != null && stomp2StonesOriginalPositions != null)
         {
-            dust.SetActive(true);
-        }
-    }
-    public void DustOff()
-    {
-        if (dust != null)
-        {
-            dust.SetActive(false);
+            Vector3 bossPosition = transform.position + stomp2PositionOffset;
+
+            for (int i = 0; i < stomp2Stones.Length; i++)
+            {
+                if (stomp2Stones[i] != null)
+                {
+                    Vector3 relativePosition = stomp2StonesOriginalPositions[i];
+
+                    stomp2Stones[i].transform.SetParent(null);
+                    stomp2Stones[i].transform.position = bossPosition + relativePosition;
+                    stomp2Stones[i].SetActive(true);
+                }
+            }
         }
     }
 
-    public void RocksOn()
+    public void StompTwoEffectOff()
     {
-        if (rocks != null)
+        if (stomp2Effect != null && stomp2Stones != null)
         {
-            rocks.SetActive(true);
-        }
-    }
-    public void RocksOff()
-    {
-        if (rocks != null)
-        {
-            rocks.SetActive(false);
-        }
-    }
-
-    public void FireExplosionOn()
-    {
-        if (fireExplosion != null)
-        {
-            fireExplosion.SetActive(true);
-        }
-    }
-    public void FireExplosionOff()
-    {
-        if (fireExplosion != null)
-        {
-            fireExplosion.SetActive(false);
+            foreach (GameObject stone in stomp2Stones)
+            {
+                if (stone != null)
+                {
+                    ParticleSystem[] particleSystems =
+                        stone.GetComponentsInChildren<ParticleSystem>();
+                    foreach (ParticleSystem ps in particleSystems)
+                    {
+                        ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+                    }
+                    stone.SetActive(false);
+                    stone.transform.SetParent(stomp2Effect.transform);
+                }
+            }
         }
     }
 
+    public void BestialRoarOn()
+    {
+        if (
+            bestialRoarEffect != null
+            && bestialRoarEffectParts != null
+            && bestialRoarEffectPartsOriginalPositions != null
+        )
+        {
+            Vector3 bossPosition = transform.position + bestialRoarPositionOffset;
+
+            for (int i = 0; i < bestialRoarEffectParts.Length; i++)
+            {
+                if (bestialRoarEffectParts[i] != null)
+                {
+                    Vector3 relativePosition = bestialRoarEffectPartsOriginalPositions[i];
+                    bestialRoarEffectParts[i].transform.SetParent(null);
+                    bestialRoarEffectParts[i].transform.position = bossPosition + relativePosition;
+                    bestialRoarEffectParts[i].SetActive(true);
+                }
+            }
+        }
+    }
+
+    public void BestialRoarOff()
+    {
+        if (bestialRoarEffect != null && bestialRoarEffectParts != null)
+        {
+            foreach (GameObject effect in bestialRoarEffectParts)
+            {
+                if (effect != null)
+                {
+                    ParticleSystem[] particleSystems =
+                        effect.GetComponentsInChildren<ParticleSystem>();
+                    foreach (ParticleSystem ps in particleSystems)
+                    {
+                        ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+                    }
+
+                    effect.SetActive(false);
+
+                    effect.transform.SetParent(bestialRoarEffect.transform);
+                }
+            }
+        }
+    }
+
+    private void SetParticleSystemToWorld(GameObject obj)
+    {
+        if (obj == null)
+            return;
+
+        ParticleSystem[] particleSystems = obj.GetComponentsInChildren<ParticleSystem>(true);
+        foreach (ParticleSystem ps in particleSystems)
+        {
+            var main = ps.main;
+            main.simulationSpace = ParticleSystemSimulationSpace.World;
+        }
+    }
 }

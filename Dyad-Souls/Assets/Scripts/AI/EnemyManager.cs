@@ -7,7 +7,7 @@ public class EnemyManager : MonoBehaviour
 {
     [Header("Components")]
     private Animator animator;
-    
+
     [Header("Behavior Tree Selection")]
     [SerializeField]
     private BehaviorTree behaviorTree;
@@ -17,9 +17,20 @@ public class EnemyManager : MonoBehaviour
     private float maxHealth = 100f;
 
     private float currentHealth;
+    private float ghostHealth;
+    private float ghostHealthTimer;
 
     [SerializeField]
     private Slider bossHealthSlider;
+
+    [SerializeField]
+    private RectTransform ghostHealthFill;
+
+    [SerializeField]
+    private float ghostHealthDelay = 0.5f;
+
+    [SerializeField]
+    private float ghostHealthSpeed = 2f;
 
     [SerializeField]
     private TextMeshProUGUI bossNameText;
@@ -33,15 +44,24 @@ public class EnemyManager : MonoBehaviour
     void Start()
     {
         animator = GetComponent<Animator>();
-        
+
         // If no behavior tree is assigned, try to get one from the component
         if (behaviorTree == null)
         {
             behaviorTree = GetComponent<BehaviorTree>();
         }
-        
+
         currentHealth = maxHealth;
+        ghostHealth = maxHealth;
         UpdateHealthUI();
+    }
+
+    void Update()
+    {
+        if (isAlive)
+        {
+            UpdateGhostHealth();
+        }
     }
 
     public void TakeDamage(float damage)
@@ -49,8 +69,12 @@ public class EnemyManager : MonoBehaviour
         if (!isAlive)
             return;
 
+        // Save current health to ghost health before applying damage
+        ghostHealth = currentHealth;
+
         currentHealth -= damage;
         currentHealth = Mathf.Max(0, currentHealth);
+        ghostHealthTimer = 0f;
 
         UpdateHealthUI();
 
@@ -66,6 +90,48 @@ public class EnemyManager : MonoBehaviour
         {
             bossHealthSlider.maxValue = maxHealth;
             bossHealthSlider.value = currentHealth;
+        }
+
+        if (ghostHealthFill != null)
+        {
+            // Calculate how much width to reduce from the right side
+            float ghostHealthPercent = ghostHealth / maxHealth;
+
+            // Get parent width (the full health bar width)
+            RectTransform parentRect = ghostHealthFill.parent as RectTransform;
+            if (parentRect != null)
+            {
+                float fullWidth = parentRect.rect.width;
+                float ghostWidth = fullWidth * ghostHealthPercent;
+                float rightOffset = fullWidth - ghostWidth;
+
+                // Update offsetMax to shrink from right
+                Vector2 offsetMax = ghostHealthFill.offsetMax;
+                offsetMax.x = -rightOffset;
+                ghostHealthFill.offsetMax = offsetMax;
+            }
+        }
+    }
+
+    private void UpdateGhostHealth()
+    {
+        if (ghostHealth > currentHealth)
+        {
+            ghostHealthTimer += Time.deltaTime;
+
+            if (ghostHealthTimer >= ghostHealthDelay)
+            {
+                float decreaseAmount =
+                    ghostHealthSpeed * (ghostHealth - currentHealth) * Time.deltaTime;
+                ghostHealth -= decreaseAmount;
+                ghostHealth = Mathf.Max(ghostHealth, currentHealth);
+                UpdateHealthUI();
+            }
+        }
+        else
+        {
+            ghostHealth = currentHealth;
+            ghostHealthTimer = 0f;
         }
     }
 
@@ -104,6 +170,8 @@ public class EnemyManager : MonoBehaviour
     {
         maxHealth = newMaxHealth;
         currentHealth = maxHealth;
+        ghostHealth = maxHealth;
+        ghostHealthTimer = 0f;
         isAlive = true;
         transform.position = Vector3.zero;
 
@@ -175,6 +243,8 @@ public class EnemyManager : MonoBehaviour
     public float GetCurrentHealth() => currentHealth;
 
     public float GetMaxHealth() => maxHealth;
+
+    public float GetHealthPercentage() => (currentHealth / maxHealth) * 100f;
 
     public bool IsAlive() => isAlive;
 }

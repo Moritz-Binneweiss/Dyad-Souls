@@ -9,23 +9,11 @@ public class IsPlayerAttacking : Conditional
 
     public SharedFloat detectionRange = 5f;
 
-    public SharedFloat dodgeChance = 70f;
-
-    private static float lastDodgeTime;
-    public SharedFloat dodgeCooldown = 2f;
-
     public override TaskStatus OnUpdate()
     {
-        if (Time.time - lastDodgeTime < dodgeCooldown.Value)
-            return TaskStatus.Failure;
-
         if (IsAttacking(player1.Value) || IsAttacking(player2.Value))
         {
-            if (Random.Range(0f, 100f) <= dodgeChance.Value)
-            {
-                lastDodgeTime = Time.time;
-                return TaskStatus.Success;
-            }
+            return TaskStatus.Success;
         }
 
         return TaskStatus.Failure;

@@ -35,7 +35,6 @@ public class PositionSwapManager : MonoBehaviour
 
     private void Awake()
     {
-        // Singleton Pattern
         if (Instance == null)
         {
             Instance = this;
@@ -112,12 +111,9 @@ public class PositionSwapManager : MonoBehaviour
 
         isSwapping = true;
 
-        // Speichere nur die aktuellen Positionen (NICHT die Rotationen)
         Vector3 player1Position = player1.transform.position;
         Vector3 player2Position = player2.transform.position;
 
-        // CharacterController blockiert direkte Transform-Änderungen
-        // Wir müssen ihn kurz deaktivieren
         CharacterController cc1 = player1.GetComponent<CharacterController>();
         CharacterController cc2 = player2.GetComponent<CharacterController>();
 
@@ -126,17 +122,14 @@ public class PositionSwapManager : MonoBehaviour
         if (cc2 != null)
             cc2.enabled = false;
 
-        // Tausche nur die Positionen (Rotationen bleiben unverändert)
         player1.transform.position = player2Position;
         player2.transform.position = player1Position;
 
-        // CharacterController wieder aktivieren
         if (cc1 != null)
             cc1.enabled = true;
         if (cc2 != null)
             cc2.enabled = true;
 
-        // Starte Cooldown
         cooldownTimer = swapCooldown;
 
         isSwapping = false;

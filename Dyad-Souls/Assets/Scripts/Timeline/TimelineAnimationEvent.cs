@@ -1,26 +1,19 @@
 using UnityEngine;
 using UnityEngine.Playables;
 
-/// <summary>
-/// Nutze dieses Skript um die Timeline von einem Animation Event aufzurufen.
-/// 1. Füge dieses Skript zum Player hinzu
-/// 2. Weise die Timeline zu
-/// 3. Erstelle ein Animation Event in deiner Attack Animation
-/// 4. Rufe PlaySlashTimeline() im Event auf
-/// </summary>
+/// Triggers a timeline from an animation event.
 public class TimelineAnimationEvent : MonoBehaviour
 {
     [Header("Timeline Reference")]
-    [SerializeField] private PlayableDirector slashTimeline;
+    [SerializeField]
+    private PlayableDirector slashTimeline;
 
-    /// <summary>
-    /// Rufe diese Funktion als Animation Event auf
-    /// </summary>
+    /// Call this function as an animation event.
     public void PlaySlashTimeline()
     {
         if (slashTimeline != null)
         {
-            slashTimeline.time = 0; // Von vorne starten
+            slashTimeline.time = 0;
             slashTimeline.Play();
         }
         else
@@ -29,9 +22,6 @@ public class TimelineAnimationEvent : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Optional: Timeline stoppen
-    /// </summary>
     public void StopSlashTimeline()
     {
         if (slashTimeline != null)
