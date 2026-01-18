@@ -17,7 +17,7 @@ https://github.com/Moritz-Binneweiss/Dyad-Souls
 
 ### Link zum Video
 
--TODO:
+https://youtu.be/CG7OlZzKkzw
 
 ## Start-Up Guide
 
