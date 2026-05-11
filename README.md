@@ -1,5 +1,10 @@
 # **Dyad Souls**
 
+## Inhalt / Contents
+
+1. [Deutsch](#dyad-souls)
+2. [English](#dyad-souls-english-version)
+
 ## **Mitwirkende**
 
 - **Moritz Binneweiß** - Models, Designs, Development
@@ -322,3 +327,330 @@ Abschluss:
 - Behavior Tree erweitert mit Subtrees
 - Finales Polishing und Bug Fixes
 - Finale Präsentation gehalten
+
+---
+
+# **Dyad Souls (English Version)**
+
+## **Contributors**
+
+- **Moritz Binneweiß** - Models, Designs, Development
+- **Sebastian Schuster** - Animations, Effects, Development
+
+Unity Version: 6000.2.6f2
+
+### Figma Board
+
+https://www.figma.com/board/uUtF92ZtxAHNdhbk2m4GBN/Dyad-Souls?node-id=0-1&t=A3mF4doLudXmPWks-1
+
+### GitHub Repo
+
+https://github.com/Moritz-Binneweiss/Dyad-Souls
+
+### Link to Video
+
+https://youtu.be/CG7OlZzKkzw
+
+## Start-Up Guide
+
+1. Download the project from GitHub (e.g., as a zip)
+2. Extract the zip file
+3. Start/open the project in Unity (Version: 6000.2.6f2)
+4. Open the MainMenu scene
+5. Select characters for Player 1 and Player 2
+6. The Arena scene loads and the game begins
+
+## Project Description
+
+Dyad Souls is a cooperative 3D souls-like boss fight game for two players in split-screen. Inspired by Dark Souls and Elden Ring, two players must fight simultaneously against an AI-controlled boss driven by a complex behavior tree. Players have to manage their stamina, dodge attacks, and find the perfect moment to strike. The project relies on Unity's new Input System for device-based multiplayer gameplay and uses UMotion Pro for high-quality combat animations.
+
+## Technologies Used
+
+- **Unity 6000.2.6f2** as the game engine with Universal Render Pipeline (URP)
+- **Unity's new Input System** for flexible controller and keyboard support
+- **Behavior Designer** (third-party asset) with Movement Pack for complex boss AI behavior patterns
+- **UMotion Pro** for animation creation and editing
+- **NavMesh** for boss pathfinding and movement
+- **Unity Animator** with state machines for player and boss animations
+- **Animation Events** for precise timing of damage triggers during attacks
+- **CharacterController** for physics-based player movement
+- **Cinemachine** for a dynamic split-screen camera with automatic adjustment
+- **Coroutines** for time-based effects (camera shake, stamina regeneration, etc.)
+- **Particle System** for creating special effects
+- **Blender** for creating and editing 3D models and assets
+
+## Special Challenges / Lessons Learned
+
+- **Behavior Tree Complexity**: Developing an extensive behavior tree required a lot of in-depth work and often caused problems, as we were using the tool for the first time.
+
+- **Animation-Code Synchronization**: Synchronizing animation events with code logic (damage dealing, attack ranges) was critical for the boss fight. Centralizing this in `EnemyDamage.cs` solved inconsistencies, but it still remained a frequent source of errors.
+
+- **Input System Device Binding**: Binding input devices (keyboard vs. gamepad), especially in the character selector, initially required significant understanding and persistence to make it work correctly.
+
+- **Animations**: Creating successful animations, even with a tool like UMotion Pro, is still very time-consuming, and even then there is always room for improvement. This topic requires intensive engagement and practice.
+
+- **General**: Because of many different components in the game, a recurring challenge was keeping scope creep under control. When implementing many different elements, there is never enough time for everything, and every part could always be improved further.
+
+## Special Achievements
+
+- **Fully Implemented Behavior Tree**: Complex boss AI system with 10+ custom actions and decision-making based on player proximity, percentages, and boss health.
+
+- **Elden Ring-Inspired Damage Preview System**: Implementation of a visual ghost health bar for the boss that shows damage visually before it is deducted.
+
+- **Polished Combat Feel**: Integration of camera shake, gamepad vibration, stamina management, health regeneration, dodge rolls, position swap, attack buffering, and responsive movement.
+
+- **Dynamic Camera**: Smooth transitions between split-screen and fullscreen with coroutine-based animation that adapts to player death.
+
+- **Extensive Animation System**: A total of over 25 animations created and/or edited with UMotion Pro.
+
+- **Self-Created Assets**: Backgrounds, models, and animations were independently created, edited, or extended from images, the golem asset by Kevin Iglesias, Mixamo, and other inspirations.
+
+- **Second Boss Phase**: Phase transition cutscene, different movement and animations, different behavior tree, different model, effects, etc.
+
+## Assets Used
+
+- **Behavior Designer** by Opsive (https://assetstore.unity.com/packages/tools/visual-scripting/behavior-designer-behavior-trees-for-everyone-15277) - Behavior tree system for boss AI (provided by the supervisors)
+- **Behavior Designer - Movement Pack** by Opsive - Advanced movement actions for behavior trees (provided by the supervisors)
+
+- **UMotion Pro** by Soxware Interactive (https://assetstore.unity.com/packages/tools/animation/umotion-pro-animation-editor-95991) - Professional animation editor (provided by the supervisors)
+
+- **Scene Switcher Pro** by Ajay Uthaman (https://assetstore.unity.com/packages/tools/gui/scene-switcher-pro-313355) for faster scene switching
+
+- **FREE - 32 RPG Animations** by Blink, some animations were extended or used directly (https://assetstore.unity.com/packages/3d/animations/free-32-rpg-animations-215058)
+
+- **Free Quick Effects Vol. 1** by Gabriel Aguiar Prod, some effects were extended or used directly (https://assetstore.unity.com/packages/vfx/particles/free-quick-effects-vol-1-304424)
+
+- **Giant Animations FREE** by Kevin Iglesias, some animations were extended or used directly (https://assetstore.unity.com/packages/p/giant-animations-free-215962)
+
+- **Giant Monster Model - Golem** by Kevin Iglesias, model was extended into our own variants (https://assetstore.unity.com/packages/p/giant-monster-model-golem-278960)
+
+- **Human Basic Motions FREE** by Kevin Iglesias, some animations were extended or used directly (https://assetstore.unity.com/packages/3d/animations/human-basic-motions-free-154271)
+
+- **Particle Pack** by Unity Technologies, some effects were extended or used directly (https://assetstore.unity.com/packages/p/particle-pack-127325)
+
+- **Blender Material and Texture Palette** by Imphenzia, for coloring 3D assets (https://imphenzia.com/assets)
+
+- **Cinematic Cutscene** created from reference images and prompts from DeeVid AI (https://deevid.ai/de/image-to-video?utm_source=google&utm_medium=cpc&utm_campaign=de-competitor&utm_term=kaiber&utm_content=pc&gad_source=1&gad_campaignid=22753869722&gbraid=0AAAAAq898mOdAFCz08IgmKlupgCQCRGXy&gclid=Cj0KCQiAgbnKBhDgARIsAGCDdlcOOl_qlBdYVUjZ4OVjlCZ-byazqxuQ_hwl8JQ2pTDeb5BV-MS3pVgaAtK2EALw_wcB), extended with Real-Time Intermediate Flow Estimation for Video Frame Interpolation (https://github.com/hzwer/ECCV2022-RIFE and https://nmkd.itch.io/flowframes), additionally upscaled with Wink (https://wink.ai/ai-upscaler/upload), and then color-corrected manually
+
+- **Background Images** created by Copilot ChatGPT and slightly modified
+
+- **Gamepad Icon** by Hafizh Hapis (https://www.flaticon.com/authors/hafizh-hapis)
+
+- **Mouse Icon** by Vector Squad (https://www.flaticon.com/authors/vector-squad)
+
+## Controls
+
+| Key (Keyboard & Mouse) / Button (Gamepad) |                          Function                           |
+| :---------------------------------------: | :---------------------------------------------------------: |
+|         **W,A,S,D / Left Stick**          |                          Movement                           |
+|          **Mouse / Right Stick**          |                         Move Camera                         |
+|  **Left Mouse Button / Right Shoulder**   |                        Light Attack                         |
+|  **Right Mouse Button / Right Trigger**   |                        Heavy Attack                         |
+|  **Middle Mouse Button / Left Trigger**   |                       Special Attack                        |
+|         **Space / Button South**          |                            Jump                             |
+|     **Left Shift / Left Stick Press**     |                           Sprint                            |
+|      **Left Control / Button East**       |                        Dodge / Roll                         |
+|            **C / Button West**            |                           Crouch                            |
+|         **Escape / Start Button**         |                            Pause                            |
+|         **F / Right Stick Press**         |                    Focus (when in range)                    |
+|           **E / Button North**            | Interact / Position swap (both players hold simultaneously) |
+
+## Logs
+
+#### **02.10.2024**
+
+Meeting:
+
+- Decided on a co-op boss fight project
+- Repository was set up
+- UMotionPro and BehaviourDesigner packages were integrated into the project
+
+Goal:
+
+- Start prototyping (movement, simple attack/hit system, etc.)
+
+For the presentation:
+
+- 5-10 minutes
+- Project introduction
+- Inspiration
+- Design ideas
+- Gameplay functionality
+- Challenges
+- Solution approaches
+- Unity techniques
+- Approximate timeline
+- Project goal
+- MVP (Minimum Viable Product)
+- Nice-to-haves
+
+#### **16.10.2024**
+
+Meeting:
+
+- Naming issue was discussed
+- Current status was shown
+- Plans for the next week were discussed
+
+Goal:
+
+- Get familiar with the tools
+- Combat animations, boss can attack
+- Get into behavior trees
+- Minimal boss fight possible
+- Prototype across all functions
+
+#### **23.10.2024**
+
+Meeting:
+
+- Behavior Designer start was shown
+- Split-screen and 2-player movement were shown
+
+Goal:
+
+- More animations
+- Taking damage (boss and player)
+- Attack buffer
+- Elden Ring wiki (boss AI behavior inspiration)
+
+#### **30.10.2024**
+
+Meeting:
+
+- Prefer one complex boss instead of several simpler ones
+- Consider what special features the boss can have
+- Focus on combat
+
+Goal:
+
+- Continue working on MVP
+- Focus on the single boss fight
+
+#### **06.11.2024**
+
+Meeting:
+
+- LockOnTarget was shown
+- Wave-based gameplay was shown
+- Extended movement, attacks, and animations were shown
+- Enemy behavior tree functionality and animations were shown
+
+Goal:
+
+- Fix and improve animation bugs
+- Fix and improve behavior tree bugs
+- Create own basic assets
+
+#### **13.11.2024**
+
+Meeting:
+
+- Crouch was shown
+- Behavior tree expansion and improvements were shown
+- Animations were partially improved and shown
+- Initial integration of own Blender assets was shown
+
+Goal:
+
+- Reach MVP goal
+
+- (Lobby/preparation room)
+- Work on issues
+- Improve and expand things
+- Prepare "presentation"
+
+For the presentation:
+
+- Show and explain technological background
+- Show prototype and what has been achieved so far
+- Goals until the end
+- 10-15 min
+
+#### **20.11.2024**
+
+Meeting:
+
+- Presentation was held
+
+Goal:
+
+- Start nice-to-have features
+- Improve and expand
+
+#### **04.12.2024**
+
+Meeting:
+
+- Refactoring and bug fixing were shown
+- New animations were shown
+
+Goal:
+
+- Add more animations
+- Improve and expand
+
+#### **11.12.2024**
+
+Meeting:
+
+- New animations were shown
+- Cascadeur was reviewed
+
+Goal:
+
+- Add more animations
+- Improve and expand
+- Start special effects
+- Try out the Cascadeur tool
+
+#### **18.12.2024**
+
+Meeting:
+
+- Effects shader was shown and discussed ->
+- Cascadeur was briefly tested
+- Goals were presented
+
+Goal:
+
+- Add more animations
+- Improve and expand
+- Expand special effects
+- Start sound effects
+
+#### **08.01.2026**
+
+Meeting:
+
+- Polishing effects (slashes, environmental, etc.)
+- Phase 2 (design, boss, effects, etc.)
+- Updated models
+- Subtrees in behavior trees
+
+Goal:
+
+- Cinematics
+- Small improvements (camera shake, colliders for walls, etc.)
+- Improvements and small extensions
+
+Presentation:
+
+- 15 min
+- Explain technical challenges
+- Show technology (behavior trees, animation events, split-screen system)
+- Demonstrate features
+- Present gameplay
+
+#### **15.01.2026**
+
+Finalization:
+
+- Ghost health bar system implemented (Elden Ring-style damage preview)
+- Smooth camera transitions between split-screen and fullscreen
+- Camera shake and gamepad vibration on damage
+- Code cleanup and refactoring
+- Animation events optimized
+- Behavior tree expanded with subtrees
+- Final polishing and bug fixes
+- Final presentation held
